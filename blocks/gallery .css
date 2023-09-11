@@ -3,15 +3,13 @@
   padding-top: 40px;
   align-items: center;
   width: 880px;
-  margin: 0;
 }
-.contnt {
-}
+
 .gallery__profile {
   max-height: 77px;
-
+  align-items: center;
   padding-left: 30px;
-  margin: 0;
+  margin: 0 auto;
   display: grid;
   grid-template-areas:
     "button"
@@ -32,6 +30,7 @@
   font-weight: 500;
   grid-area: "title";
   overflow: hidden;
+  width: 337px;
 }
 
 .gallery__subtitle {
@@ -45,6 +44,7 @@
   height: 24px;
   width: 24px;
   padding: 0;
+  border: 1px solid white;
   margin-right: 165px;
   grid-area: "button";
   background: transparent url(/images/pen\ icon.png) center no-repeat;
@@ -55,4 +55,5 @@
   width: 150px;
   height: 50px;
   background: transparent url(/images/plus\ icon.png) center no-repeat;
+  border: 1px solid white;
 }
