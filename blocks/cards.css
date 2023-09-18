@@ -6,7 +6,7 @@
   flex-direction: column;
 }
 
-.card__list {
+.cards__list {
   list-style-type: none;
   margin: 0 auto;
   padding-top: 51px;
@@ -18,7 +18,7 @@
   grid-template-columns: repeat(auto-fit, 282px);
 }
 @media screen and (max-width: 974px) {
-  .card__list {
+  .cards__list {
     max-width: 600px;
     margin: 0 auto;
   }

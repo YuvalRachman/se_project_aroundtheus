@@ -52,7 +52,7 @@
 
     height: 50px;
   }
-  .card__list {
+  .cards__list {
     overflow-y: hidden;
 
     margin: 0 auto;
