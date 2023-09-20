@@ -13,7 +13,6 @@
 .page__content {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 .page__section {
   max-width: 880px;
@@ -31,34 +30,28 @@
   max-width: 880px;
   margin-inline: auto;
 }
+.modal_opened {
+  display: flex;
+}
+.modal__container {
+  position: fixed;
+  background-color: (0, 0, 0, 0.5);
+}
 
 @media screen and (max-width: 320px) {
-  .page__footer {
-    font-size: 14px;
-    line-height: 17px;
-    max-width: 282px;
-    max-height: 14px;
-    margin: auto;
-  }
 }
 @media screen and (max-width: 635px) {
-  .profile {
-    padding-bottom: 0 !important;
-  }
   .card__list {
-    padding-left: 10px;
-    padding-right: 10px;
-    margin-top: 0;
+    margin: 0 10px 0 10px !important;
   }
   .card:nth-of-type(1) {
     margin-top: 0;
     padding-top: 36px;
   }
-  .page__footer {
-    padding: 48px 0 36px 0;
-  }
-  .profile__button-plus {
-    margin-bottom: 36px;
+
+  .footer {
+    padding: 0;
+    max-width: 318px;
   }
 }
 
@@ -67,6 +60,9 @@
     margin: 0 20px;
     max-width: calc(100% - 40px);
   }
+  .profile__button-plus {
+    max-width: 150px;
+  }
 }
 @media screen and (max-width: 713px) {
   .logo {
@@ -74,45 +70,30 @@
   }
   .page {
     min-width: 320px;
-    min-inline-size: auto;
-  }
-  .profile {
-    flex-direction: column;
-  }
-  .profile__info {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: self-end;
-  }
-  .profile__subtitle {
-    width: 100%;
-    text-align: center;
-    font-size: 14px;
-    line-height: 17px;
-    margin-bottom: 36px;
-    margin-top: 0;
-  }
-  .profile__add-button {
-    margin: 0;
-    width: 282px;
-  }
-  .profile__title {
-    padding-top: 30px;
-    font-size: 22px;
-    line-height: 26px;
-    margin-right: 10px;
-  }
-  .profile__image {
-    margin: 0 auto;
-    margin-bottom: 30px;
-  }
-  .profile__button-plus {
-    width: 282px;
   }
 }
+.profile__image {
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+.profile__button-plus {
+  width: 282px;
+}
+
 @media screen and (min-width: 935px) {
   .card:nth-child(-n + 3) {
     margin-top: 0;
+  }
+  .footer__copyright {
+    min-width: 880px;
+  }
+}
+@media screen and (min-width: 621px) and (max-width: 935px) {
+  .footer__copyright {
+    width: 567px;
+    min-width: 560px;
+  }
+  .profile__button-plus {
+    max-width: 150px;
   }
 }

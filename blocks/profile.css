@@ -1,6 +1,6 @@
 .profile {
-  display: flex;
   padding: 40px 0 51px 0;
+  display: flex;
   align-items: center;
   white-space: nowrap;
 }
@@ -14,6 +14,7 @@
   align-items: center;
   grid-template-columns: minmax(auto, 373px) auto;
 }
+
 .profile__avatar {
   height: 120px;
   width: 120px;
@@ -43,16 +44,15 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 280px;
 }
 .profile__button {
+  background: transparent url(/images/pen\ icon.png) center no-repeat;
   height: 24px;
   width: 24px;
   padding: 0;
   border: 1px solid white;
 
   grid-area: button;
-  background: transparent url(/images/pen\ icon.png) center no-repeat;
 }
 
 .profile__button:hover {
@@ -72,4 +72,35 @@
   opacity: 50%;
   transition: 0.2s;
   cursor: pointer;
+}
+@media screen and (max-width: 635px) {
+  .profile {
+    padding-bottom: 0 !important;
+  }
+  .profile__button-plus {
+    margin-bottom: 36px;
+  }
+}
+@media screen and (max-width: 713px) {
+  .profile__subtitle {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    line-height: 17px;
+
+    font-size: 14px !important;
+    padding-bottom: 36px;
+  }
+  .profile__button-plus {
+    margin: 0;
+    max-width: 282px;
+  }
+  .profile__title {
+    padding-top: 30px;
+    font-size: 22px !important;
+    max-width: 208px;
+    line-height: 26px;
+    margin-right: 10px;
+    justify-self: center;
+  }
 }
