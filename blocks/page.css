@@ -45,7 +45,6 @@
 
   .footer {
     padding: 0;
-    max-width: 318px;
     min-width: 282px;
     max-width: min-content;
   }
@@ -62,9 +61,6 @@
 .profile__image {
   margin: 0 auto;
   margin-bottom: 30px;
-}
-.profile__button-plus {
-  width: 282px;
 }
 
 @media screen and (min-width: 917px) {
