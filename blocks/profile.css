@@ -99,7 +99,8 @@
   }
   .profile__button-plus {
     margin: 0;
-    max-width: 282px;
+
+    min-width: 282px;
   }
   #profile__title {
     padding-top: 30px;
