@@ -5,4 +5,24 @@
 }
 .footer__copyright {
   margin: 0 auto;
+  color: #545454;
+}
+@media screen and (max-width: 618px) {
+  .footer {
+    padding: 0;
+    min-width: 282px;
+    max-width: min-content;
+  }
+}
+@media screen and (min-width: 917px) {
+  .footer__copyright {
+    max-width: 880px;
+    min-width: 880px;
+  }
+}
+@media screen and (min-width: 619px) and (max-width: 917px) {
+  .footer__copyright {
+    width: 567px;
+    min-width: 560px;
+  }
 }

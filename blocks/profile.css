@@ -3,6 +3,7 @@
   display: flex;
   align-items: center;
   white-space: nowrap;
+  margin: 0 auto;
 }
 
 .profile__info {
@@ -14,7 +15,9 @@
   align-items: center;
   grid-template-columns: minmax(auto, 373px) auto;
 }
-
+.profile__button-plus {
+  max-width: 150px;
+}
 .profile__avatar {
   height: 120px;
   width: 120px;
@@ -24,9 +27,7 @@
   margin: 0;
 }
 .profile__title {
-  max-height: 48px;
   margin: 0;
-
   font-size: 42px;
   line-height: 48px;
   font-weight: 500;
@@ -41,26 +42,27 @@
   grid-area: description;
   margin: 0;
   white-space: nowrap;
-
   text-overflow: ellipsis;
 }
+.profile__image {
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
 .profile__button {
-  background: transparent url(/images/pen\ icon.png) center no-repeat;
+  background: transparent url(../images/pen\ icon.svg) center no-repeat;
   height: 24px;
   width: 24px;
   padding: 0;
   border: 1px solid white;
-
   grid-area: button;
 }
-
 .profile__button:hover {
-  opacity: 50%;
+  opacity: 60%;
   transition: 0.2s;
   cursor: pointer;
 }
 .profile__button-plus {
-  background: transparent url(/images/plus\ icon.png) center no-repeat;
+  background: transparent url(../images/plus\ icon.svg) center no-repeat;
   min-width: 150px;
   height: 50px;
   margin: 0;
@@ -68,7 +70,7 @@
   border-radius: 2px;
 }
 .profile__button-plus:hover {
-  opacity: 50%;
+  opacity: 60%;
   transition: 0.2s;
   cursor: pointer;
 }
@@ -97,11 +99,6 @@
     justify-content: center;
     align-items: self-end;
   }
-  .profile__button-plus {
-    margin: 0;
-
-    min-width: 282px;
-  }
   #profile__title {
     padding-top: 30px;
     font-size: 22px;
@@ -109,5 +106,8 @@
     line-height: 26px;
     margin-right: 10px;
     justify-self: center;
+  }
+  .profile__button-plus {
+    min-width: 282px;
   }
 }

@@ -1,21 +1,60 @@
-# Project 3: Around The U.S.
+# Around the United States
 
-### Overview  
+Welcome to the "Around the United States" project!
 
-* Intro  
-* Figma  
-* Images  
-  
-**Intro**
-  
-This project is made so all the elements are displayed correctly on popular screen sizes. We recommend investing more time in completing this project, since it's more difficult than previous ones.  
-  
-**Figma**  
-  
-* [Link to the project on Figma](https://www.figma.com/file/ii4xxsJ0ghevUOcssTlHZv/Sprint-3%3A-Around-the-US?node-id=0%3A1)  
-  
-**Images**  
-  
-The way you'll do this at work is by exporting images directly from Figma — we recommend doing that to practice more. Don't forget to optimize them [here](https://tinypng.com/), so your project loads faster. 
-  
-Good luck and have fun!
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+  - [Media Queries](#media-queries)
+  - [Design in Figma](#design-in-figma)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Project Overview
+
+The "Around the United States" project is all about exploring and showcasing the beauty, culture, and diversity of the United States through a visually appealing web application.
+
+## Features
+
+- Feature 1
+- Feature 2
+- Feature 3
+
+## Technologies Used
+
+- HTML5
+- CSS3
+- CSS Grid
+- Flexbox
+- Pseudo-classes
+- Media Queries
+- [Figma](https://www.figma.com/)
+- [GitHub Repository](https://github.com/YuvalRachman/se_project_aroundtheus.git)
+
+## Getting Started
+
+To get started with "Around the United States," follow these steps:
+
+### Prerequisites
+
+- Web browser (e.g., Chrome, Firefox)
+
+### Installation
+
+1. Clone this [GitHub repository](https://github.com/YuvalRachman/se_project_aroundtheus.git) to your local machine.
+2. Navigate to the project directory using your terminal: `cd se_project_aroundtheus`
+3. Open the `index.html` file in your preferred web browser to begin exploring the United States.
+
+## Usage
+
+"Around the United States" allows you to explore various aspects of the United States, from its breathtaking landscapes to its vibrant cities. Here's how you can use this project:
+
+### Media Queries
+
+We've implemented media queries to make the project responsive to different screen sizes. The design adjusts seamlessly, ensuring a great user experience on various devices.

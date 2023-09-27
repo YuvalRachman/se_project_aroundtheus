@@ -1,35 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Information about the U.S" />
+    <meta name="keywords" content="HTML, CSS" />
+    <title>Around the U.S</title>
+    <link rel="stylesheet" href="./pages/index.css" />
+    <link rel="shortcut icon" href="./favicon.ico" />
+  </head>
   <body class="page">
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <meta name="author" content="Edward" />
-      <meta name="description" content="Information about the U.S" />
-      <meta name="keywords" content="HTML, CSS" />
-      <title>Around the U.S</title>
-      <link rel="stylesheet" href="./pages/index.css" />
-      <link rel="shortcut icon" href="./favicon.ico" />
-    </head>
-
+    <header class="header">
+      <img
+        class="header__logo"
+        src="./images/Vector.svg"
+        alt="Around the U.S. Logo"
+      />
+    </header>
     <main class="contnt">
-      <section class="page__section">
-        <header class="header">
-          <img
-            class="header__logo"
-            src="./images/Vector.png"
-            alt="Around the U.S. Logo"
-          />
-        </header>
-        <div class="profile">
-          <img src="./images/Avatar.png" alt="Avatar" class="profile__avatar" />
-          <div class="profile__info">
-            <h1 class="profile__title" id="profile__title">Jacques Cousteau</h1>
-            <button class="profile__button"></button>
-            <p class="profile__subtitle">Explorer</p>
-          </div>
-          <button class="profile__button-plus"></button>
+      <section class="profile page__section">
+        <img src="./images/Avatar.png" alt="Avatar" class="profile__avatar" />
+        <div class="profile__info">
+          <h1 class="profile__title">Jacques Cousteau</h1>
+          <button class="profile__button" type="button"></button>
+          <p class="profile__subtitle">Explorer</p>
         </div>
+        <button class="profile__button-plus" type="button"></button>
       </section>
+
       <section class="cards">
         <ul class="cards__list">
           <li class="card">
@@ -79,14 +77,13 @@
             <div class="card__description">
               <h2 class="card__title">Vanoise Nationa...</h2>
               <button class="card__like-button" type="button"></button>
-
-              <li class="card">
-                <img class="card__image" src="./images/lago.jpg" alt="lago" />
-                <div class="card__description">
-                  <h2 class="card__title">Lago di Braies</h2>
-                  <button class="card__like-button" type="button"></button>
-                </div>
-              </li>
+            </div>
+          </li>
+          <li class="card">
+            <img class="card__image" src="./images/lago.jpg" alt="lago" />
+            <div class="card__description">
+              <h2 class="card__title">Lago di Braies</h2>
+              <button class="card__like-button" type="button"></button>
             </div>
           </li>
         </ul>
