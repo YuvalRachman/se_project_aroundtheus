@@ -15,9 +15,7 @@
     "description description";
   align-items: center;
   grid-template-columns: minmax(auto, 373px) auto;
-}
-.profile__button-plus {
-  max-width: 150px;
+  max-width: 415px;
 }
 .profile__avatar {
   height: 120px;
@@ -29,11 +27,15 @@
 }
 .profile__title {
   margin: 0;
+  padding: 0;
   font-size: 42px;
   line-height: 48px;
   font-weight: 500;
   grid-area: title;
   justify-self: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .profile__subtitle {
@@ -69,6 +71,7 @@
 .profile__button-plus {
   background: transparent url(../images/plus\ icon.svg) center no-repeat;
   min-width: 150px;
+  max-width: 150px;
   height: 50px;
   margin: 0;
   border: solid #ffffff 2px;
@@ -109,11 +112,14 @@
     min-width: 282px;
   }
 }
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 713px) {
   .profile__title {
     font-size: 22px;
     line-height: 26.6px;
     padding-right: 10px;
     margin-top: 30px;
+  }
+  .profile__button {
+    margin: 0;
   }
 }
