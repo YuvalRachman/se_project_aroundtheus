@@ -33,12 +33,6 @@
   font-weight: 500;
   grid-area: title;
   justify-self: center;
-<<<<<<< HEAD
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-=======
->>>>>>> 71d60543c957b450376608481d6dc77ea016dd2e
 }
 
 .profile__subtitle {
@@ -115,21 +109,11 @@
     min-width: 282px;
   }
 }
-<<<<<<< HEAD
-@media screen and (max-width: 713px) {
-=======
 @media screen and (max-width: 580px) {
->>>>>>> 71d60543c957b450376608481d6dc77ea016dd2e
   .profile__title {
     font-size: 22px;
     line-height: 26.6px;
     padding-right: 10px;
     margin-top: 30px;
   }
-<<<<<<< HEAD
-  .profile__button {
-    margin: 0;
-  }
-=======
->>>>>>> 71d60543c957b450376608481d6dc77ea016dd2e
 }
