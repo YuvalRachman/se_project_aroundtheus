@@ -1,17 +1,6 @@
 .page__header {
   position: relative;
 }
-.header {
-  border: 1px solid #545454;
-  max-width: 880px;
-  margin: auto;
-  border-inline-style: none;
-}
-
-.header__logo {
-  padding-top: 45px;
-  margin: 0;
-}
 .page {
   margin: 0;
   background-color: black;
@@ -42,9 +31,6 @@
 }
 
 @media screen and (max-width: 713px) {
-  .header__logo {
-    margin-left: 10%;
-  }
   .page {
     min-width: 320px;
   }
