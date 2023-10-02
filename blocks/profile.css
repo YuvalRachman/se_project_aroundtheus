@@ -47,13 +47,10 @@
   font-weight: 400;
   grid-area: description;
   margin: 0;
+  max-width: 415px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.profile__image {
-  margin: 0 auto;
-  margin-bottom: 30px;
 }
 .profile__button {
   background: transparent url(../images/pen\ icon.svg) center no-repeat;
@@ -87,6 +84,7 @@
   .profile {
     padding-bottom: 0;
     max-width: 282px;
+    padding-top: 42px;
   }
   .profile__button-plus {
     margin-bottom: 36px;
@@ -117,8 +115,6 @@
   .profile__button-plus {
     min-width: 282px;
   }
-}
-@media screen and (max-width: 713px) {
   .profile__title {
     font-size: 22px;
     line-height: 26.6px;
