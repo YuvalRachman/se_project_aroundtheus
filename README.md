@@ -61,4 +61,5 @@ We've implemented media queries to make the project responsive to different scre
 
 ## link to my porject
 
-https://yuvalrachman.github.io/se_project_aroundtheus/
+https://yuvalrachman.github.io/se_project_aroundtheus/ .
+thanks for your watching
