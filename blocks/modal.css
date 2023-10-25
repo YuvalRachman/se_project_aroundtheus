@@ -1,0 +1,109 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  padding: 0 19px;
+  min-height: 330px;
+  display: flex;
+  visibility: hidden;
+}
+.modal_opened {
+  display: flex;
+  border: none;
+  visibility: visible;
+}
+.modal__container {
+  position: relative;
+  padding: 36px;
+  background-color: #fff;
+  margin: auto;
+  border-radius: 10px;
+  max-width: 430px;
+}
+.modal__close {
+  top: -45px;
+  right: -45px;
+  width: 40px;
+  height: 40px;
+  background-image: url("../images/Close\ Icon.svg");
+  border: none;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: #000;
+}
+.modal__heading {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  line-height: 29px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: rgba(0, 0, 0, 1);
+  max-width: 330px;
+  margin: 0;
+}
+.modal__form {
+  min-width: 358px;
+  display: inline-grid;
+  padding-top: 54px;
+}
+.modal__form1 {
+  border: none;
+  border-bottom: 1px solid black;
+}
+.modal__form2 {
+  margin-top: 29px;
+  margin-bottom: 36px;
+  border: none;
+  border-bottom: 1px solid black;
+}
+.modal__button {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0em;
+  text-align: center;
+  min-width: 358px;
+  min-height: 50px;
+  background-color: #000;
+  color: #fff;
+}
+.modal__button:hover {
+  opacity: 60%;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.modal__close:hover {
+  opacity: 60%;
+  transition: 0.2s;
+  cursor: pointer;
+}
+@media screen and (max-width: 580px) {
+  .modal__container {
+    max-width: 238px;
+    min-height: 272px;
+    padding: 25px 22px;
+  }
+  .modal__form1 {
+    max-width: 238px;
+  }
+  .modal__form2 {
+    max-width: 238px;
+  }
+  .modal__button {
+    max-width: 238px;
+    font-size: 14px;
+    line-height: 16.94px;
+    min-width: max-content;
+  }
+  .modal__close {
+    color: aqua;
+    padding-bottom: 40px;
+  }
+}

@@ -22,7 +22,7 @@
         <img src="./images/Avatar.png" alt="Avatar" class="profile__avatar" />
         <div class="profile__info">
           <h1 class="profile__title">Jacques Cousteau</h1>
-          <button class="profile__button" type="button"></button>
+          <button class="profile__button" id="PenBth" type="button"></button>
           <p class="profile__subtitle">Explorer</p>
         </div>
         <button class="profile__button-plus" type="button"></button>
@@ -92,5 +92,27 @@
     <footer class="footer">
       <p class="footer__copyright">&copy; 2022 Around The U.S.</p>
     </footer>
+    <div class="modal modal_opened" id="ModalEdit">
+      <div class="modal__container">
+        <button class="modal__close"></button>
+        <p class="modal__heading">Edit Profile</p>
+        <form class="modal__form">
+          <input
+            type="text"
+            name="title"
+            placeholder="title"
+            class="modal__form1"
+          />
+          <input
+            type="text"
+            name="subtitle"
+            placeholder="subtitle"
+            class="modal__form2"
+          />
+          <button class="modal__button">Save</button>
+        </form>
+      </div>
+    </div>
+    <script src="./scripts/index.js"></script>
   </body>
 </html>
