@@ -34,13 +34,13 @@
   position: absolute;
   background-repeat: no-repeat;
   background-size: contain;
-  background-color: #000;
+  background-color: transparent;
 }
 .modal__heading {
   font-family: Inter, Arial, Helvetica, sans-serif;
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 900;
-  line-height: 29px;
+  line-height: 21px;
   letter-spacing: 0em;
   text-align: left;
   color: rgba(0, 0, 0, 1);
@@ -48,35 +48,40 @@
   margin: 0;
 }
 .modal__form {
-  min-width: 358px;
-  display: inline-grid;
+  display: grid;
   padding-top: 54px;
 }
-.modal__form1 {
-  border: none;
-  border-bottom: 1px solid black;
-}
-.modal__form2 {
-  margin-top: 29px;
-  margin-bottom: 36px;
-  border: none;
-  border-bottom: 1px solid black;
-}
+
 .modal__button {
   font-family: Inter, Arial, Helvetica, sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 22px;
+  border-radius: 2px;
   letter-spacing: 0em;
   text-align: center;
-  min-width: 358px;
   min-height: 50px;
   background-color: #000;
   color: #fff;
+  width: 358px;
+  padding: 0;
+  border: none;
+}
+.modal__input {
+  font-family: Inter;
+  font-size: 14px;
+  line-height: 17px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 1);
+  margin-bottom: 29px;
+  padding: 0;
+}
+.modal__input:last-child {
+  margin-bottom: 45px;
 }
 .modal__button:hover {
-  opacity: 60%;
-  transition: 0.2s;
+  opacity: 80%;
+  transition: opacity 0.2s;
   cursor: pointer;
 }
 .modal__close:hover {
@@ -90,20 +95,24 @@
     min-height: 272px;
     padding: 25px 22px;
   }
-  .modal__form1 {
-    max-width: 238px;
+  .modal__form {
+    padding-top: 75px;
   }
-  .modal__form2 {
+  .modal__input {
     max-width: 238px;
+    margin-bottom: 45px;
+  }
+  .modal__input:first-of-type {
+    margin-bottom: 43px;
   }
   .modal__button {
-    max-width: 238px;
+    width: 238px;
     font-size: 14px;
     line-height: 16.94px;
     min-width: max-content;
   }
   .modal__close {
-    color: aqua;
-    padding-bottom: 40px;
+    margin-right: 44px;
+    width: 26px;
   }
 }

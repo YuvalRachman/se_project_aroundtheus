@@ -34,7 +34,6 @@
   font-weight: 500;
   max-width: 373px;
   grid-area: title;
-  justify-self: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -122,7 +121,7 @@
     max-width: 196px;
   }
   .profile__button {
-    margin-left: 10px;
+    margin: 0 0 7px 10px;
     height: 18px;
     width: 18px;
   }
