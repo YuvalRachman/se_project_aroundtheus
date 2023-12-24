@@ -24,19 +24,41 @@ const initialCards = [
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/lago.jpg",
   },
 ];
+const plusEdit = document.querySelector(".profile__button-plus");
+const modalImage = document.querySelector("#profilePlus");
+
 const penEdit = document.querySelector("#penBth");
 const modalEdit = document.querySelector("#modalEdit");
-const modalClose = document.querySelector(".modal__close");
+
 const profileTitle = document.querySelector(".profile__title");
 const profileSubtitle = document.querySelector(".profile__subtitle");
 const profilleTitleInpot = document.querySelector("#profile-title-inpot");
 const profilleSubtitleInpot = document.querySelector("#profile-subtitle-inpot");
-
+const modalPlusClose = modalImage.querySelector(".modal__close");
+const modalEditClose = modalEdit.querySelector(".modal__close");
 const profileEditForm = modalEdit.querySelector(".modal__form");
 const cardList = document.querySelector(".cards__list");
 const cardTemplate =
   document.querySelector("#card-template").content.firstElementChild;
-function getCsrdElement(cardData) {
+
+const addCardModal = document.querySelector("#add__card__form");
+const addCardEditForm = addCardModal.querySelector(".modal__form");
+const cardTitle = addCardEditForm.querySelector(".modal__input__type__title");
+const cardUrl = addCardEditForm.querySelector(".modal__input__type__url");
+
+function handleCardSubmit(e) {
+  e.preventDefault();
+  const name = cardTitle.value;
+  const link = cardUrl.value;
+  const newCard = getCardElement({
+    name,
+    link,
+  });
+  console.log(newCard);
+  closePopup();
+}
+
+function getCardElement(cardData) {
   const cardElement = cardTemplate.cloneNode(true);
   const cardImageEL = cardElement.querySelector(".card__image");
   const cardTitleEL = cardElement.querySelector(".card__title");
@@ -45,16 +67,27 @@ function getCsrdElement(cardData) {
   cardImageEL.alt = cardData.name;
   return cardElement;
 }
+
 function closePopup() {
   modalEdit.classList.remove("modal_opened");
+  modalImage.classList.remove("modal_opened");
 }
+
+plusEdit.addEventListener("click", () => {
+  modalImage.classList.add("modal_opened");
+});
 
 penEdit.addEventListener("click", () => {
   profilleTitleInpot.value = profileTitle.textContent;
   profilleSubtitleInpot.value = profileSubtitle.textContent;
   modalEdit.classList.add("modal_opened");
 });
-modalClose.addEventListener("click", () => {
+
+modalPlusClose.addEventListener("click", () => {
+  closePopup();
+});
+
+modalEditClose.addEventListener("click", () => {
   closePopup();
 });
 
@@ -64,8 +97,16 @@ function handleProfileEditSubmit(e) {
   profileSubtitle.textContent = profilleSubtitleInpot.value;
   closePopup();
 }
+
 profileEditForm.addEventListener("submit", handleProfileEditSubmit);
+addCardEditForm.addEventListener("submit", handleCardSubmit);
 initialCards.forEach((cardData) => {
-  const cardElement = getCsrdElement(cardData);
+  const cardElement = getCardElement(cardData);
   cardList.append(cardElement);
+});
+const likeButton = document.querySelectorAll(".card__like-button");
+likeButton.forEach((button) => {
+  button.addEventListener("click", () => {
+    button.classList.toggle("card__like-button-activ");
+  });
 });

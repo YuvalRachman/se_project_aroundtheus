@@ -47,6 +47,9 @@
   border: none;
   cursor: pointer;
 }
+.card__like-button-activ {
+  background: transparent url(../images/like\ icon\ activ.svg);
+}
 .card__like-button.liked {
   background-color: red;
 }
