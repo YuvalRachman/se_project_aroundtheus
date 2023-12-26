@@ -15,7 +15,7 @@
   letter-spacing: 0em;
   text-align: left;
 }
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 598px) {
   .footer {
     padding: 0;
     min-width: 282px;
@@ -34,7 +34,7 @@
     min-width: 880px;
   }
 }
-@media screen and (min-width: 619px) and (max-width: 917px) {
+@media screen and (min-width: 599px) and (max-width: 917px) {
   .footer__copyright {
     width: 567px;
     min-width: 560px;

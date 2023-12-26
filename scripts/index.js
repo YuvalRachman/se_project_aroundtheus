@@ -25,27 +25,25 @@ const initialCards = [
   },
 ];
 const plusEdit = document.querySelector(".profile__button-plus");
-const modalImage = document.querySelector("#profilePlus");
 
 const penEdit = document.querySelector("#penBth");
 const modalEdit = document.querySelector("#modalEdit");
-
+const modalAddCard = document.querySelector("#modalAddCard");
 const profileTitle = document.querySelector(".profile__title");
 const profileSubtitle = document.querySelector(".profile__subtitle");
 const profilleTitleInpot = document.querySelector("#profile-title-inpot");
 const profilleSubtitleInpot = document.querySelector("#profile-subtitle-inpot");
-const modalPlusClose = modalImage.querySelector(".modal__close");
+const modalPlusClose = modalAddCard.querySelector(".modal__close");
 const modalEditClose = modalEdit.querySelector(".modal__close");
 const profileEditForm = modalEdit.querySelector(".modal__form");
 const cardList = document.querySelector(".cards__list");
 const cardTemplate =
   document.querySelector("#card-template").content.firstElementChild;
 
-const addCardModal = document.querySelector("#add__card__form");
-const addCardEditForm = addCardModal.querySelector(".modal__form");
-const cardTitle = addCardEditForm.querySelector(".modal__input__type__title");
-const cardUrl = addCardEditForm.querySelector(".modal__input__type__url");
+const addCardEditForm = modalAddCard.querySelector(".modal__form");
 
+const cardTitle = modalAddCard.querySelector(".modal__input_type_title");
+const cardUrl = modalAddCard.querySelector(".modal__input_type_url");
 function handleCardSubmit(e) {
   e.preventDefault();
   const name = cardTitle.value;
@@ -54,7 +52,10 @@ function handleCardSubmit(e) {
     name,
     link,
   });
-  console.log(newCard);
+  cardList.prepend(newCard);
+  likeButton();
+  trashCard();
+  closePopup();
   closePopup();
 }
 
@@ -70,12 +71,9 @@ function getCardElement(cardData) {
 
 function closePopup() {
   modalEdit.classList.remove("modal_opened");
-  modalImage.classList.remove("modal_opened");
 }
 
-plusEdit.addEventListener("click", () => {
-  modalImage.classList.add("modal_opened");
-});
+plusEdit.addEventListener("click", () => {});
 
 penEdit.addEventListener("click", () => {
   profilleTitleInpot.value = profileTitle.textContent;
@@ -110,3 +108,11 @@ likeButton.forEach((button) => {
     button.classList.toggle("card__like-button-activ");
   });
 });
+
+function trashCard() {
+  trashButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      card.remove();
+    });
+  });
+}
