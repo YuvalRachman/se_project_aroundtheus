@@ -24,25 +24,41 @@ const initialCards = [
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/lago.jpg",
   },
 ];
-const plusEdit = document.querySelector(".profile__button-plus");
-const cardTemplate =
-  document.querySelector("#card-template").content.firstElementChild;
-const penEdit = document.querySelector("#penBth");
+
+// modal
 const modalEdit = document.querySelector("#modalEdit");
 const modalAddCard = document.querySelector("#modalAddCard");
+const modalPlusClose = modalAddCard.querySelector(".modal__close");
+const modalEditClose = modalEdit.querySelector(".modal__close");
+const profileEditForm = modalEdit.querySelector(".modal__form");
+const addCardEditForm = modalAddCard.querySelector(".modal__form");
+const cardTitle = modalAddCard.querySelector(".modal__input_type_title");
+const cardUrl = modalAddCard.querySelector(".modal__input_type_url");
+
+// button
+const plusEdit = document.querySelector(".profile__button-plus");
+const penEdit = document.querySelector("#penBth");
+const trashDelete = document.querySelector(".card__trash-button");
+
+// container
+const cardTemplate =
+  document.querySelector("#card-template").content.firstElementChild;
+const imagePreview = document.querySelector("preview_image-container");
+
+// profile
+
 const profileTitle = document.querySelector(".profile__title");
 const profileSubtitle = document.querySelector(".profile__subtitle");
 const profilleTitleInpot = document.querySelector("#profile-title-inpot");
 const profilleSubtitleInpot = document.querySelector("#profile-subtitle-inpot");
-const modalPlusClose = modalAddCard.querySelector(".modal__close");
-const modalEditClose = modalEdit.querySelector(".modal__close");
-const profileEditForm = modalEdit.querySelector(".modal__form");
-const cardList = document.querySelector(".cards__list");
 
-const addCardEditForm = modalAddCard.querySelector(".modal__form");
-const trashDelete = document.querySelector(".card__trash-button");
-const cardTitle = modalAddCard.querySelector(".modal__input_type_title");
-const cardUrl = modalAddCard.querySelector(".modal__input_type_url");
+// card
+
+const cardList = document.querySelector(".cards__list");
+const cardImageEL = document.querySelector(".card__image");
+
+// function
+
 function buttonActiv() {
   const likeButton = document.querySelectorAll(".card__like-button");
   likeButton.forEach((button) => {
@@ -51,7 +67,14 @@ function buttonActiv() {
     });
   });
 }
-
+function previewImage() {
+  cardImageEl.addEventListener("click", () => {
+    modal_preview.src = cardData.link;
+    modal_coption.textContent = cardData.name;
+    modal_preview.alt = `Photo of ${cardData.name}`;
+    openPopup(preview_image - container);
+  });
+}
 function handleCardSubmit(e) {
   e.preventDefault();
 
@@ -115,11 +138,11 @@ function handleProfileEditSubmit(e) {
   closePopup();
 }
 
-profileEditForm.addEventListener("submit", handleProfileEditSubmit);
-addCardEditForm.addEventListener("submit", handleCardSubmit);
-
 initialCards.forEach((cardData) => {
   const cardElement = getCardElement(cardData);
   cardList.append(cardElement);
   buttonActiv();
 });
+// else
+profileEditForm.addEventListener("submit", handleProfileEditSubmit);
+addCardEditForm.addEventListener("submit", handleCardSubmit);
