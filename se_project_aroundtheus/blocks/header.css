@@ -1,0 +1,32 @@
+.header {
+  border: 1px solid rgba(84, 84, 84, 0.7);
+  max-width: 880px;
+  margin: auto;
+  border-inline-style: none;
+  color: white;
+  margin-top: 45px;
+  border-block-start-style: none;
+  max-height: 74px;
+}
+.header__logo {
+  padding-bottom: 41px;
+  margin: 0;
+  max-height: 33px;
+}
+@media screen and (max-width: 879px) {
+  .header__logo {
+    margin-left: 10%;
+  }
+}
+@media screen and (max-width: 580px) {
+  .header {
+    max-width: 320px;
+    margin-top: 28px;
+    max-height: 56px;
+  }
+  .header__logo {
+    max-width: 126px;
+    max-height: 24px;
+    padding-bottom: 32px;
+  }
+}
