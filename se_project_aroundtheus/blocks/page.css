@@ -1,0 +1,37 @@
+.page__header {
+  position: relative;
+}
+.page {
+  margin: 0;
+  background-color: black;
+  color: white;
+  font-family: Inter, Arial, Helvetica, sans-serif;
+}
+.page__content {
+  display: flex;
+  flex-direction: column;
+  margin: 0 20px;
+  max-width: calc(100% - 40px);
+}
+.page__section {
+  max-width: 880px;
+  width: 100%;
+  position: relative;
+  margin: 0 auto;
+}
+
+.page__footer {
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  color: #545454;
+  max-width: 880px;
+  margin-inline: auto;
+}
+
+@media screen and (max-width: 713px) {
+  .page {
+    min-width: 320px;
+  }
+}
