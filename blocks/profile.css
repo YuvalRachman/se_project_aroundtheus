@@ -1,0 +1,128 @@
+.profile {
+  padding: 40px 0 51px 0;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin: 0 auto;
+}
+
+.profile__info {
+  margin-left: 30px;
+  margin-right: auto;
+  display: grid;
+  grid-template-areas:
+    " title button "
+    "description description";
+  align-items: center;
+  grid-template-columns: minmax(auto, 373px) auto;
+  max-width: 415px;
+  max-width: 415px;
+}
+.profile__avatar {
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-position: center;
+  margin: 0;
+}
+.profile__title {
+  margin: 0;
+  padding: 0;
+  font-size: 42px;
+  line-height: 48px;
+  font-weight: 500;
+  max-width: 373px;
+  grid-area: title;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile__subtitle {
+  font-family: "Inter", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 400;
+  grid-area: description;
+  margin: 0;
+  max-width: 415px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.profile__button {
+  background: transparent url(../images/pen\ icon.svg) center no-repeat;
+  height: 24px;
+  width: 24px;
+  padding: 0;
+  margin-left: 18px;
+  border: 1px solid white;
+  grid-area: button;
+}
+.profile__button:hover {
+  opacity: 60%;
+  transition: 0.2s;
+  cursor: pointer;
+}
+.profile__card-button {
+  background: transparent url(../images/plus\ icon.svg) center no-repeat;
+  min-width: 150px;
+  max-width: 150px;
+  height: 50px;
+  margin: 0;
+  border: solid #ffffff 2px;
+  border-radius: 2px;
+}
+.profile__card-button:hover {
+  opacity: 60%;
+  transition: 0.2s;
+  cursor: pointer;
+}
+@media screen and (max-width: 580px) {
+  .profile {
+    padding-bottom: 0;
+    max-width: 282px;
+    padding-top: 42px;
+  }
+  .profile__card-button {
+    margin-bottom: 36px;
+  }
+  .profile__info {
+    max-width: 196px;
+  }
+}
+@media screen and (max-width: 713px) {
+  .profile {
+    flex-flow: column;
+  }
+  .profile__subtitle {
+    width: 100%;
+    text-align: center;
+    font-size: 14px;
+    line-height: 17px;
+    padding: 14px 0 36px;
+  }
+  .profile__info {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: self-end;
+    margin-inline-start: auto;
+    min-width: 282px;
+  }
+  .profile__card-button {
+    min-width: 282px;
+  }
+  .profile__title {
+    font-size: 22px;
+    line-height: 26.6px;
+    margin-top: 30px;
+    max-width: 196px;
+  }
+  .profile__button {
+    margin: 0 0 7px 10px;
+    height: 18px;
+    width: 18px;
+  }
+}
