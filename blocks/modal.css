@@ -11,6 +11,7 @@
   display: flex;
   visibility: hidden;
 }
+
 .modal__image {
   position: fixed;
   top: 0;
@@ -95,21 +96,33 @@
   transition: 0.2s;
   cursor: pointer;
 }
-#preview_image > .modal__close {
+#preview_image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  padding: 0 19px;
+  min-height: 330px;
+  display: flex;
+  visibility: hidden;
 }
-
 .preview_image-container {
-  position: relative;
-  /* max-width: 75vw;
-  max-height: 75vh;*/
   min-width: 433px;
   width: 816px;
   height: 540px;
   margin: auto;
-  max-width: 100%;
   max-height: 100%;
   max-width: max-content;
   white-space: nowrap;
+  position: relative;
+}
+.modal_preview {
+  min-width: 433px;
+  min-height: 540px;
+  max-height: 540px;
 }
 .modal_coption {
   font-size: 12px;
@@ -120,27 +133,43 @@
 #preview_close {
   background-image: url("../images/Close\ Icon.svg");
   border: none;
-
   background-repeat: no-repeat;
   background-size: contain;
   background-color: transparent;
   padding: 0;
   width: 24px;
-  visibility: hidden;
-  position: revert;
-  height: 564px;
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 40px;
+  height: 40px;
 }
+.modal__close {
+  background-image: url("../images/Close\ Icon.svg");
+  border: none;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: transparent;
+  padding: 0;
+  width: 24px;
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 40px;
+  height: 40px;
+}
+
 @media screen and (max-width: 580px) {
   .modal__container {
     max-width: 238px;
     min-height: 272px;
-    padding: 25px 22px;
+    padding: 0;
   }
   .modal__form {
     padding-top: 75px;
   }
   .modal__input {
-    max-width: 238px;
+    max-width: 139px;
     margin-bottom: 45px;
   }
   .modal__input:first-of-type {
@@ -160,5 +189,21 @@
   .modal__close {
     margin-right: 44px;
     width: 26px;
+    height: 26px;
+  }
+  #preview_close {
+    width: 30px;
+    height: 30px;
+  }
+  .modal_preview {
+    max-width: 240px;
+    max-height: 299px;
+    min-height: 299px;
+    min-width: 240px;
+  }
+  .preview_image-container {
+    min-width: 239px;
+    width: 388px;
+    height: 287px;
   }
 }
