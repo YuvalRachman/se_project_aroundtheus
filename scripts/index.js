@@ -90,7 +90,7 @@ function deleteCard(cardElement) {
   cardElement.remove();
 }
 function toggleLike(likeButton) {
-  likeButton.classList.toggle("liked");
+  likeButton.classList.toggle("card__like-button_active");
 }
 
 //openPopup(modalPreview);
@@ -139,6 +139,8 @@ plusEdit.addEventListener("click", () => {
 penEdit.addEventListener("click", () => {
   openModal(modalEdit);
   profilleTitleInput.focus();
+  profilleTitleInput.value = profileTitle.textContent;
+  profilleSubtitleInput.value = profileSubtitle.textContent;
 });
 modalEdit.addEventListener("submit", handleProfileEditSubmit);
 // Event listener for card form submission
