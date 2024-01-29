@@ -27,10 +27,7 @@
   visibility: hidden;
   display: flex;
 }
-.modal_preview {
-  max-width: 100%;
-  max-height: 100%;
-}
+
 .modal_opened {
   display: flex;
   border: none;
@@ -59,6 +56,7 @@
 }
 .modal__form {
   padding-top: 54px;
+  width: min-content;
 }
 
 .modal__button {
@@ -84,7 +82,8 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   margin-bottom: 29px;
   padding: 0;
-  padding-right: 41%;
+  width: 100%;
+  display: inline-block;
 }
 .modal__input:nth-last-of-type(1) {
   margin-bottom: 45px;
@@ -113,35 +112,35 @@
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 999;
-  padding: 0 19px;
+  padding: 0 47px;
   min-height: 330px;
   display: flex;
-  visibility: hidden;
-  opacity: 0;
+  justify-content: center;
+  align-items: center;
   transition: all 300ms ease-in-out;
 }
-.preview_image-container {
-  min-width: 433px;
-  width: 816px;
-  height: 540px;
-  margin: auto;
-  max-height: 100%;
-  max-width: max-content;
-  white-space: nowrap;
+
+.preview__container {
+  max-width: 816px;
+  max-height: 540px;
   position: relative;
+  transition: all 500ms ease-in-out;
 }
 
-.modal_preview {
-  min-width: 433px;
-  min-height: 540px;
+.preview__image {
+  max-width: 100%;
+  max-height: 100%;
   max-height: 540px;
+  min-height: 299px;
 }
-.modal_coption {
+
+.preview__caption {
   font-size: 12px;
   padding: 0;
   margin: 0;
   margin-top: 10px;
 }
+
 #preview_close {
   background-image: url("../images/Close\ Icon.svg");
   border: none;
@@ -171,17 +170,23 @@
   height: 40px;
 }
 
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 599px) {
   .modal__container {
     max-width: 260px;
     max-height: 297px;
     padding: 25px 22px;
   }
+  .preview__container {
+    transition: all 500ms ease-in-out;
+    min-width: 239px;
+    max-width: 240px;
+    width: 388px;
+    height: 287px;
+  }
   .modal__form {
-    padding-top: 75px;
+    padding-top: 76px;
   }
   .modal__input {
-    max-width: 139px;
     margin-bottom: 45px;
   }
   .modal__input:first-of-type {
@@ -210,15 +215,10 @@
     height: 30px;
     left: 241px;
   }
-  .modal_preview {
+  .preview_image {
     max-width: 240px;
     max-height: 299px;
     min-height: 299px;
     min-width: 240px;
-  }
-  .preview_image-container {
-    min-width: 239px;
-    width: 388px;
-    height: 287px;
   }
 }

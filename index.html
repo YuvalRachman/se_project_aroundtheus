@@ -48,7 +48,7 @@
             type="text"
             name="title"
             placeholder="title"
-            id="profile-title-inpot"
+            id="profile-title-input"
             class="modal__input"
             required
           />
@@ -56,7 +56,7 @@
             type="text"
             name="subtitle"
             placeholder="subtitle"
-            id="profile-subtitle-inpot"
+            id="profile-subtitle-input"
             class="modal__input"
             required
           />
@@ -84,8 +84,8 @@
             class="modal__input modal__input_type_url"
             required
           />
-          <button class="modal__button" id="craeteButton" type="submit">
-            Craete
+          <button class="modal__button" id="createButton" type="submit">
+            Create
           </button>
         </form>
       </div>
@@ -101,11 +101,11 @@
       </li>
     </template>
 
-    <div class="modal" id="preview_image">
-      <div class="preview_image-container">
-        <img class="modal_preview" src="" alt="" />
+    <div class="modal preview" id="preview_image">
+      <div class="preview__container">
+        <img class="preview__image" src="" alt="" />
         <button class="modal__close" id="preview_close" type="button"></button>
-        <h2 class="modal_coption"></h2>
+        <h2 class="preview__caption"></h2>
       </div>
     </div>
     <script src="./scripts/index.js"></script>

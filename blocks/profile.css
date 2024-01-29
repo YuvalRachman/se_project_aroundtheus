@@ -79,7 +79,7 @@
   transition: 0.2s;
   cursor: pointer;
 }
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 599px) {
   .profile {
     padding-bottom: 0;
     max-width: 282px;

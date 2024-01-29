@@ -47,9 +47,10 @@
   border: none;
   cursor: pointer;
 }
-.card__like-button-activ {
+.card__like-button.liked {
   background: transparent url(../images/like\ icon\ activ.svg);
 }
+
 .card__trash-button {
   background: transparent url(../images/Trash.svg);
   width: 18px;
@@ -69,12 +70,12 @@
   opacity: 0.5;
   transition: 0.2s;
 }
-@media screen and (max-width: 580px) {
+@media screen and (max-width: 599px) {
   .card:nth-of-type(1) {
     margin-top: 0;
   }
 }
-@media screen and (min-width: 880px) {
+@media screen and (min-width: 899px) {
   .card:nth-child(-n + 3) {
     margin-top: 0;
   }
