@@ -55,6 +55,13 @@ const profilleSubtitleInput = document.querySelector("#profile-subtitle-input");
 
 const previewContainer = document.querySelector(".preview__container");
 
+// Event Bubbling for delete card
+cardList.addEventListener("click", function (e) {
+  if (e.target.className == "card__trash-button") {
+    const li = e.target.parentElement;
+    cardList.removeChild(li);
+  }
+});
 function closeModal(modal) {
   modal.classList.remove("modal_opened");
 }
@@ -99,15 +106,10 @@ function getCardElement(cardData) {
   const cardImageEL = cardElement.querySelector(".card__image");
   const cardTitleEL = cardElement.querySelector(".card__title");
   const likeButton = cardElement.querySelector(".card__like-button");
-  const trashButton = cardElement.querySelector(".card__trash-button");
 
   cardTitleEL.textContent = cardData.name;
   cardImageEL.src = cardData.link;
   cardImageEL.alt = cardData.name;
-
-  // Use deleteCard as the event listener for the trash button
-
-  trashButton.addEventListener("click", () => deleteCard(cardElement));
 
   // Attach the like button event listener directly for the specific card
 

@@ -26,6 +26,11 @@
   background-position: center;
   margin: 0;
 }
+.profile__change {
+  background-image: url(../images/Avatar\ change.svg);
+  height: 24px;
+  width: 24px;
+}
 .profile__title {
   margin: 0;
   padding: 0;
@@ -58,7 +63,6 @@
   padding: 0;
   margin-left: 18px;
   border: 1px solid white;
-  grid-area: button;
 }
 .profile__button:hover {
   opacity: 60%;
