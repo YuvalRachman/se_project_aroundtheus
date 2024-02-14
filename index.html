@@ -52,7 +52,14 @@
             id="profile-title-input"
             class="modal__input"
             required
+            minlength="2"
+            maxlength="40"
           />
+          <span
+            class="modal__input-error"
+            id="profile-title-input-error"
+          ></span>
+
           <input
             type="text"
             name="subtitle"
@@ -60,7 +67,13 @@
             id="profile-subtitle-input"
             class="modal__input"
             required
+            minlength="2"
+            maxlength="200"
           />
+          <span
+            class="modal__input-error"
+            id="profile-subtitle-input-error"
+          ></span>
           <button class="modal__button" type="submit">Save</button>
         </form>
       </div>
@@ -76,15 +89,19 @@
             name="title"
             placeholder="title"
             class="modal__input modal__input_type_title"
+            id="card-title-input"
             required
-          />
+            minlength="1"
+          /><span class="modal__input-error" id="card-title-input-error"></span>
           <input
-            type="text"
-            name="url"
+            type="url"
+            name="website"
             placeholder="image URL"
             class="modal__input modal__input_type_url"
+            id="card-url-input"
             required
           />
+          <span class="modal__input-error" id="card-url-input-error"></span>
           <button class="modal__button" id="createButton" type="submit">
             Create
           </button>
@@ -110,5 +127,6 @@
       </div>
     </div>
     <script src="./scripts/index.js"></script>
+    <script src="./scripts/valid-form.js"></script>
   </body>
 </html>

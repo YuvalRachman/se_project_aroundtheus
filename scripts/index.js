@@ -55,7 +55,7 @@ const profilleSubtitleInput = document.querySelector("#profile-subtitle-input");
 
 const previewContainer = document.querySelector(".preview__container");
 
-// Event Bubbling for delete card
+// Event  bubbling for delete card
 cardList.addEventListener("click", function (e) {
   if (e.target.className == "card__trash-button") {
     const li = e.target.parentElement;
