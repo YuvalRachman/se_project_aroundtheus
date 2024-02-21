@@ -62,20 +62,38 @@ cardList.addEventListener("click", function (e) {
     cardList.removeChild(li);
   }
 });
-function closeModal(modal) {
-  modal.classList.remove("modal_opened");
-}
-// Function to open modals and focus on an element
 function openModal(modal) {
   modal.classList.add("modal_opened");
 }
 
+// Function to close modals
+function closeModal(modal) {
+  modal.classList.remove("modal_opened");
+}
+
+// Event listener to handle Escape key press
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Escape") {
+    // Iterate over each modal and close it
+    modals.forEach(function (modal) {
+      closeModal(modal);
+    });
+  }
+});
+document.addEventListener("mousedown", (event) => {
+  if (event.target.matches(".modal_opened")) {
+    // Iterate over each modal and close it
+    modals.forEach(function (modal) {
+      closeModal(modal);
+    });
+  }
+});
 // Function to handle profile form submission
 function handleProfileEditSubmit(e) {
   e.preventDefault();
   profileTitle.textContent = profilleTitleInput.value;
   profileSubtitle.textContent = profilleSubtitleInput.value;
-  closeModal(modalEdit);
+  closeModal(modalEdit); // Close the modal after form submission
 }
 
 // Function to handle image preview
