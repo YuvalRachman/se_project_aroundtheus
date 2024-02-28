@@ -52,16 +52,9 @@ const profileTitle = document.querySelector(".profile__title");
 const profileSubtitle = document.querySelector(".profile__subtitle");
 const profilleTitleInput = document.querySelector("#profile-title-input");
 const profilleSubtitleInput = document.querySelector("#profile-subtitle-input");
-
+const modalButtons = document.querySelectorAll(".modal__button");
 const previewContainer = document.querySelector(".preview__container");
-
-// Event  bubbling for delete card
-cardList.addEventListener("click", function (e) {
-  if (e.target.className == "card__trash-button") {
-    const li = e.target.parentElement;
-    cardList.removeChild(li);
-  }
-});
+const closeButtons = document.querySelectorAll(".popup__close");
 function openModal(modal) {
   modal.classList.add("modal_opened");
 }
@@ -75,19 +68,19 @@ function closeModal(modal) {
 document.addEventListener("keydown", function (event) {
   if (event.key === "Escape") {
     // Iterate over each modal and close it
-    modals.forEach(function (modal) {
-      closeModal(modal);
+    modals.forEach(closeModal);
+    // Remove the event listener for "keydown" when Esc is pressed
+    modals.forEach((modal) => {
+      modal.removeEventListener("keydown", closeModalOnEscape);
     });
   }
 });
-document.addEventListener("mousedown", (event) => {
-  if (event.target.matches(".modal_opened")) {
-    // Iterate over each modal and close it
-    modals.forEach(function (modal) {
-      closeModal(modal);
-    });
-  }
+modalButtons.forEach((modal) => {
+  modal.addEventListener("mousedown", () => {
+    closeModal(modal);
+  });
 });
+
 // Function to handle profile form submission
 function handleProfileEditSubmit(e) {
   e.preventDefault();
@@ -124,14 +117,17 @@ function getCardElement(cardData) {
   const cardImageEL = cardElement.querySelector(".card__image");
   const cardTitleEL = cardElement.querySelector(".card__title");
   const likeButton = cardElement.querySelector(".card__like-button");
+  const deleteButton = cardElement.querySelector(".card__trash-button"); // Select the delete button
 
   cardTitleEL.textContent = cardData.name;
   cardImageEL.src = cardData.link;
   cardImageEL.alt = cardData.name;
 
   // Attach the like button event listener directly for the specific card
-
   likeButton.addEventListener("click", () => toggleLike(likeButton));
+
+  // Add event listener to delete button
+  deleteButton.addEventListener("click", () => deleteCard(cardElement));
 
   previewImage(cardData, cardElement);
   return cardElement;
@@ -145,8 +141,7 @@ function handleCardSubmit(e) {
   const cardData = { name, link };
   const newCard = getCardElement(cardData);
   cardList.prepend(newCard); // Append the new card to the cardList container
-  cardTitle.value = "";
-  cardUrl.value = "";
+  e.target.reset();
   closeModal(modalAddCard); // Close the modal after form submission
 }
 
@@ -166,21 +161,30 @@ modalEdit.addEventListener("submit", handleProfileEditSubmit);
 // Event listener for card form submission
 addCardEditForm.addEventListener("submit", handleCardSubmit);
 
-// Event listener for closing the preview modal
-modalPreviewClose.addEventListener("click", () => {
-  closeModal(modalPreview);
-});
+function closePopup(popup) {
+  if (popup) {
+    popup.classList.remove("modal_opened");
+  }
+}
 
-// Event listener for closing the add card modal
-modalAddCardCloseButton.addEventListener("click", () => {
-  closeModal(modalAddCard);
+closeButtons.forEach((button) => {
+  const popup = button.closest(".popup");
+  if (popup) {
+    button.addEventListener("click", () => closePopup(popup));
+  }
 });
-
-// Event listener for closing the edit profile modal
-modalEditClose.addEventListener("click", () => {
-  closeModal(modalEdit);
+modalPreviewClose.addEventListener("click", () => closePopup(modalPreview));
+modalEditClose.addEventListener("click", () => closePopup(modalEdit));
+modalAddCardCloseButton.addEventListener("click", () =>
+  closePopup(modalAddCard)
+);
+modals.forEach((modal) => {
+  modal.addEventListener("click", (event) => {
+    if (event.target.classList.contains("modal")) {
+      closeModal(modal);
+    }
+  });
 });
-
 initialCards.forEach((cardData) => {
   const cardElement = getCardElement(cardData);
   cardList.append(cardElement);
