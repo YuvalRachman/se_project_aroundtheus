@@ -34,7 +34,7 @@
   visibility: visible;
   opacity: 1;
 }
-.modal__container {
+.modal__container:not(.preview__container) {
   position: relative;
   padding: 36px;
   background-color: #fff;

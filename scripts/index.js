@@ -33,9 +33,6 @@ const modalPreview = document.querySelector("#preview_image");
 const modalContainers = document.querySelectorAll(".modal__container");
 const modalEdit = document.querySelector("#modalEdit");
 const modalAddCard = document.querySelector("#modalAddCard");
-const modalPreviewClose = document.querySelector("#preview_close");
-const modalAddCardCloseButton = modalAddCard.querySelector(".modal__close");
-const modalEditClose = modalEdit.querySelector(".modal__close");
 const profileEditForm = modalEdit.querySelector(".modal__form");
 const addCardEditForm = modalAddCard.querySelector(".modal__form");
 const cardTitle = modalAddCard.querySelector(".modal__input_type_title");
@@ -54,7 +51,7 @@ const profilleTitleInput = document.querySelector("#profile-title-input");
 const profilleSubtitleInput = document.querySelector("#profile-subtitle-input");
 const modalButtons = document.querySelectorAll(".modal__button");
 const previewContainer = document.querySelector(".preview__container");
-const closeButtons = document.querySelectorAll(".popup__close");
+
 function openModal(modal) {
   modal.classList.add("modal_opened");
 }
@@ -63,12 +60,6 @@ function openModal(modal) {
 function closeModal(modal) {
   modal.classList.remove("modal_opened");
 }
-const closeModalOnEscape = (event) => {
-  const modal = event.target.closest(".modal");
-  if (modal) {
-    closeModal(modal);
-  }
-};
 
 // Event listener to handle Escape key press
 document.addEventListener("keydown", function (event) {
@@ -76,12 +67,6 @@ document.addEventListener("keydown", function (event) {
     // Iterate over each modal and close it
     modals.forEach(closeModal);
   }
-});
-
-modalButtons.forEach((modal) => {
-  modal.addEventListener("mousedown", () => {
-    closeModal(modal);
-  });
 });
 
 // Function to handle profile form submission
@@ -164,23 +149,19 @@ modalEdit.addEventListener("submit", handleProfileEditSubmit);
 // Event listener for card form submission
 addCardEditForm.addEventListener("submit", handleCardSubmit);
 
-function closePopup(popup) {
-  if (popup) {
-    popup.classList.remove("modal_opened");
-  }
-}
-
-closeButtons.forEach((button) => {
-  const popup = button.closest(".popup");
-  if (popup) {
-    button.addEventListener("click", () => closePopup(popup));
-  }
+// Assuming modalContainers is a NodeList or an array-like structure containing all modal containers
+modalContainers.forEach((container) => {
+  container.addEventListener("click", function (event) {
+    const button = event.target.closest(".modal__close");
+    if (button) {
+      const modal = button.closest(".modal");
+      if (modal) {
+        closeModal(modal);
+      }
+    }
+  });
 });
-modalPreviewClose.addEventListener("click", () => closePopup(modalPreview));
-modalEditClose.addEventListener("click", () => closePopup(modalEdit));
-modalAddCardCloseButton.addEventListener("click", () =>
-  closePopup(modalAddCard)
-);
+
 modals.forEach((modal) => {
   modal.addEventListener("click", (event) => {
     if (event.target.classList.contains("modal")) {

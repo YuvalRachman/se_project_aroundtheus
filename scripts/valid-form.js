@@ -37,10 +37,10 @@ const hasInvalidInput = (inputList) => {
 const toggleButtonState = (inputList, buttonElement, validationOptions) => {
   if (hasInvalidInput(inputList)) {
     buttonElement.classList.add(validationOptions.inactiveButtonClass);
-    buttonElement.classList.remove("modal__button_inactive");
+    buttonElement.setAttribute("disabled", "disabled");
   } else {
     buttonElement.classList.remove(validationOptions.inactiveButtonClass);
-    buttonElement.classList.add("modal__button_inactive");
+    buttonElement.removeAttribute("disabled");
   }
 };
 
@@ -70,6 +70,7 @@ const enableValidation = (validationOptions) => {
   });
 };
 
+// Validation options object
 const validationOptions = {
   formSelector: ".modal__form",
   inputSelector: ".modal__input",
@@ -77,7 +78,8 @@ const validationOptions = {
   inactiveButtonClass: "modal__button_disabled",
   inputErrorClass: "modal__input_type_error",
   errorClass: "modal__input-error",
-  errorVisibleClass: "modal__input-error_active",
+  errorVisibleClass: "modal__input-error_visible",
 };
 
+// Enable validation with the provided options
 enableValidation(validationOptions);
