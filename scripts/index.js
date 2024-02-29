@@ -51,23 +51,35 @@ const profilleTitleInput = document.querySelector("#profile-title-input");
 const profilleSubtitleInput = document.querySelector("#profile-subtitle-input");
 const modalButtons = document.querySelectorAll(".modal__button");
 const previewContainer = document.querySelector(".preview__container");
-
+// Function to open modals
 function openModal(modal) {
   modal.classList.add("modal_opened");
+  // Add event listener for Escape key press
+  document.addEventListener("keydown", closeModalOnEscape);
 }
 
 // Function to close modals
 function closeModal(modal) {
   modal.classList.remove("modal_opened");
+  // Remove event listener for Escape key press
+  document.removeEventListener("keydown", closeModalOnEscape);
 }
 
-// Event listener to handle Escape key press
-document.addEventListener("keydown", function (event) {
+// Define the event handler function for Escape key press
+function closeModalOnEscape(event) {
   if (event.key === "Escape") {
-    // Iterate over each modal and close it
-    modals.forEach(closeModal);
+    // Find the currently active modal
+    const activeModal = document.querySelector(".modal_opened");
+    if (activeModal) {
+      closeModal(activeModal);
+    }
   }
-});
+}
+
+// Function to remove modal from its parent
+function removeModal(modal) {
+  modal.parentNode.removeChild(modal);
+}
 
 // Function to handle profile form submission
 function handleProfileEditSubmit(e) {
@@ -78,7 +90,6 @@ function handleProfileEditSubmit(e) {
 }
 
 // Function to handle image preview
-
 function previewImage(cardData, previewContainer) {
   const cardImageEL = previewContainer.querySelector(".card__image");
 
@@ -87,48 +98,47 @@ function previewImage(cardData, previewContainer) {
       previewModalPicture.src = cardData.link;
       previewCaptionModal.textContent = cardData.name;
       previewModalPicture.alt = `Photo of ${cardData.name}`;
-      console.log("aa");
       openModal(modalPreview);
     });
   }
 }
+
+// Function to delete a card
 function deleteCard(cardElement) {
   cardElement.remove();
 }
+
+// Function to toggle like on a card
 function toggleLike(likeButton) {
   likeButton.classList.toggle("card__like-button_active");
 }
 
-//openPopup(modalPreview);
+// Function to get a card element
 function getCardElement(cardData) {
   const cardElement = cardTemplate.cloneNode(true);
   const cardImageEL = cardElement.querySelector(".card__image");
   const cardTitleEL = cardElement.querySelector(".card__title");
   const likeButton = cardElement.querySelector(".card__like-button");
-  const deleteButton = cardElement.querySelector(".card__trash-button"); // Select the delete button
+  const deleteButton = cardElement.querySelector(".card__trash-button");
 
   cardTitleEL.textContent = cardData.name;
   cardImageEL.src = cardData.link;
   cardImageEL.alt = cardData.name;
 
-  // Attach the like button event listener directly for the specific card
   likeButton.addEventListener("click", () => toggleLike(likeButton));
-
-  // Add event listener to delete button
   deleteButton.addEventListener("click", () => deleteCard(cardElement));
-
   previewImage(cardData, cardElement);
   return cardElement;
 }
 
-// Modify handleCardSubmit to trigger the deleteCard function
+// Function to handle card form submission
 function handleCardSubmit(e) {
   e.preventDefault();
   const name = cardTitle.value;
   const link = cardUrl.value;
   const cardData = { name, link };
   const newCard = getCardElement(cardData);
-  cardList.prepend(newCard); // Append the new card to the cardList container
+  cardList.prepend(newCard);
   e.target.reset();
   closeModal(modalAddCard); // Close the modal after form submission
 }
@@ -146,22 +156,24 @@ penEdit.addEventListener("click", () => {
   profilleSubtitleInput.value = profileSubtitle.textContent;
 });
 modalEdit.addEventListener("submit", handleProfileEditSubmit);
+
 // Event listener for card form submission
 addCardEditForm.addEventListener("submit", handleCardSubmit);
 
-// Assuming modalContainers is a NodeList or an array-like structure containing all modal containers
-modalContainers.forEach((container) => {
-  container.addEventListener("click", function (event) {
-    const button = event.target.closest(".modal__close");
-    if (button) {
-      const modal = button.closest(".modal");
-      if (modal) {
-        closeModal(modal);
-      }
+// Event listener for clicking on the close button of a modal
+function handleCloseButtonClick(event) {
+  const button = event.target.closest(".modal__close");
+  if (button) {
+    const modal = button.closest(".modal");
+    if (modal) {
+      closeModal(modal);
     }
-  });
-});
+  }
+}
 
+// Attach event listener to the document for close buttons
+document.addEventListener("click", handleCloseButtonClick);
+// Event listener for clicking outside the modal to close it
 modals.forEach((modal) => {
   modal.addEventListener("click", (event) => {
     if (event.target.classList.contains("modal")) {
@@ -169,6 +181,8 @@ modals.forEach((modal) => {
     }
   });
 });
+
+// Initialize card elements from initialCards data
 initialCards.forEach((cardData) => {
   const cardElement = getCardElement(cardData);
   cardList.append(cardElement);
