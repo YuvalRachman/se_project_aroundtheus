@@ -63,18 +63,21 @@ function openModal(modal) {
 function closeModal(modal) {
   modal.classList.remove("modal_opened");
 }
+const closeModalOnEscape = (event) => {
+  const modal = event.target.closest(".modal");
+  if (modal) {
+    closeModal(modal);
+  }
+};
 
 // Event listener to handle Escape key press
 document.addEventListener("keydown", function (event) {
   if (event.key === "Escape") {
     // Iterate over each modal and close it
     modals.forEach(closeModal);
-    // Remove the event listener for "keydown" when Esc is pressed
-    modals.forEach((modal) => {
-      modal.removeEventListener("keydown", closeModalOnEscape);
-    });
   }
 });
+
 modalButtons.forEach((modal) => {
   modal.addEventListener("mousedown", () => {
     closeModal(modal);
