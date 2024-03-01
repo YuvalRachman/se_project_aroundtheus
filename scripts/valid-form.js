@@ -4,7 +4,7 @@ const showInputError = (inputElement, errorMessage, validationOptions) => {
   );
   inputElement.classList.add(validationOptions.inputErrorClass);
   errorElement.textContent = errorMessage;
-  errorElement.classList.add(validationOptions.errorVisibleClass);
+  errorElement.classList.add(validationOptions.errorVisibleClass); // Make error visible
 };
 
 const hideInputError = (inputElement, validationOptions) => {
@@ -12,8 +12,8 @@ const hideInputError = (inputElement, validationOptions) => {
     `.${validationOptions.errorClass}`
   );
   inputElement.classList.remove(validationOptions.inputErrorClass);
-  errorElement.textContent = "";
-  errorElement.classList.remove(validationOptions.errorVisibleClass);
+  errorElement.textContent = ""; // Clear error message
+  errorElement.classList.remove(validationOptions.errorVisibleClass); // Hide error
 };
 
 const checkInputValidity = (inputElement, validationOptions) => {
@@ -56,10 +56,12 @@ const setEventListeners = (formElement, validationOptions) => {
 
   inputList.forEach((input) => {
     input.addEventListener("input", () => {
+      checkInputValidity(input, validationOptions);
       toggleButtonState(inputList, buttonElement, validationOptions);
     });
   });
 };
+
 const enableValidation = (validationOptions) => {
   const formList = document.querySelectorAll(validationOptions.formSelector);
   formList.forEach((formElement) => {
