@@ -52,14 +52,14 @@ const setEventListeners = (formElement, validationOptions) => {
     validationOptions.submitButtonSelector
   );
 
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener("input", () => {
-      checkInputValidity(inputElement, validationOptions);
+  toggleButtonState(inputList, buttonElement, validationOptions);
+
+  inputList.forEach((input) => {
+    input.addEventListener("input", () => {
       toggleButtonState(inputList, buttonElement, validationOptions);
     });
   });
 };
-
 const enableValidation = (validationOptions) => {
   const formList = document.querySelectorAll(validationOptions.formSelector);
   formList.forEach((formElement) => {

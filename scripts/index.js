@@ -58,29 +58,6 @@ function openModal(modal) {
   document.addEventListener("keydown", closeModalOnEscape);
 }
 
-// Function to close modals
-function closeModal(modal) {
-  modal.classList.remove("modal_opened");
-  // Remove event listener for Escape key press
-  document.removeEventListener("keydown", closeModalOnEscape);
-}
-
-// Define the event handler function for Escape key press
-function closeModalOnEscape(event) {
-  if (event.key === "Escape") {
-    // Find the currently active modal
-    const activeModal = document.querySelector(".modal_opened");
-    if (activeModal) {
-      closeModal(activeModal);
-    }
-  }
-}
-
-// Function to remove modal from its parent
-function removeModal(modal) {
-  modal.parentNode.removeChild(modal);
-}
-
 // Function to handle profile form submission
 function handleProfileEditSubmit(e) {
   e.preventDefault();
@@ -160,19 +137,36 @@ modalEdit.addEventListener("submit", handleProfileEditSubmit);
 // Event listener for card form submission
 addCardEditForm.addEventListener("submit", handleCardSubmit);
 
-// Event listener for clicking on the close button of a modal
-function handleCloseButtonClick(event) {
-  const button = event.target.closest(".modal__close");
-  if (button) {
-    const modal = button.closest(".modal");
-    if (modal) {
-      closeModal(modal);
+// Function to close modals
+function closeModal(modal) {
+  modal.classList.remove("modal_opened");
+  // Remove event listener for Escape key press
+  document.removeEventListener("keydown", closeModalOnEscape);
+}
+
+// Define the event handler function for Escape key press
+function closeModalOnEscape(event) {
+  if (event.key === "Escape") {
+    // Find the currently active modal
+    const activeModal = document.querySelector(".modal_opened");
+    if (activeModal) {
+      closeModal(activeModal);
     }
   }
 }
+function handleCloseButtonClick() {
+  const buttonsClose = document.querySelectorAll(".modal__close");
+  buttonsClose.forEach((button) => {
+    button.addEventListener("click", () => {
+      const popup = button.closest(".modal");
+      closeModal(popup);
+    });
+  });
+}
 
-// Attach event listener to the document for close buttons
-document.addEventListener("click", handleCloseButtonClick);
+// Immediately invoke the function to attach event listeners to close buttons
+handleCloseButtonClick();
+
 // Event listener for clicking outside the modal to close it
 modals.forEach((modal) => {
   modal.addEventListener("click", (event) => {
