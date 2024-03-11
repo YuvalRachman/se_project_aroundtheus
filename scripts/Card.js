@@ -36,7 +36,15 @@ export default class Card {
       this._cardElement.remove();
     }
   };
-
+  closeModal(e) {
+    if (e.key === "Escape") {
+      // Find the currently active modal
+      const activeModal = document.querySelector(".modal_opened");
+      if (activeModal) {
+        closeModal(activeModal);
+      }
+    }
+  }
   getView() {
     this._cardElement = document
       .querySelector(this._cardSelector)

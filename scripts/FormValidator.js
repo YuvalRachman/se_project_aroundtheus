@@ -1,25 +1,31 @@
 export default class FormValidator {
-  constructor(config, formElement) {
-    this._config = config;
+  constructor(setting, formElement) {
+    this._setting = setting;
     this._formElement = formElement;
+    this._inputList = Array.from(
+      this._formElement.querySelectorAll(this._setting.inputSelector)
+    );
+    this._buttonElement = this._formElement.querySelector(
+      this._setting.submitButtonSelector
+    );
   }
 
   _showInputError(inputElement, errorMessage) {
     const errorElement = inputElement.parentElement.querySelector(
-      `.${this._config.errorClass}`
+      `.${this._setting.errorClass}`
     );
-    inputElement.classList.add(this._config.inputErrorClass);
+    inputElement.classList.add(this._setting.inputErrorClass);
     errorElement.textContent = errorMessage;
-    errorElement.classList.add(this._config.errorVisibleClass);
+    errorElement.classList.add(this._setting.errorVisibleClass);
   }
 
   _hideInputError(inputElement) {
     const errorElement = inputElement.parentElement.querySelector(
-      `.${this._config.errorClass}`
+      `.${this._setting.errorClass}`
     );
-    inputElement.classList.remove(this._config.inputErrorClass);
+    inputElement.classList.remove(this._setting.inputErrorClass);
     errorElement.textContent = "";
-    errorElement.classList.remove(this._config.errorVisibleClass);
+    errorElement.classList.remove(this._setting.errorVisibleClass);
   }
 
   _checkInputValidity(inputElement) {
@@ -30,52 +36,72 @@ export default class FormValidator {
     }
   }
 
-  _toggleButtonState(inputList, buttonElement) {
-    const isFormValid = Array.from(inputList).every(
-      (input) => input.validity.valid
-    );
+  _toggleButtonState() {
+    const isFormValid = this._inputList.every((input) => input.validity.valid);
 
     if (isFormValid) {
-      buttonElement.classList.remove(this._config.inactiveButtonClass);
-      buttonElement.removeAttribute("disabled");
+      this._buttonElement.classList.remove(this._setting.inactiveButtonClass);
+      this._buttonElement.removeAttribute("disabled");
     } else {
-      buttonElement.classList.add(this._config.inactiveButtonClass);
-      buttonElement.setAttribute("disabled", "disabled");
+      this._buttonElement.classList.add(this._setting.inactiveButtonClass);
+      this._buttonElement.setAttribute("disabled", "disabled");
     }
   }
 
   _setEventListeners() {
-    const inputList = this._formElement.querySelectorAll(
-      this._config.inputSelector
-    );
-    const buttonElement = this._formElement.querySelector(
-      this._config.submitButtonSelector
-    );
-
-    inputList.forEach((inputElement) => {
+    this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
         this._checkInputValidity(inputElement);
-        this._toggleButtonState(inputList, buttonElement);
+        this._toggleButtonState();
       });
     });
+  }
 
+  enableValidator() {
     this._formElement.addEventListener("submit", (evt) => {
       evt.preventDefault();
     });
+    this._setEventListeners();
   }
 }
 
-// Usage:
-const formElement = document.querySelector(".modal__form");
-const config = {
-  formSelector: ".modal__form",
-  inputSelector: ".modal__input",
-  submitButtonSelector: ".modal__button",
+export const settingModalEdit = {
+  formSelector: "#modalEdit .modal__form",
+  inputSelector: "#modalEdit .modal__input",
+  submitButtonSelector: "#modalEdit .modal__button",
   inactiveButtonClass: "modal__button_disabled",
   inputErrorClass: "modal__input_type_error",
   errorClass: "modal__input-error",
   errorVisibleClass: "modal__input-error_visible",
 };
 
-const formValidator = new FormValidator(config, formElement);
-formValidator._setEventListeners();
+// Define settings for modalAddCard form
+export const settingModalAddCard = {
+  formSelector: "#modalAddCard .modal__form",
+  inputSelector: "#modalAddCard .modal__input",
+  submitButtonSelector: "#modalAddCard .modal__button",
+  inactiveButtonClass: "modal__button_disabled",
+  inputErrorClass: "modal__input_type_error",
+  errorClass: "modal__input-error",
+  errorVisibleClass: "modal__input-error_visible",
+};
+
+// Initialize FormValidator for modalEdit form
+const modalEditFormElement = document.querySelector(
+  settingModalEdit.formSelector
+);
+const modalEditFormValidator = new FormValidator(
+  settingModalEdit,
+  modalEditFormElement
+);
+modalEditFormValidator.enableValidator();
+
+// Initialize FormValidator for modalAddCard form
+const modalAddCardFormElement = document.querySelector(
+  settingModalAddCard.formSelector
+);
+const modalAddCardFormValidator = new FormValidator(
+  settingModalAddCard,
+  modalAddCardFormElement
+);
+modalAddCardFormValidator.enableValidator();
