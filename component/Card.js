@@ -1,4 +1,4 @@
-import { openModal } from "./index.js";
+import { openModal } from "../pages/index.js";
 
 export default class Card {
   constructor({ name, link }, cardSelector, handleImageClick) {
