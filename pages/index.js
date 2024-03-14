@@ -1,4 +1,9 @@
-import Card from "../component/Card.js";
+import Card, {
+  handleCardSubmit,
+  createAndAppendCard,
+  initialCards,
+} from "../component/Card.js";
+
 import FormValidator, {
   settingModalEdit,
   settingModalAddCard,
@@ -7,10 +12,7 @@ const modals = Array.from(document.querySelectorAll(".modal"));
 
 const modalEdit = document.querySelector("#modalEdit");
 const modalAddCard = document.querySelector("#modalAddCard");
-const cardTitle = modalAddCard.querySelector(".modal__input_type_title");
-const cardUrl = modalAddCard.querySelector(".modal__input_type_url");
 
-const cardList = document.querySelector(".cards__list");
 const plusEdit = document.querySelector(".profile__card-button");
 const penEdit = document.querySelector("#profileButton");
 const cardTemplate =
@@ -19,7 +21,7 @@ const profileTitle = document.querySelector(".profile__title");
 const profileSubtitle = document.querySelector(".profile__subtitle");
 const profilleTitleInput = document.querySelector("#profile-title-input");
 const profilleSubtitleInput = document.querySelector("#profile-subtitle-input");
-function closeModalOnEscape(event) {
+export function closeModalOnEscape(event) {
   if (event.key === "Escape") {
     const activeModal = document.querySelector(".modal_opened");
     if (activeModal) {
@@ -41,28 +43,8 @@ function handleProfileEditSubmit(e) {
   profileSubtitle.textContent = profilleSubtitleInput.value;
   closeModal(modalEdit); // Close the modal after form submission
 }
-function getCardElement(cardData) {
-  const cardElement = cardTemplate.cloneNode(true);
-  const cardImageEL = cardElement.querySelector(".card__image");
-  const cardTitleEL = cardElement.querySelector(".card__title");
 
-  cardTitleEL.textContent = cardData.name;
-  cardImageEL.src = cardData.link;
-  cardImageEL.alt = cardData.name;
-
-  return cardElement;
-}
 // Function to handle card form submission
-function handleCardSubmit(e) {
-  e.preventDefault();
-  const name = cardTitle.value;
-  const link = cardUrl.value;
-  const cardData = { name, link };
-  const newCard = getCardElement(cardData);
-  cardList.prepend(newCard);
-  e.target.reset();
-  closeModal(modalAddCard); // Close the modal after form submission
-}
 
 // Event listener for opening the add card modal
 plusEdit.addEventListener("click", () => openModal(modalAddCard));

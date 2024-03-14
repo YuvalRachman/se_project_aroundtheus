@@ -1,4 +1,13 @@
-import { openModal } from "../pages/index.js";
+import { openModal, closeModalOnEscape } from "../pages/index.js";
+const modalAddCard = document.getElementById("modalAddCard");
+const cardTitle = modalAddCard.querySelector(".modal__input_type_title");
+const cardUrl = modalAddCard.querySelector(".modal__input_type_url");
+
+export function closeModal(modal) {
+  modal.classList.remove("modal_opened");
+  // Remove event listener for Escape key press
+  document.removeEventListener("keydown", closeModalOnEscape);
+}
 
 export default class Card {
   constructor({ name, link }, cardSelector, handleImageClick) {
@@ -32,19 +41,9 @@ export default class Card {
   };
 
   _deleteCard = () => {
-    if (this._cardElement) {
-      this._cardElement.remove();
-    }
+    this._cardElement.remove();
   };
-  closeModal(e) {
-    if (e.key === "Escape") {
-      // Find the currently active modal
-      const activeModal = document.querySelector(".modal_opened");
-      if (activeModal) {
-        closeModal(activeModal);
-      }
-    }
-  }
+
   getView() {
     this._cardElement = document
       .querySelector(this._cardSelector)
@@ -61,17 +60,18 @@ export default class Card {
       cardImageEL.src = this._link;
       cardImageEL.alt = this._name;
     }
+
+    return this._cardElement;
   }
 }
 
 // Initialize card elements from initialCards data
 const cardList = document.querySelector(".cards__list");
-const initialCards = [
+export const initialCards = [
   {
     name: "Lake Louise",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/lake-louise.jpg",
   },
-  ,
   {
     name: "Bald Mountains",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/bald-mountains.jpg",
@@ -92,10 +92,9 @@ const initialCards = [
     name: "Yosemite Valley",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/yosemite.jpg",
   },
-  // Add more initial card data here
 ];
 
-initialCards.forEach((cardData) => {
+export function createAndAppendCard(cardData) {
   const handleImageClick = () => {
     const { name, link } = cardData;
     const previewCaptionModal = document.querySelector(".preview__caption");
@@ -111,6 +110,20 @@ initialCards.forEach((cardData) => {
   };
 
   const card = new Card(cardData, "#card-template", handleImageClick);
-  card.getView();
-  cardList.append(card._cardElement);
-});
+  const cardElement = card.getView();
+  cardList.append(cardElement);
+}
+
+export function handleCardSubmit(e) {
+  e.preventDefault();
+  const name = cardTitle.value;
+  const link = cardUrl.value;
+  const cardData = { name, link };
+  const card = new Card(cardData, "#card-template", this._handleImageClick);
+  e.target.reset();
+  closeModal(modalAddCard);
+  initialCards.push(cardData);
+  createAndAppendCard(cardData);
+}
+
+initialCards.forEach(createAndAppendCard);
