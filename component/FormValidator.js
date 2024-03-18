@@ -35,11 +35,12 @@ export default class FormValidator {
       this._hideInputError(inputElement);
     }
   }
-
   _toggleButtonState() {
     const isFormValid = this._inputList.every((input) => input.validity.valid);
-
-    if (isFormValid) {
+    const isAnyInputEmpty = this._inputList.some(
+      (input) => !input.value.trim()
+    );
+    if (isFormValid && !isAnyInputEmpty) {
       this._buttonElement.classList.remove(this._setting.inactiveButtonClass);
       this._buttonElement.removeAttribute("disabled");
     } else {
@@ -47,7 +48,6 @@ export default class FormValidator {
       this._buttonElement.setAttribute("disabled", "disabled");
     }
   }
-
   _setEventListeners() {
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener("input", () => {
@@ -62,46 +62,25 @@ export default class FormValidator {
       evt.preventDefault();
     });
     this._setEventListeners();
+    this._toggleButtonState();
   }
 }
 
-export const settingModalEdit = {
-  formSelector: "#modalEdit .modal__form",
-  inputSelector: "#modalEdit .modal__input",
-  submitButtonSelector: "#modalEdit .modal__button",
-  inactiveButtonClass: "modal__button_disabled",
-  inputErrorClass: "modal__input_type_error",
-  errorClass: "modal__input-error",
-  errorVisibleClass: "modal__input-error_visible",
+export const formSettings = {
+  modalEdit: {
+    formSelector: "#modalEdit .modal__form",
+    inputSelector: "#modalEdit .modal__input",
+    submitButtonSelector: "#modalEdit .modal__button",
+  },
+  modalAddCard: {
+    formSelector: "#modalAddCard .modal__form",
+    inputSelector: "#modalAddCard .modal__input",
+    submitButtonSelector: "#modalAddCard .modal__button",
+  },
+  common: {
+    inactiveButtonClass: "modal__button_disabled",
+    inputErrorClass: "modal__input_type_error",
+    errorClass: "modal__input-error",
+    errorVisibleClass: "modal__input-error_visible",
+  },
 };
-
-// Define settings for modalAddCard form
-export const settingModalAddCard = {
-  formSelector: "#modalAddCard .modal__form",
-  inputSelector: "#modalAddCard .modal__input",
-  submitButtonSelector: "#modalAddCard .modal__button",
-  inactiveButtonClass: "modal__button_disabled",
-  inputErrorClass: "modal__input_type_error",
-  errorClass: "modal__input-error",
-  errorVisibleClass: "modal__input-error_visible",
-};
-
-// Initialize FormValidator for modalEdit form
-const modalEditFormElement = document.querySelector(
-  settingModalEdit.formSelector
-);
-const modalEditFormValidator = new FormValidator(
-  settingModalEdit,
-  modalEditFormElement
-);
-modalEditFormValidator.enableValidator();
-
-// Initialize FormValidator for modalAddCard form
-const modalAddCardFormElement = document.querySelector(
-  settingModalAddCard.formSelector
-);
-const modalAddCardFormValidator = new FormValidator(
-  settingModalAddCard,
-  modalAddCardFormElement
-);
-modalAddCardFormValidator.enableValidator();
