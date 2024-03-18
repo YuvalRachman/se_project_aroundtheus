@@ -2,7 +2,7 @@ import Card, { initialCards } from "../component/Card.js";
 
 import FormValidator, { formSettings } from "../component/FormValidator.js";
 const modals = Array.from(document.querySelectorAll(".modal"));
-const CardList = document.querySelector(".cards__list");
+const cardsList = document.querySelector(".cards__list");
 const modalEdit = document.querySelector("#modalEdit");
 const modalAddCard = document.querySelector("#modalAddCard");
 const cardTitle = modalAddCard.querySelector(".modal__input_type_title");
@@ -49,10 +49,10 @@ penEdit.addEventListener("click", () => {
   profilleSubtitleInput.value = profileSubtitle.textContent;
 });
 
-const addCardForm = document.getElementById("add__card__form");
+const addCardForm = document.forms.add__card__form;
 addCardForm.addEventListener("submit", handleCardSubmit);
 
-const editProfileForm = document.querySelector("#modalEdit .modal__form");
+const editProfileForm = document.forms.edit__prfile__form;
 editProfileForm.addEventListener("submit", handleProfileEditSubmit);
 // Function to close modals
 export function closeModal(modal) {
@@ -83,41 +83,47 @@ function handleCloseButtonClick() {
 
 // Attach event listeners to close buttons
 handleCloseButtonClick();
-// Initialize FormValidator for modalEdit form
-const modalEditFormElement = document.querySelector(
-  formSettings.modalEdit.formSelector
-);
+// Initialize FormValidator for modalForms form
+
 const modalEditFormValidator = new FormValidator(
-  { ...formSettings.modalEdit, ...formSettings.common },
-  modalEditFormElement
+  { ...formSettings.modalForms.modalEdit, ...formSettings.common },
+  editProfileForm
 );
 modalEditFormValidator.enableValidator();
 // Initialize FormValidator for modalAddCard form
-const modalAddCardFormElement = document.querySelector(
-  formSettings.modalAddCard.formSelector
-);
+
 const modalAddCardFormValidator = new FormValidator(
-  { ...formSettings.modalAddCard, ...formSettings.common },
-  modalAddCardFormElement
+  { ...formSettings.modalForms.modalAddCard, ...formSettings.common },
+  addCardForm
 );
 modalAddCardFormValidator.enableValidator();
-function createAndAppendCard(cardData) {
+
+function createCard(cardData) {
   const card = new Card(cardData, "#card-template", () => {
     const { name, link } = cardData;
-    const previewCaptionModal = document.querySelector(".preview__caption");
-    const previewModalPicture = document.querySelector(".preview__image");
     const modalPreview = document.querySelector("#preview_image");
 
-    if (previewModalPicture && previewCaptionModal && modalPreview) {
-      previewModalPicture.src = link;
-      previewCaptionModal.textContent = name;
-      previewModalPicture.alt = `Photo of ${name}`;
-      openModal(modalPreview);
+    if (modalPreview) {
+      const previewCaptionModal =
+        modalPreview.querySelector(".preview__caption");
+      const previewModalPicture = modalPreview.querySelector(".preview__image");
+
+      if (previewModalPicture && previewCaptionModal) {
+        previewModalPicture.src = link || ""; // Ensure link is set or set to empty string if undefined
+        previewCaptionModal.textContent = name || ""; // Ensure name is set or set to empty string if undefined
+        previewModalPicture.alt = `Photo of ${name || ""}`; // Ensure name is set or set to empty string if undefined
+        openModal(modalPreview);
+      }
     }
   });
 
+  return card;
+}
+
+function createAndPrependCard(cardData) {
+  const card = createCard(cardData);
   const cardElement = card.getView();
-  CardList.prepend(cardElement);
+  cardsList.prepend(cardElement);
 }
 
 function handleCardSubmit(e) {
@@ -128,6 +134,6 @@ function handleCardSubmit(e) {
   e.target.reset();
   closeModal(modalAddCard);
   // initialCards.push(cardData);
-  createAndAppendCard(cardData);
+  createAndPrependCard(cardData);
 }
-initialCards.forEach(createAndAppendCard);
+initialCards.forEach(createAndPrependCard);

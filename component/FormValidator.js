@@ -65,17 +65,18 @@ export default class FormValidator {
     this._toggleButtonState();
   }
 }
-
 export const formSettings = {
-  modalEdit: {
-    formSelector: "#modalEdit .modal__form",
-    inputSelector: "#modalEdit .modal__input",
-    submitButtonSelector: "#modalEdit .modal__button",
-  },
-  modalAddCard: {
-    formSelector: "#modalAddCard .modal__form",
-    inputSelector: "#modalAddCard .modal__input",
-    submitButtonSelector: "#modalAddCard .modal__button",
+  modalForms: {
+    modalEdit: {
+      formSelector: "#modalEdit .modal__form",
+      inputSelector: "#modalEdit .modal__input",
+      submitButtonSelector: "#modalEdit .modal__button",
+    },
+    modalAddCard: {
+      formSelector: "#modalAddCard .modal__form",
+      inputSelector: "#modalAddCard .modal__input",
+      submitButtonSelector: "#modalAddCard .modal__button",
+    },
   },
   common: {
     inactiveButtonClass: "modal__button_disabled",
