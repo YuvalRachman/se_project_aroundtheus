@@ -26,6 +26,7 @@ export function closeModalOnEscape(event) {
 export function openModal(modal) {
   modal.classList.add("modal_opened");
   document.addEventListener("keydown", closeModalOnEscape);
+  modalAddCardFormValidator.toggleButtonState();
 }
 
 // Function to handle profile form submission
@@ -85,17 +86,11 @@ function handleCloseButtonClick() {
 handleCloseButtonClick();
 // Initialize FormValidator for modalForms form
 
-const modalEditFormValidator = new FormValidator(
-  { ...formSettings.modalForms.modalEdit, ...formSettings.common },
-  editProfileForm
-);
+const modalEditFormValidator = new FormValidator(formSettings, editProfileForm);
 modalEditFormValidator.enableValidator();
 // Initialize FormValidator for modalAddCard form
 
-const modalAddCardFormValidator = new FormValidator(
-  { ...formSettings.modalForms.modalAddCard, ...formSettings.common },
-  addCardForm
-);
+const modalAddCardFormValidator = new FormValidator(formSettings, addCardForm);
 modalAddCardFormValidator.enableValidator();
 
 function createCard(cardData) {
@@ -133,7 +128,8 @@ function handleCardSubmit(e) {
   const cardData = { name, link };
   e.target.reset();
   closeModal(modalAddCard);
-  // initialCards.push(cardData);
+  initialCards.push(cardData);
   createAndPrependCard(cardData);
 }
+
 initialCards.forEach(createAndPrependCard);
