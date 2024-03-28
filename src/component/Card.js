@@ -1,4 +1,4 @@
-import { openModal, closeModalOnEscape, closeModal } from "../pages/index.js";
+import { openModal, closeModalOnEscape, closeModal } from "../index.js";
 export default class Card {
   constructor({ name, link }, cardSelector, handleImageClick) {
     this._name = name;
