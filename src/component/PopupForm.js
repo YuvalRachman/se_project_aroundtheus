@@ -1,33 +1,36 @@
-import Popup from "./Poup";
+import Popup from "./Poup.js";
 export default class PopupForm extends Popup {
-  constructor(popupSelector, handelFormSubmit) {
-    super({ popupSelector });
-    this._handelForm = handelFormSubmit;
-    this._popupForm = this._popupElement.querySelector(".modal__form");
-    this._inputList = [...this._popupForm.querySelectorAll("input")];
-  }
-  reset() {
-    if (this._popupForm) {
-      this._popupForm.reset();
-    }
+  constructor(
+    popupSelector,
+    handleFormSubmit,
+    openSelector = "",
+    handleOpen = () => {}
+  ) {
+    super({ popupSelector, openSelector, handleOpen });
+    this._popupForm = document.querySelector(popupSelector);
+    this._handleFormSubmit = handleFormSubmit;
   }
 
-  close = () => {
-    this.reset();
-    super.close();
-  };
-  setInputValues(data) {
-    this._inputList.forEach((input) => {
-      input.value = data[input.name];
-    });
+  open() {
+    super.open(this._popupForm);
   }
+
+  close() {
+    super.close(this._popupForm);
+  }
+
+  _getInputValues() {
+    const formValues = {};
+    const formInputs = Array.from(document.querySelectorAll(".modal__input"));
+    formInputs.forEach((input) => {
+      formValues[input.name] = input.value;
+    });
+    return formValues;
+  }
+
   setEventListeners() {
-    super.setEventListeners(); // Call superclass method
-    this._popupForm.addEventListener("submit", (evt) => {
-      evt.preventDefault();
-      this._handleForm(this._getInputValues());
+    this._popupForm.addEventListener("submit", () => {
+      this._handleFormSubmit(this._getInputValues());
     });
   }
 }
-
-const newCardPopup = new PopupForm("#modalAddCard", () => {});
