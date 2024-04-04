@@ -10,7 +10,6 @@ export default class FormValidator {
     this._inactiveButtonClass = formSettings.inactiveButtonClass;
     this._submitButton = document.querySelector(this._submitButtonSelector);
     this._inputs = Array.from(document.querySelectorAll(this._inputSelector));
-    this._setEventListeners();
   }
 
   _showInputError(inputEl) {

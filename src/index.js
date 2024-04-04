@@ -6,33 +6,32 @@ import * as constants from "./component/utils/constants.js";
 import FormValidator from "./component/FormValidator.js";
 import { PopupImage } from "./component/PopupImage.js";
 import UserInfo from "./component/UserInfo.js";
+
+// Initialize popups
 const imagePopup = new PopupImage("#preview_image");
 const editPopup = new PopupForm({
   popupSelector: "#modalEdit",
-  handleFormSubmit: (data) => {
-    handleProfileFormSubmit(data);
-  },
+  handleFormSubmit: handleProfileFormSubmit,
 });
-profileEditPopup.setEventListeners();
-
 const addCardPopup = new PopupForm({
   popupSelector: "#modalAddCard",
-  handleFormSubmit: (data) => {
-    handleAddCardFormSubmit(data);
-  },
+  handleFormSubmit: handleAddCardFormSubmit,
 });
+
+// Set event listeners for popups
+editPopup.setEventListeners();
 addCardPopup.setEventListeners();
 imagePopup.setEventListeners();
+
+// Initialize cards section
 const cardsWrap = new Section(
   {
     items: constants.initialCards,
-    renderer: (cardData) => {
-      const card = renderCard(cardData);
-      cardsWrap.addItem(card);
-    },
+    renderer: renderCard,
   },
   ".cards__list"
 );
+
 // Initialize form validators
 const profileFormValidator = new FormValidator(
   "#edit__profile__form",
@@ -50,6 +49,7 @@ cardFormValidator.disableButton();
 
 editPopup.setFormValidator(profileFormValidator);
 addCardPopup.setFormValidator(cardFormValidator);
+
 // Event listeners
 constants.plusEdit.addEventListener("click", () => {
   addCardPopup.open();
@@ -69,11 +69,25 @@ constants.cardsList.addEventListener("click", (event) => {
 
 // Function to handle image click
 function handleImageClick(data) {
-  const imagePopup = new PopupImage("#preview_image");
   imagePopup.open(data.link, data.name);
 }
+const userInfo = new UserInfo({
+  titleSelector: ".profile__title",
+  descriptionSelector: ".profile__subtitle",
+});
 
-function createCard(cardData) {
+function handleProfileFormSubmit({ title, description }) {
+  userInfo.setUserInfo({ title, description });
+  profileEditPopup.close();
+}
+function handleAddCardFormSubmit({ name, link }) {
+  const newCard = renderCard({ name, link });
+  cardsWrap.addItem(newCard);
+  newCardPopup.close();
+  newCardPopup.reset();
+}
+
+function renderCard(cardData) {
   const card = new Card(cardData, "#card-template", () => {
     const { name, link } = cardData;
     const modalPreview = document.querySelector("#preview_image");
@@ -91,20 +105,6 @@ function createCard(cardData) {
     }
   });
 
-  return card;
+  return card.getView();
 }
-function handleAddCardFormSubmit({ name, link }) {
-  const newCard = renderCard({ name, link });
-  cardsWrap.addItem(newCard);
-  newCardPopup.close();
-  newCardPopup.reset();
-}
-
-function createAndPrependCard(cardData) {
-  const card = createCard(cardData);
-  const cardElement = card.getView();
-  constants.cardsList.prepend(cardElement);
-}
-
-// Initialize cards
-constants.initialCards.forEach(createAndPrependCard);
+cardsWrap.renderItems();
