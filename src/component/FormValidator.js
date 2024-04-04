@@ -1,3 +1,4 @@
+// FormValidator.js
 import { formSettings } from "../component/utils/constants.js";
 
 export default class FormValidator {
@@ -32,21 +33,27 @@ export default class FormValidator {
     } else {
       this._showInputError(inputEl);
     }
+    return inputEl.validity.valid; // Return the validity status
+  }
+
+  _checkFormValidity() {
+    return this._inputs.every((inputEl) => this._checkInputValidity(inputEl));
   }
 
   _toggleButtonState() {
-    const isFormValid = this._inputs.every((inputEl) => inputEl.validity.valid);
-    this._submitButton.disabled = !isFormValid;
-    this._submitButton.classList.toggle(
-      this._inactiveButtonClass,
-      !isFormValid
-    );
+    const isFormValid = this._checkFormValidity();
+    if (!isFormValid) {
+      this.disableButton();
+    } else {
+      this._submitButton.classList.remove(this._inactiveButtonClass);
+      this._submitButton.disabled = false;
+    }
   }
 
   _setEventListeners() {
-    this._inputs.forEach((inputEl) => {
-      inputEl.addEventListener("input", () => {
-        this._checkInputValidity(inputEl);
+    this._inputs.forEach((_inputEl) => {
+      _inputEl.addEventListener("input", () => {
+        this._checkInputValidity(_inputEl);
         this._toggleButtonState();
       });
     });
@@ -56,17 +63,15 @@ export default class FormValidator {
     document.addEventListener("submit", (e) => {
       e.preventDefault();
     });
-    this._toggleButtonState();
-  }
-
-  _reset() {
-    this._submitButton.setAttribute("disabled", true);
-    this._submitButton.classList.add(this._inactiveButtonClass);
+    this._setEventListeners();
   }
 
   disableButton() {
-    if (this._submitButton) {
-      this._reset();
-    }
+    this._submitButton.setAttribute("disabled", true);
+    this._submitButton.classList.add(this._inactiveButtonClass);
+    this._submitButton.removeEventListener(
+      "click",
+      this._submitButtonClickHandler
+    );
   }
 }
