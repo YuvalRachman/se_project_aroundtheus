@@ -21,13 +21,12 @@ const cardFormValidator = new FormValidator(
   constants.formSettings
 );
 
-// Enable validators and disableButton profile form
 profileFormValidator.enableValidator();
 profileFormValidator.disableButton();
-addCardPopup.enableValidator();
-addCardPopup.disableButton();
-imagePopup.setEventListeners();
-// Event listeners
+// addCardPopup.enableValidator();
+// addCardPopup.disableButton();
+// imagePopup.setEventListeners();
+
 constants.plusEdit.addEventListener("click", () => {
   editPopup.open();
 });
@@ -35,21 +34,6 @@ constants.plusEdit.addEventListener("click", () => {
 constants.editProfileForm.addEventListener("click", () => {
   editPopup.open();
 });
-const newCardList = new Section(
-  {
-    items: initialCards,
-    renderer: createCard,
-  },
-  ".cards__list"
-);
-
-cardSection.renderItems();
-
-function renderCard(cardData) {
-  const cardElement = createCard(cardData);
-  cardSection.addItem(cardElement);
-}
-
 constants.cardsList.addEventListener("click", (event) => {
   if (event.target.classList.contains("card__image")) {
     const cardElement = event.target.closest(".card");
@@ -63,73 +47,31 @@ function handleImageClick(data) {
   imagePopup.open(data.link, data.name);
 }
 
-newCardList.renderItems();
-
 function createCard(cardData) {
-  const card = new Card(cardData, "#card-template", handleImageClick);
-  return card.getView();
-}
-function handleProfileInputValues() {
-  const name = addCardTitleInput.value;
-  const link = addCardUrlInput.value;
-  renderCard({ name, link });
-  cardFormValidator.disableButton();
-  addCardPopup.close();
-}
-function handleProfileEditSubmit(e) {
-  e.preventDefault();
-  profileTitle.textContent = profilleTitleInput.value;
-  profileSubtitle.textContent = profilleSubtitleInput.value;
-  closeModal(modalEdit); // Close the modal after form submission
-}
+  const card = new Card(cardData, "#card-template", () => {
+    const { name, link } = cardData;
+    const modalPreview = document.querySelector("#preview_image");
 
-// Event listener for clicking outside the modal to close it
-constants.modals.forEach((modal) => {
-  modal.addEventListener("click", (event) => {
-    if (event.target.classList.contains("modal")) {
-      closeModal(modal);
+    if (modalPreview) {
+      const previewCaptionModal =
+        modalPreview.querySelector(".preview__caption");
+      const previewModalPicture = modalPreview.querySelector(".preview__image");
+
+      if (previewModalPicture && previewCaptionModal) {
+        previewModalPicture.src = link || "";
+        previewCaptionModal.textContent = name || "";
+        previewModalPicture.alt = `Photo of ${name || ""}`;
+      }
     }
   });
-});
 
-// Initialize FormValidator for modalForms form
-
-// function createCard(cardData) {
-//   const card = new Card(cardData, "#card-template", () => {
-//     const { name, link } = cardData;
-//     const modalPreview = document.querySelector("#preview_image");
-
-//     if (modalPreview) {
-//       const previewCaptionModal =
-//         modalPreview.querySelector(".preview__caption");
-//       const previewModalPicture = modalPreview.querySelector(".preview__image");
-
-//       if (previewModalPicture && previewCaptionModal) {
-//         previewModalPicture.src = link || ""; // Ensure link is set or set to empty string if undefined
-//         previewCaptionModal.textContent = name || ""; // Ensure name is set or set to empty string if undefined
-//         previewModalPicture.alt = `Photo of ${name || ""}`; // Ensure name is set or set to empty string if undefined
-//       }
-//     }
-//   });
-
-//   return card;
-// }
+  return card;
+}
 
 function createAndPrependCard(cardData) {
   const card = createCard(cardData);
   const cardElement = card.getView();
   constants.cardsList.prepend(cardElement);
-}
-
-function handleCardSubmit(e) {
-  e.preventDefault();
-  const name = cardTitle.value;
-  const link = cardUrl.value;
-  const cardData = { name, link };
-  cardFormValidate.disableButton();
-  closeModal(modalAddCard);
-  createAndPrependCard(cardData);
-  modalAddCardFormValidator.toggleButtonState();
 }
 
 constants.initialCards.forEach(createAndPrependCard);

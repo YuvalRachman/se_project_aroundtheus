@@ -1,4 +1,4 @@
-import Popup from "./Poup.js";
+import Popup from "../component/Poup.js";
 
 export class PopupImage extends Popup {
   constructor(popupSelector) {
@@ -8,13 +8,9 @@ export class PopupImage extends Popup {
   }
 
   open(data) {
-    console.log(999);
     super.open();
     this._cardImage.src = data.link;
     this._cardImage.alt = data.name;
     this._cardTitle.textContent = data.name;
-  }
-  setEventListeners() {
-    super.setEventListeners();
   }
 }

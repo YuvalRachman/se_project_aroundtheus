@@ -24,6 +24,12 @@ export const initialCards = [
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/around-project/yosemite.jpg",
   },
 ];
+const newCardData = [
+  {
+    name: "",
+    link: "",
+  },
+];
 export const formSettings = {
   formSelector: ".modal__form",
   inputSelector: ".modal__input",
