@@ -6,7 +6,7 @@ import * as constants from "./component/utils/constants.js";
 import FormValidator from "./component/FormValidator.js";
 import { PopupImage } from "./component/PopupImage.js";
 import UserInfo from "./component/UserInfo.js";
-console.log(constants.cardsList);
+
 // Initialize UserInfo
 const userInfo = new UserInfo({
   titleSelector: ".profile__title",
@@ -42,7 +42,22 @@ const addCardPopup = new PopupForm({
 editPopup.setEventListeners();
 addCardPopup.setEventListeners();
 imagePopup.setEventListeners();
+// Initialize card section
 
+// Function to handle form submit for adding a card
+function handleAddCardFormSubmit(data) {
+  const newCard = renderCard(data);
+  cardSection.addItem(newCard);
+  addCardPopup.close();
+  cardFormValidator.resetValidation();
+}
+
+// Function to handle form submit for profile edit
+function handleProfileFormSubmit({ title, description }) {
+  userInfo.setInfo({ title, description });
+  editPopup.close();
+}
+// Function to render card
 function renderCard(data) {
   const card = new Card(
     { data, handleImageClick: (imageData) => imagePopup.open(imageData) },
@@ -62,28 +77,9 @@ const cardSection = new Section(
       cardSection.addItem(cardElement);
     },
   },
-  constants.cardsList // Invoke the function to get the selector string
+  constants.cardsList() // Invoke the function to get the selector string
 );
 
+// Render initial set of cards
 cardSection.renderItems(constants.initialCards);
-// Function to render card
-
-// Function to handle form submit for adding a card
-function handleAddCardFormSubmit(data) {
-  createAndAddCard(data);
-  addCardPopup.close();
-  cardFormValidator.resetValidation();
-}
-const addFormPopup = new PopupForm(constants.modalAddCard, (formData) => {
-  // Create a new card
-  const newCard = renderCard(formData);
-  // Close the add form
-  addFormPopup.close();
-  // Add the new card to the section
-  cardSection.addItem(newCard);
-});
-// Function to handle form submit for profile edit
-function handleProfileFormSubmit({ title, description }) {
-  userInfo.setInfo({ title, description });
-  editPopup.close();
-}
+console.log();
