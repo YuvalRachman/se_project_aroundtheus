@@ -1,76 +1,119 @@
-// FormValidator.js
-import { formSettings } from "../component/utils/constants.js";
-
 export default class FormValidator {
-  constructor(options) {
-    this._formEl = formSettings.formSelector;
-    this._formOptions = options;
-    this._inputSelector = formSettings.inputSelector;
-    this._submitButtonSelector = formSettings.submitButtonSelector;
-    this._inactiveButtonClass = formSettings.inactiveButtonClass;
+  constructor(settings, formElement) {
+    this._inputSelector = settings.inputSelector;
+    this._submitButtonSelector = settings.submitButtonSelector;
+    this._inactiveButtonClass = settings.inactiveButtonClass;
+    this._inputErrorClass = settings.inputErrorClass;
+    this._errorClass = settings.errorClass;
+
+    this._form = formElement;
+    console.log(this._form);
+    this._inputList = document.querySelectorAll(this._inputSelector);
+
     this._submitButton = document.querySelector(this._submitButtonSelector);
-    this._inputs = Array.from(document.querySelectorAll(this._inputSelector));
   }
 
-  _showInputError(inputEl) {
-    const errorEl = document.querySelector(`#${inputEl.id}-error`);
-    inputEl.classList.add(this._formOptions.inputErrorClass);
-    errorEl.textContent = inputEl.validationMessage;
-    errorEl.classList.add(this._formOptions.errorClass);
+  _showInputError(inputElement) {
+    // Generate the id for error for the target element
+    const errorMessageElement = this._form.querySelector(
+      `#${inputElement.id}-error`
+    );
+
+    // Add the input error class to the element's class list
+    inputElement.classList.add(this._inputErrorClass);
+
+    // Change the text content to the error message
+    errorMessageElement.textContent = inputElement.validationMessage;
+
+    // Add the error class to the error message's class list
+    errorMessageElement.classList.add(this._errorClass);
   }
 
-  _hideInputError(inputEl) {
-    const errorEl = document.querySelector(`#${inputEl.id}-error`);
-    inputEl.classList.remove(this._formOptions.inputErrorClass);
-    errorEl.classList.remove(this._formOptions.errorClass);
-    errorEl.textContent = "";
+  _hideInputError(inputElement) {
+    // Generate the id for error for the target element
+    const errorMessageElement = this._form.querySelector(
+      `#${inputElement.id}-error`
+    );
+
+    // Add the input error class to the element's class list
+    inputElement.classList.remove(this._inputErrorClass);
+
+    // Clear the error message from the text content
+    errorMessageElement.textContent = "";
+
+    // Add the error class to the error message's class list
+    errorMessageElement.classList.remove(this._errorClass);
   }
 
-  _checkInputValidity(inputEl) {
-    if (inputEl.validity.valid) {
-      this._hideInputError(inputEl);
+  // Disable form button
+  disableButton() {
+    this._submitButton.classList.add(this._inactiveButtonClass);
+    this._submitButton.disabled = true;
+  }
+
+  // Enable form button
+  _enableButton() {
+    this._submitButton.classList.remove(this._inactiveButtonClass);
+    this._submitButton.disabled = false;
+  }
+
+  // Show or hide input errors based on the current input element's validity
+  _toggleInputState(inputElement) {
+    if (!inputElement.validity.valid) {
+      // If input element is invalid, show input error message
+      this._showInputError(inputElement);
     } else {
-      this._showInputError(inputEl);
+      // Otherwise, hide input error message
+      this._hideInputError(inputElement);
     }
-    return inputEl.validity.valid; // Return the validity status
   }
 
-  _checkFormValidity() {
-    return this._inputs.every((inputEl) => this._checkInputValidity(inputEl));
+  // Check if the input element is invalid
+  _checkValidity(inputElement) {
+    return !inputElement.validity.valid;
   }
 
+  _hasInvalidInput = () =>
+    Array.from(this._inputList).some(this._checkValidity);
+
+  // Toggle button depending on the input's validity
   _toggleButtonState() {
-    const isFormValid = this._checkFormValidity();
-    if (!isFormValid) {
+    // If the input is valid, disable the button
+    if (this._hasInvalidInput()) {
       this.disableButton();
     } else {
-      this._submitButton.classList.remove(this._inactiveButtonClass);
-      this._submitButton.disabled = false;
+      // Otherwise, enable the button
+      this._enableButton();
     }
   }
 
+  // Set event listeners for form elements based on the user inputs' validity
   _setEventListeners() {
-    this._inputs.forEach((_inputEl) => {
-      _inputEl.addEventListener("input", () => {
-        this._checkInputValidity(_inputEl);
+    // Disable button
+    this.disableButton();
+
+    // Listen for the "type" event on each input
+    this._inputList.forEach((inputElement) => {
+      inputElement.addEventListener("input", () => {
+        this._toggleInputState(inputElement);
         this._toggleButtonState();
       });
     });
   }
 
-  enableValidator() {
-    document.addEventListener("submit", (e) => {
-      e.preventDefault();
-    });
+  // Validate form
+  enableValidation() {
+    // Set event listeners
     this._setEventListeners();
   }
 
-  disableButton() {
-    this._submitButton.setAttribute("disabled", true);
-    this._submitButton.classList.add(this._inactiveButtonClass);
-    this._submitButton.removeEventListener(
-      "click",
-      this._submitButtonClickHandler
-    );
+  resetValidation() {
+    // Reset submit button
+    this._toggleButtonState();
+
+    // Clear error messages
+    this._inputList.forEach((inputElement) => {
+      this._hideInputError(inputElement);
+    });
   }
 }

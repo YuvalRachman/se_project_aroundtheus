@@ -1,11 +1,18 @@
 import Popup from "../component/Popup.js";
 
 export class PopupImage extends Popup {
-  open({ name, link }) {
-    this._popupElement.querySelector(".modal__image-title").textContent = name;
-    const image = this._popupElement.querySelector(".modal__image");
-    image.src = link;
-    image.alt = name;
-    super.open();
+  constructor(popupSelector) {
+    super(popupSelector);
+
+    this._image = this._popupElement.querySelector(".preview__image");
+    this._caption = this._popupElement.querySelector(".preview__caption");
   }
+
+  // Use a different method name to avoid conflict with the 'open' method from the parent class
+  openImage = (data) => {
+    super.open();
+    this._caption.textContent = data.title;
+    this._image.src = data.link;
+    this._image.alt = data.title;
+  };
 }

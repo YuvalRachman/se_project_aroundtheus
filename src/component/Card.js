@@ -1,10 +1,11 @@
-import { openModal, closeModalOnEscape, closeModal } from "../index.js";
 export default class Card {
-  constructor({ name, link }, cardSelector, handleImageClick) {
-    this._name = name;
-    this._link = link;
+  constructor({ data, handleImageClick }, cardSelector) {
+    this._name = data.name;
+    this._link = data.link;
     this._cardSelector = cardSelector;
     this._handleImageClick = handleImageClick;
+    this._cardElement = null; // Initialize _cardElement as null
+    console.log(this._cardSelector);
   }
 
   _setEventListeners() {
@@ -35,24 +36,19 @@ export default class Card {
   };
 
   getView() {
+    // Assign _cardElement at the beginning of the method
     this._cardElement = document
       .querySelector(this._cardSelector)
-      .content.querySelector(".card")
-      .cloneNode(true);
+      .content.firstElementChild.cloneNode(true);
 
-    if (this._cardElement) {
-      this._setEventListeners();
+    const cardImageEL = this._cardElement.querySelector(".card__image");
+    const cardTitleEL = this._cardElement.querySelector(".card__title");
 
-      const cardImageEL = this._cardElement.querySelector(".card__image");
-      const cardTitleEL = this._cardElement.querySelector(".card__title");
+    cardTitleEL.textContent = this._name;
+    cardImageEL.src = this._link;
+    cardImageEL.alt = this._name;
 
-      cardTitleEL.textContent = this._name;
-      cardImageEL.src = this._link;
-      cardImageEL.alt = this._name;
-    }
-
+    this._setEventListeners();
     return this._cardElement;
   }
 }
-
-// Initialize card elements from initialCards data
