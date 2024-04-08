@@ -1,9 +1,7 @@
 export default class Popup {
-  constructor({ popupSelector }) {
-    this._popupElement = document.querySelector(popupSelector);
-    this._closeButton = this._popupElement.querySelector(".modal__close");
-
-    this.setEventListeners();
+  constructor(popupSelector) {
+    console.log(popupSelector);
+    this._popupElement = document.querySelector(`${popupSelector}`);
   }
 
   open = () => {
@@ -24,13 +22,10 @@ export default class Popup {
 
   setEventListeners() {
     // Close the popup when users click on the shaded area outside the modal
-    this._popupElement.addEventListener("click", (event) => {
-      if (event.target === event.currentTarget) {
+    this._popupElement.addEventListener("mousedown", (event) => {
+      if (!event.target.classList.contains("modal_opened")) {
         this.close();
       }
     });
-
-    // Close the popup when users click on the 'close' button
-    this._closeButton.addEventListener("click", () => this.close());
   }
 }

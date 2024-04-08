@@ -35,13 +35,14 @@ export const formSettings = {
   errorVisibleClass: "modal__input-error_visible",
   cardsList: ".cards__list",
   cardTemplate: "#card-template",
+  modalAddCard: "#modalAddCard",
 };
 
 // Instead of directly accessing DOM elements, export selectors and retrieve them dynamically when needed.
 export const modals = () => Array.from(document.querySelectorAll(".modal"));
 
 export const modalEdit = () => document.querySelector("#modalEdit");
-export const modalAddCard = () => document.querySelector("#modalAddCard");
+
 export const cardTitle = () =>
   modalAddCard().querySelector(".modal__input_type_title");
 export const cardUrl = () =>

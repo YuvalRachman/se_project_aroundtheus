@@ -23,26 +23,10 @@ const cardFormValidator = new FormValidator(
   "#add__card__form"
 );
 
-// Enable form validation
-profileFormValidator.enableValidation();
-cardFormValidator.enableValidation();
-
 // Initialize PopupImage, PopupForm instances
-const imagePopup = new PopupImage({ popupSelector: "#preview_image" });
-const editPopup = new PopupForm({
-  popupSelector: "#modalEdit",
-  handleFormSubmit: handleProfileFormSubmit,
-});
-const addCardPopup = new PopupForm({
-  popupSelector: "#modalAddCard",
-  handleFormSubmit: handleAddCardFormSubmit,
-});
-
-// Set event listeners for popups
-editPopup.setEventListeners();
-addCardPopup.setEventListeners();
-imagePopup.setEventListeners();
-// Initialize card section
+const imagePopup = new PopupImage("#preview_image");
+const editPopup = new PopupForm("#modalEdit", handleProfileFormSubmit);
+const addCardPopup = new PopupForm("#modalAddCard", handleAddCardFormSubmit);
 
 // Function to handle form submit for adding a card
 function handleAddCardFormSubmit(data) {
@@ -77,9 +61,18 @@ const cardSection = new Section(
       cardSection.addItem(cardElement);
     },
   },
-  constants.formSettings.cardsList // Invoke the function to get the selector string
+  constants.formSettings.cardsList
 );
 
 // Render initial set of cards
 cardSection.renderItems(constants.initialCards);
+
 console.log();
+// Set event listeners for popups
+editPopup.setEventListeners();
+addCardPopup.setEventListeners();
+imagePopup.setEventListeners();
+// Initialize card section
+// Enable form validation
+profileFormValidator.enableValidation();
+cardFormValidator.enableValidation();
