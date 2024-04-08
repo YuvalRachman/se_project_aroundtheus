@@ -3,9 +3,9 @@ export default class Card {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
+    console.log(this._cardSelector);
     this._handleImageClick = handleImageClick;
     this._cardElement = null; // Initialize _cardElement as null
-    console.log(this._cardSelector);
   }
 
   _setEventListeners() {
