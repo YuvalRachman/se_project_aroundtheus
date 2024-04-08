@@ -12,7 +12,7 @@ const userInfo = new UserInfo({
   titleSelector: ".profile__title",
   descriptionSelector: ".profile__subtitle",
 });
-console.log(constants.formSettings.cardsList);
+
 // Initialize form validators
 const profileFormValidator = new FormValidator(
   constants.formSettings,
@@ -42,10 +42,11 @@ function handleProfileFormSubmit({ title, description }) {
   editPopup.close();
 }
 // Function to render card
+
 function renderCard(data) {
   const card = new Card(
-    { data, handleImageClick: (imageData) => imagePopup.open(imageData) },
-    constants.formSettings.cardTemplate
+    { data, handleImageClick: (data) => imagePopup.open(data) },
+    constants.formSettings.images
   );
 
   return card.getView();
@@ -67,7 +68,7 @@ const cardSection = new Section(
 // Render initial set of cards
 cardSection.renderItems(constants.initialCards);
 
-console.log();
+console.log(constants.formSettings.cardTemplate);
 // Set event listeners for popups
 editPopup.setEventListeners();
 addCardPopup.setEventListeners();

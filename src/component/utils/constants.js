@@ -36,6 +36,8 @@ export const formSettings = {
   cardsList: ".cards__list",
   cardTemplate: "#card-template",
   modalAddCard: "#modalAddCard",
+  modalImage: "#preview_image",
+  images: ".card",
 };
 
 // Instead of directly accessing DOM elements, export selectors and retrieve them dynamically when needed.
