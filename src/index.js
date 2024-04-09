@@ -7,6 +7,9 @@ import FormValidator from "./component/FormValidator.js";
 import { PopupImage } from "./component/PopupImage.js";
 import UserInfo from "./component/UserInfo.js";
 
+// Define modalAddCard
+const modalAddCard = document.querySelector(".profile__card-button");
+const modalProfile = document.querySelector(".profile__button");
 // Initialize UserInfo
 const userInfo = new UserInfo({
   titleSelector: ".profile__title",
@@ -37,20 +40,24 @@ function handleAddCardFormSubmit(data) {
 }
 
 // Function to handle form submit for profile edit
-function handleProfileFormSubmit({ title, description }) {
-  userInfo.setInfo({ title, description });
+function handleProfileFormSubmit(data) {
+  userInfo.setInfo(data);
   editPopup.close();
 }
-// Function to render card
-
+function handleImageClick() {
+  imagePopup.open();
+}
 function renderCard(data) {
   const card = new Card(
-    { data, handleImageClick: (data) => imagePopup.open(data) },
-    constants.formSettings.cardTemplate
+    {
+      data: data,
+      handleImageClick: handleImageClick,
+    },
+    "#card-template"
   );
-
   return card.getView();
 }
+// Initialize card section
 const cardSection = new Section(
   {
     items: constants.initialCards,
@@ -68,12 +75,20 @@ const cardSection = new Section(
 // Render initial set of cards
 cardSection.renderItems(constants.initialCards);
 
-console.log(constants.formSettings.cardTemplate);
 // Set event listeners for popups
 editPopup.setEventListeners();
 addCardPopup.setEventListeners();
 imagePopup.setEventListeners();
-// Initialize card section
+
 // Enable form validation
 profileFormValidator.enableValidation();
 cardFormValidator.enableValidation();
+
+// Now add the event listener to modalAddCard
+modalAddCard.addEventListener("click", () => {
+  addCardPopup.open();
+});
+modalProfile.addEventListener("click", () => {
+  console.log(222);
+  editPopup.open();
+});
