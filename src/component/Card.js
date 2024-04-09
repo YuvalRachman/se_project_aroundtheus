@@ -16,11 +16,13 @@ export default class Card {
 
       this._cardElement
         .querySelector(".card__trash-button")
-        .addEventListener("click", this._deleteCard);
+        .addEventListener("click", () => this._deleteCard());
 
       this._cardElement
         .querySelector(".card__image")
-        .addEventListener("click", this._handleImageClick);
+        .addEventListener("click", () =>
+          this._handleImageClick({ link: this._link, name: this._name })
+        );
     }
   }
 
@@ -34,21 +36,29 @@ export default class Card {
   _deleteCard = () => {
     this._cardElement.remove();
   };
+  _getTemplate() {
+    return document
+      .querySelector(this._cardSelector)
+      .content.querySelector(".card")
+      .cloneNode(true);
+  }
 
   getView() {
-    // Assign _cardElement at the beginning of the method
-    this._cardElement = document
-      .querySelector(this._cardSelector)
-      .content.firstElementChild.cloneNode(true);
+    // Create card template
+    this._cardElement = this._getTemplate();
 
-    const cardImageEL = this._cardElement.querySelector(".card__image");
-    const cardTitleEL = this._cardElement.querySelector(".card__title");
+    // Set the image link
+    const cardImage = this._cardElement.querySelector(".card__image");
+    cardImage.src = this._link;
+    cardImage.alt = `Photo of ${this._name}`;
 
-    cardTitleEL.textContent = this._name;
-    cardImageEL.src = this._link;
-    cardImageEL.alt = this._name;
+    // Set the card title
+    const cardTitle = this._cardElement.querySelector(".card__title");
+    cardTitle.textContent = this._name;
 
+    // Set the event listeners
     this._setEventListeners();
+
     return this._cardElement;
   }
 }

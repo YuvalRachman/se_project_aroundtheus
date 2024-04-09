@@ -46,7 +46,7 @@ function handleProfileFormSubmit({ title, description }) {
 function renderCard(data) {
   const card = new Card(
     { data, handleImageClick: (data) => imagePopup.open(data) },
-    constants.formSettings.images
+    constants.formSettings.cardTemplate
   );
 
   return card.getView();
