@@ -49,22 +49,20 @@ export const validationSettings = {
 };
 
 // Instead of directly accessing DOM elements, export selectors and retrieve them dynamically when needed.
-export const modals = () => Array.from(document.querySelectorAll(".modal"));
+// export const modals = () => Array.from(document.querySelectorAll(".modal"));
 
-export const modalEdit = () => document.querySelector("#modalEdit");
+// export const modalEdit = () => document.querySelector("#modalEdit");
 
-export const cardTitle = () =>
-  modalAddCard().querySelector(".modal__input_type_title");
-export const cardUrl = () =>
-  modalAddCard().querySelector(".modal__input_type_url");
-export const plusEdit = () => document.querySelector(".profile__card-button");
-export const editProfileForm = () => document.querySelector("#profileButton");
-export const profileTitle = () => document.querySelector(".profile__title");
-export const profileSubtitle = () =>
-  document.querySelector(".profile__subtitle");
-export const profilleTitleInput = () =>
-  document.querySelector("#profile-title-input");
-export const profilleSubtitleInput = () =>
-  document.querySelector("#profile-subtitle-input");
+// export const cardTitle = () =>
+//   modalAddCard().querySelector(".modal__input_type_title");
+// export const cardUrl = () =>
+//   modalAddCard().querySelector(".modal__input_type_url");
+// export const plusEdit = () => document.querySelector(".profile__card-button");
+// export const editProfileForm = () => document.querySelector("#profileButton");
+
+// export const profilleTitleInput = () =>
+//   document.querySelector("#profile-title-input");
+// export const profilleSubtitleInput = () =>
+//   document.querySelector("#profile-subtitle-input");
 
 //

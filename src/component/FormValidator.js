@@ -13,7 +13,7 @@ export default class FormValidator {
     this._inputList = document.querySelectorAll(this._inputSelector);
 
     this._submitButton = document.querySelector(this._submitButtonSelector);
-    console.log(this._submitButton);
+    console.log(this._inactiveButtonClass);
   }
 
   _showInputError(inputElement) {
@@ -21,13 +21,10 @@ export default class FormValidator {
     const errorMessageElement = this._form.querySelector(
       `#${inputElement.id}-error`
     );
-    console.log(inputElement.id);
     // Add the input error class to the element's class list
     inputElement.classList.add(this._inputErrorClass);
-
     // Change the text content to the error message
     errorMessageElement.textContent = inputElement.validationMessage;
-
     // Add the error class to the error message's class list
     errorMessageElement.classList.add(this._errorClass);
   }
@@ -37,13 +34,10 @@ export default class FormValidator {
     const errorMessageElement = this._form.querySelector(
       `#${inputElement.id}-error`
     );
-
     // Add the input error class to the element's class list
     inputElement.classList.remove(this._inputErrorClass);
-
     // Clear the error message from the text content
     errorMessageElement.textContent = "";
-
     // Add the error class to the error message's class list
     errorMessageElement.classList.remove(this._errorClass);
   }
@@ -74,8 +68,11 @@ export default class FormValidator {
   // Check if the input element is invalid
   _checkValidity(inputElement) {
     return !inputElement.validity.valid;
-    _hasInvalidInput = () =>
-      Array.from(this._inputList).some(this._checkValidity);
+  }
+  _hasInvalidInput() {
+    return Array.from(this._inputList).some((inputElement) =>
+      this._checkValidity(inputElement)
+    );
   }
 
   // Toggle button depending on the input's validity
