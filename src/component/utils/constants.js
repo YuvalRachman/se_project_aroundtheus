@@ -39,6 +39,14 @@ export const formSettings = {
   modalImage: "#preview_image",
   images: ".card",
 };
+export const validationSettings = {
+  inputSelector: ".modal__input",
+  submitButtonSelector: ".modal__button",
+  inactiveButtonClass: "modal__button_disabled",
+  inputErrorClass: "modal__input-error",
+  errorClass: "modal__input-error_visible",
+  formSelector: ".modal",
+};
 
 // Instead of directly accessing DOM elements, export selectors and retrieve them dynamically when needed.
 export const modals = () => Array.from(document.querySelectorAll(".modal"));

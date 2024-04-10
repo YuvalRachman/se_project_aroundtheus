@@ -1,3 +1,5 @@
+import { validationSettings } from "../component/utils/constants.js";
+
 export default class FormValidator {
   constructor(settings, formElement) {
     this._inputSelector = settings.inputSelector;
@@ -5,12 +7,13 @@ export default class FormValidator {
     this._inactiveButtonClass = settings.inactiveButtonClass;
     this._inputErrorClass = settings.inputErrorClass;
     this._errorClass = settings.errorClass;
+    console.log(this._submitButtonSelector);
 
     this._form = formElement;
-    console.log(this._form);
     this._inputList = document.querySelectorAll(this._inputSelector);
 
     this._submitButton = document.querySelector(this._submitButtonSelector);
+    console.log(this._submitButton);
   }
 
   _showInputError(inputElement) {
@@ -18,7 +21,7 @@ export default class FormValidator {
     const errorMessageElement = this._form.querySelector(
       `#${inputElement.id}-error`
     );
-
+    console.log(inputElement.id);
     // Add the input error class to the element's class list
     inputElement.classList.add(this._inputErrorClass);
 
@@ -71,10 +74,9 @@ export default class FormValidator {
   // Check if the input element is invalid
   _checkValidity(inputElement) {
     return !inputElement.validity.valid;
+    _hasInvalidInput = () =>
+      Array.from(this._inputList).some(this._checkValidity);
   }
-
-  _hasInvalidInput = () =>
-    Array.from(this._inputList).some(this._checkValidity);
 
   // Toggle button depending on the input's validity
   _toggleButtonState() {
@@ -101,9 +103,17 @@ export default class FormValidator {
     });
   }
 
-  // Validate form
   enableValidation() {
-    // Set event listeners
+    // Set event listener for form submission
+    this._form.addEventListener("submit", (event) => {
+      // Prevent the form's default behavior
+      event.preventDefault();
+
+      // Perform form validation
+      this._checkFormValidity();
+    });
+
+    // Set event listeners for individual input elements
     this._setEventListeners();
   }
 

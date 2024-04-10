@@ -2,7 +2,9 @@ import Card from "./component/Card.js";
 import Section from "./component/Section.js";
 import PopupForm from "./component/PopupForm.js";
 import "./pages/index.css";
+import { validationSettings } from "./component/utils/constants.js";
 import * as constants from "./component/utils/constants.js";
+
 import FormValidator from "./component/FormValidator.js";
 import { PopupImage } from "./component/PopupImage.js";
 import UserInfo from "./component/UserInfo.js";
@@ -16,15 +18,38 @@ const userInfo = new UserInfo({
   descriptionSelector: ".profile__subtitle",
 });
 
-// Initialize form validators
-const profileFormValidator = new FormValidator(
-  constants.formSettings,
-  "#edit__profile__form"
-);
-const cardFormValidator = new FormValidator(
-  constants.formSettings,
-  "#add__card__form"
-);
+/* -------------------------------------------------------------------------- */
+/*                               Form Validation                              */
+/* -------------------------------------------------------------------------- */
+
+// Create a form validators object
+const formValidators = {};
+
+// Create validator instances for all forms
+const enableValidation = (validationSettings) => {
+  // Create an array of all forms
+  const formList = Array.from(
+    document.querySelectorAll(validationSettings.formSelector)
+  );
+
+  // Create a validator for each form
+  formList.forEach((formElement) => {
+    // Create a validator instance for the current instance
+    const validator = new FormValidator(validationSettings, formElement);
+
+    // Retrieve the form element by its name
+    const formName = formElement.getAttribute("name");
+
+    // Store the current form validator in the validators object
+    formValidators[formName] = validator;
+
+    // Enable validation for the current form
+    validator.enableValidation();
+  });
+};
+
+// Enable validation for all forms
+enableValidation(validationSettings);
 
 // Initialize PopupImage, PopupForm instances
 const imagePopup = new PopupImage("#preview_image");
@@ -44,9 +69,11 @@ function handleProfileFormSubmit(data) {
   userInfo.setInfo(data);
   editPopup.close();
 }
+
 function handleImageClick() {
   imagePopup.open();
 }
+
 function renderCard(data) {
   const card = new Card(
     {
@@ -57,6 +84,7 @@ function renderCard(data) {
   );
   return card.getView();
 }
+
 // Initialize card section
 const cardSection = new Section(
   {
@@ -80,14 +108,11 @@ editPopup.setEventListeners();
 addCardPopup.setEventListeners();
 imagePopup.setEventListeners();
 
-// Enable form validation
-profileFormValidator.enableValidation();
-cardFormValidator.enableValidation();
-
 // Now add the event listener to modalAddCard
 modalAddCard.addEventListener("click", () => {
   addCardPopup.open();
 });
+
 modalProfile.addEventListener("click", () => {
   console.log(222);
   editPopup.open();
