@@ -11,178 +11,158 @@ import * as constants from "./component/utils/constants.js";
 import FormValidator from "./component/FormValidator.js";
 import { PopupImage } from "./component/PopupImage.js";
 import UserInfo from "./component/UserInfo.js";
-const addCardModal = document.forms["card-modal"];
-const profileModal = document.forms["profile-modal"];
 
-console.log(profileModal);
-// Define modalAddCard
-const modalAddCard = document.querySelector(".profile__card-button");
+document.addEventListener("DOMContentLoaded", function () {
+  const addCardModal = document.forms["addCardModal"];
+  const profileModal = document.forms["profileModal"];
 
-// Initialize UserInfo
+  console.log(profileModal);
+  // Define modalAddCard
+  const modalAddCard = document.querySelector(".profile__card-button");
 
-/* -------------------------------------------------------------------------- */
-/*                               Form Validation                              */
-/* -------------------------------------------------------------------------- */
+  // Initialize UserInfo
 
-// Create a form validators object
-const formValidators = {};
+  /* -------------------------------------------------------------------------- */
+  /*                               Form Validation                              */
+  /* -------------------------------------------------------------------------- */
 
-// Create validator instances for all forms
-const enableValidation = (validationSettings) => {
-  // Create an array of all forms
-  const formList = Array.from(
-    document.querySelectorAll(validationSettings.formSelector)
-  );
+  // Create a form validators object
+  const formValidators = {};
 
-  // Create a validator for each form
-  formList.forEach((formElement) => {
-    // Create a validator instance for the current instance
-    const validator = new FormValidator(validationSettings, formElement);
+  // Create validator instances for all forms
+  const enableValidation = (validationSettings) => {
+    // Create an array of all forms
+    const formList = Array.from(
+      document.querySelectorAll(validationSettings.formSelector)
+    );
 
-    // Retrieve the form element by its name
-    const formName = formElement.getAttribute("name");
+    // Create a validator for each form
+    formList.forEach((formElement) => {
+      // Create a validator instance for the current instance
+      const validator = new FormValidator(validationSettings, formElement);
 
-    // Store the current form validator in the validators object
-    formValidators[formName] = validator;
+      // Retrieve the form element by its name
+      const formName = formElement.getAttribute("name");
 
-    // Enable validation for the current form
-    validator.enableValidation();
-  });
-};
-/* -------------------------------------------------------------------------- */
-/*                                Card Section                                */
-/* -------------------------------------------------------------------------- */
+      // Store the current form validator in the validators object
+      formValidators[formName] = validator;
 
-function renderCard(data) {
-  const card = new Card(
+      // Enable validation for the current form
+      validator.enableValidation();
+    });
+  };
+
+  /* -------------------------------------------------------------------------- */
+  /*                                Card Section                                */
+  /* -------------------------------------------------------------------------- */
+
+  function renderCard(data) {
+    const card = new Card(
+      {
+        data: data,
+        handleImageClick: (imageData) => {
+          imagePopup.open(imageData);
+        },
+      },
+      "#card-template"
+    );
+    return card.getView();
+  }
+
+  // Initialize card section
+  const cardSection = new Section(
     {
-      data: data,
-      handleImageClick: (imageData) => {
-        imagePopup.open(imageData);
+      items: constants.initialCards,
+      renderer: (data) => {
+        // Create a new card
+        const cardElement = renderCard(data);
+
+        // Display each card
+        cardSection.addItem(cardElement);
       },
     },
-    "#card-template"
+    formSettings.cardsList
   );
-  return card.getView();
-}
 
-// Initialize card section
-const cardSection = new Section(
-  {
-    items: constants.initialCards,
-    renderer: (data) => {
-      // Create a new card
-      const cardElement = renderCard(data);
+  // Enable validation for all forms
+  enableValidation(validationSettings);
 
-      // Display each card
-      cardSection.addItem(cardElement);
-    },
-  },
-  formSettings.cardsList
-);
+  // Initialize PopupImage, PopupForm instances
+  const imagePopup = new PopupImage("#preview_image");
 
-// Enable validation for all forms
-enableValidation(validationSettings);
+  /* -------------------------------------------------------------------------- */
+  /*                                  Add Form                                  */
+  /* -------------------------------------------------------------------------- */
 
-// Initialize PopupImage, PopupForm instances
-const imagePopup = new PopupImage("#preview_image");
+  // Create the add form instance
+  const addCardPopup = new PopupForm(formSettings.modalAddCard, (formData) => {
+    // Create a new card
+    const newCard = renderCard(formData);
+    // Close the add form
+    addCardPopup.close();
+    // Add the new card to the section
+    cardSection.addItem(newCard);
+  });
 
-/* -------------------------------------------------------------------------- */
-/*                                  Add Form                                  */
-/* -------------------------------------------------------------------------- */
+  // Open the modal when users click on the add button
+  modalAddCard.addEventListener("click", () => {
+    // Reset validation for the add card form
+    formValidators[addCardModal.getAttribute("name")].resetValidation();
 
-// Create the add form instance
-const addCardPopup = new PopupForm(formSettings.modalAddCard, (formData) => {
-  // Create a new card
-  const newCard = renderCard(formData);
-  // Close the add form
-  addCardPopup.close();
-  // Add the new card to the section
-  cardSection.addItem(newCard);
+    // Open the add card form
+    addCardPopup.open();
+  });
+
+  // Set add form event listeners
+  addCardPopup.setEventListeners();
+
+  /* -------------------------------------------------------------------------- */
+  /*                             Profile Information                            */
+  /* -------------------------------------------------------------------------- */
+
+  // Create the user info instance
+  const userInfo = new UserInfo({
+    title: ".profile__title",
+    subtitle: ".profile__subtitle",
+  });
+  // Create the edit form instance
+  const profile = new PopupForm(formSettings.modalProfile, (values) => {
+    // Add the form's input to the profile section
+    userInfo.setUserInfo(values.name, values.subtitle);
+
+    // Close the edit form
+    profile.close();
+  });
+
+  /* -------------------------------------------------------------------------- */
+  /*                                  Edit Form                                 */
+  /* -------------------------------------------------------------------------- */
+  const editButton = document.querySelector(".profile__button");
+  const modalInputTitle = document.querySelector("#profile-title-input");
+  const modalInputSubtitle = document.querySelector("#profile-subtitle-input");
+  // Open the modal when users click on the edit button
+  editButton.addEventListener("click", () => {
+    // Get profile info and add to the form fields
+    const profileInfo = userInfo.getInfo();
+
+    // Add the profile info on the page to the form's fields
+    modalInputTitle.value = profileInfo.title;
+    modalInputSubtitle.value = profileInfo.subtitle;
+
+    // Disable button each time it opens
+    formValidators[profileModal.getAttribute("name")].disableButton();
+
+    // Open modal
+    profile.open();
+  });
+
+  // Set edit form event listeners
+  profile.setEventListeners();
+
+  // Render initial set of cards
+  cardSection.renderItems(constants.initialCards);
+
+  // Set event listeners for popups
+
+  imagePopup.setEventListeners();
 });
-
-// Open the modal when users click on the add button
-modalAddCard.addEventListener("click", () => {
-  // Reset validation for the add card form
-  formValidators[addCardModal.getAttribute("name")].resetValidation();
-
-  // Open the add card form
-  addCardPopup.open();
-});
-
-// Set add form event listeners
-addCardPopup.setEventListeners();
-
-/* -------------------------------------------------------------------------- */
-/*                             Profile Information                            */
-/* -------------------------------------------------------------------------- */
-
-// Create the user info instance
-const userInfo = new UserInfo({
-  titleSelector: ".profile__title",
-  descriptionSelector: ".profile__subtitle",
-});
-// Create the edit form instance
-const profile = new PopupForm(formSettings.modalAddCard, (values) => {
-  // Add the form's input to the profile section
-  userInfo.setUserInfo(values.title, values.subtitle);
-
-  // Close the edit form
-  profile.close();
-});
-
-/* -------------------------------------------------------------------------- */
-/*                                  Edit Form                                 */
-/* -------------------------------------------------------------------------- */
-const editButton = document.querySelector(".profile__button");
-const modalInputTitle = document.querySelector("#profile-title-input");
-const modalInputSubtitle = document.querySelector("#profile-subtitle-input");
-// Open the modal when users click on the edit button
-editButton.addEventListener("click", () => {
-  // Get profile info and add to the form fields
-  const profileInfo = userInfo.getInfo();
-
-  // Add the profile info on the page to the form's fields
-  modalInputTitle.value = profileInfo.name;
-  modalInputSubtitle.value = profileInfo.subtitle;
-
-  // Disable button each time it opens
-  formValidators[profileModal.getAttribute("name")].disableButton();
-
-  // Open modal
-  profile.open();
-});
-
-// Set edit form event listeners
-profile.setEventListeners();
-
-// Function to handle form submit for adding a card
-// function handleAddCardFormSubmit(data) {
-//   const newCard = renderCard(data);
-//   cardSection.addItem(newCard);
-//   addCardPopup.close();
-//   cardFormValidator.resetValidation();
-// }
-
-// Function to handle form submit for profile edit
-function handleProfileFormSubmit(data) {
-  userInfo.setInfo(data);
-  profile.close();
-}
-
-// Render initial set of cards
-cardSection.renderItems(constants.initialCards);
-
-// Set event listeners for popups
-
-imagePopup.setEventListeners();
-
-// // Now add the event listener to modalAddCard
-// modalAddCard.addEventListener("click", () => {
-//   addCardPopup.open();
-// });
-
-// modalProfile.addEventListener("click", () => {
-//   console.log(222);
-//   editPopup.open();
-// });

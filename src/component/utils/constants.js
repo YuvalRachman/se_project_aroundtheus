@@ -36,6 +36,7 @@ export const formSettings = {
   cardsList: ".cards__list",
   cardTemplate: "#card-template",
   modalAddCard: "#modalAddCard",
+  modalProfile: "#edit__profile__form",
   modalImage: "#preview_image",
   images: ".card",
 };
