@@ -27,18 +27,16 @@ export const initialCards = [
 
 export const formSettings = {
   formSelector: ".modal__form",
-  inputSelector: ".modal__input",
-  submitButtonSelector: ".modal__button",
-  inactiveButtonClass: "modal__button_disabled",
-  inputErrorClass: "modal__input_type_error",
-  errorClass: "modal__input-error",
-  errorVisibleClass: "modal__input-error_visible",
-  cardsList: ".cards__list",
   cardTemplate: "#card-template",
   modalAddCard: "#modalAddCard",
-  modalProfile: "#edit__profile__form",
+  modalProfile: "#modalEdit",
+  profileForm: "#edit__profile__form",
   modalImage: "#preview_image",
+  imageModalContainer: ".preview__container",
   images: ".card",
+  cardList: ".cards__list",
+  profileName: ".profile__title",
+  profileSubtitle: ".profile__subtitle",
 };
 export const validationSettings = {
   inputSelector: ".modal__input",
@@ -46,7 +44,7 @@ export const validationSettings = {
   inactiveButtonClass: "modal__button_disabled",
   inputErrorClass: "modal__input-error",
   errorClass: "modal__input-error_visible",
-  formSelector: ".modal",
+  modalSelector: ".modal",
 };
 
 // Instead of directly accessing DOM elements, export selectors and retrieve them dynamically when needed.

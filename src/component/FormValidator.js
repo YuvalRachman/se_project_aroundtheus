@@ -1,5 +1,3 @@
-import { validationSettings } from "../component/utils/constants.js";
-
 export default class FormValidator {
   constructor(settings, formElement) {
     this._inputSelector = settings.inputSelector;
@@ -9,10 +7,10 @@ export default class FormValidator {
     this._errorClass = settings.errorClass;
 
     this._form = formElement;
-    this._inputList = document.querySelectorAll(this._inputSelector);
 
-    this._submitButton = document.querySelector(this._submitButtonSelector);
+    this._inputList = this._form.querySelectorAll(this._inputSelector);
     console.log(this._inputList);
+    this._submitButton = document.querySelector(this._submitButtonSelector);
   }
 
   _showInputError(inputElement) {
@@ -20,10 +18,13 @@ export default class FormValidator {
     const errorMessageElement = this._form.querySelector(
       `#${inputElement.id}-error`
     );
+
     // Add the input error class to the element's class list
     inputElement.classList.add(this._inputErrorClass);
+
     // Change the text content to the error message
     errorMessageElement.textContent = inputElement.validationMessage;
+
     // Add the error class to the error message's class list
     errorMessageElement.classList.add(this._errorClass);
   }
@@ -33,10 +34,13 @@ export default class FormValidator {
     const errorMessageElement = this._form.querySelector(
       `#${inputElement.id}-error`
     );
+
     // Add the input error class to the element's class list
     inputElement.classList.remove(this._inputErrorClass);
+
     // Clear the error message from the text content
     errorMessageElement.textContent = "";
+
     // Add the error class to the error message's class list
     errorMessageElement.classList.remove(this._errorClass);
   }
@@ -44,6 +48,7 @@ export default class FormValidator {
   // Disable form button
   disableButton() {
     this._submitButton.classList.add(this._inactiveButtonClass);
+
     this._submitButton.disabled = true;
   }
 
@@ -68,6 +73,10 @@ export default class FormValidator {
   _checkValidity(inputElement) {
     return !inputElement.validity.valid;
   }
+
+  // Check if any element in the input list is invalid
+  // Reference (1): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
+  // Reference (2): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from
   _hasInvalidInput = () =>
     Array.from(this._inputList).some(this._checkValidity);
 
@@ -96,14 +105,15 @@ export default class FormValidator {
     });
   }
 
+  // Validate form
   enableValidation() {
-    // Set event listener for form submission
     this._form.addEventListener("submit", (event) => {
-      // Prevent the form's default behavior
+      // Prevent the form's default behaviour
       event.preventDefault();
-      // Set event listeners for individual input elements
-      this._setEventListeners();
     });
+
+    // Set event listeners
+    this._setEventListeners();
   }
 
   resetValidation() {
@@ -112,7 +122,6 @@ export default class FormValidator {
 
     // Clear error messages
     this._inputList.forEach((inputElement) => {
-      console.log(inputElement);
       this._hideInputError(inputElement);
     });
   }

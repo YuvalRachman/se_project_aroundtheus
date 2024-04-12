@@ -1,31 +1,27 @@
 export default class Card {
-  constructor({ data, handleImageClick }, cardSelector) {
-    this._name = data.name;
-    this._link = data.link;
+  constructor({ name, link }, handleImageClick, cardSelector) {
+    this._name = name;
+    this._link = link;
     this._cardSelector = cardSelector;
 
     this._handleImageClick = handleImageClick;
-    this._cardElement = null; // Initialize _cardElement as null
+    // Initialize _cardElement as null
   }
-
   _setEventListeners() {
-    if (this._cardElement) {
-      this._cardElement
-        .querySelector(".card__like-button")
-        .addEventListener("click", this._handleLike);
+    this._cardElement
+      .querySelector(".card__like-button")
+      .addEventListener("click", this._handleLike);
 
-      this._cardElement
-        .querySelector(".card__trash-button")
-        .addEventListener("click", () => this._deleteCard());
+    this._cardElement
+      .querySelector(".card__trash-button")
+      .addEventListener("click", () => this._deleteCard());
 
-      this._cardElement
-        .querySelector(".card__image")
-        .addEventListener("click", () =>
-          this._handleImageClick({ link: this._link, name: this._name })
-        );
-    }
+    this._cardElement
+      .querySelector(".card__image")
+      .addEventListener("click", () =>
+        this._handleImageClick({ link: this._link, name: this._name })
+      );
   }
-
   _handleLike = () => {
     const likeButton = this._cardElement.querySelector(".card__like-button");
     if (likeButton) {
@@ -33,9 +29,10 @@ export default class Card {
     }
   };
 
-  _deleteCard = () => {
+  _deleteCard() {
     this._cardElement.remove();
-  };
+    this._cardElement = null;
+  }
 
   _getTemplate() {
     return document
@@ -57,7 +54,7 @@ export default class Card {
     const cardTitle = this._cardElement.querySelector(".card__title");
     cardTitle.textContent = this._name;
 
-    // Set the event listeners
+    // Set the event listeners after creating the card element
     this._setEventListeners();
 
     return this._cardElement;
