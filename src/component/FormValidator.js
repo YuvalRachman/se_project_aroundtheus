@@ -10,7 +10,7 @@ export default class FormValidator {
 
     this._inputList = this._form.querySelectorAll(this._inputSelector);
     console.log(this._inputList);
-    this._submitButton = document.querySelector(this._submitButtonSelector);
+    this._submitButton = this._form.querySelector(this._submitButtonSelector);
   }
 
   _showInputError(inputElement) {

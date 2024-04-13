@@ -44,24 +44,5 @@ export const validationSettings = {
   inactiveButtonClass: "modal__button_disabled",
   inputErrorClass: "modal__input-error",
   errorClass: "modal__input-error_visible",
-  modalSelector: ".modal",
+  modalSelector: ".modal__form",
 };
-
-// Instead of directly accessing DOM elements, export selectors and retrieve them dynamically when needed.
-// export const modals = () => Array.from(document.querySelectorAll(".modal"));
-
-// export const modalEdit = () => document.querySelector("#modalEdit");
-
-// export const cardTitle = () =>
-//   modalAddCard().querySelector(".modal__input_type_title");
-// export const cardUrl = () =>
-//   modalAddCard().querySelector(".modal__input_type_url");
-// export const plusEdit = () => document.querySelector(".profile__card-button");
-// export const editProfileForm = () => document.querySelector("#profileButton");
-
-// export const profilleTitleInput = () =>
-//   document.querySelector("#profile-title-input");
-// export const profilleSubtitleInput = () =>
-//   document.querySelector("#profile-subtitle-input");
-
-//

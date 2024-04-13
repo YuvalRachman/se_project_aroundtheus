@@ -26,7 +26,7 @@ const profileModal = document.forms["profileForm"];
 /* -------------------------------------------------------------------------- */
 
 // Create a form validators object
-const formValidators = {};
+const formValidator = {};
 
 // Create validator instances for all forms
 const enableValidation = (validationSettings) => {
@@ -40,11 +40,12 @@ const enableValidation = (validationSettings) => {
     // Create a validator instance for the current instance
     const validator = new FormValidator(validationSettings, formElement);
 
-    // Retrieve the form element by its name
+    console.log("Form Element:", formElement);
     const formName = formElement.getAttribute("name");
+    console.log("Form Name:", formName);
 
     // Store the current form validator in the validators object
-    formValidators[formName] = validator;
+    formValidator[formName] = validator;
 
     // Enable validation for the current form
     validator.enableValidation();
@@ -109,7 +110,7 @@ const addCardPopup = new PopupForm(formSettings.modalAddCard, (data) => {
 // Open the modal when users click on the add button
 addCardBut.addEventListener("click", () => {
   // Reset validation for the add card form
-  formValidators[addCardModal.getAttribute("name")].resetValidation();
+  formValidator[addCardModal.getAttribute("name")].resetValidation();
 
   // Open the add card form
   addCardPopup.open();
@@ -149,7 +150,7 @@ editButton.addEventListener("click", () => {
   modalInputSubtitle.value = profileInfo.subtitle;
 
   // Disable button each time it opens
-  formValidators[profileModal.getAttribute("name")].disableButton();
+  formValidator[profileModal.getAttribute("name")].disableButton();
 
   // Open modal
   profile.open();
