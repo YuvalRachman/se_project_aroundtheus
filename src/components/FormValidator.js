@@ -75,8 +75,7 @@ export default class FormValidator {
   }
 
   // Check if any element in the input list is invalid
-  // Reference (1): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
-  // Reference (2): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from
+
   _hasInvalidInput = () =>
     Array.from(this._inputList).some(this._checkValidity);
 

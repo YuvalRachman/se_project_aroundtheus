@@ -1,4 +1,4 @@
-import Popup from "../component/Popup.js";
+import Popup from "./Popup.js";
 
 export class PopupWithImage extends Popup {
   constructor(popupSelector) {

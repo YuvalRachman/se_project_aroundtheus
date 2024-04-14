@@ -34,8 +34,6 @@ export default class PopupWithForm extends Popup {
   }
 
   close() {
-    // Reset the form
-
     // Close the form
     super.close();
   }

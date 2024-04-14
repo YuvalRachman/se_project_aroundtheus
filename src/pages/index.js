@@ -1,6 +1,6 @@
-import Card from "../component/Card.js";
-import Section from "../component/Section.js";
-import PopupForm from "../component/PopupForm.js";
+import Card from "../components/Card.js";
+import Section from "../components/Section.js";
+import PopupWithForm from "../components/PopupWithForm.js";
 import "./index.css";
 import {
   validationSettings,
@@ -8,9 +8,9 @@ import {
   initialCards,
 } from "../utils/contants.js";
 
-import FormValidator from "../component/FormValidator.js";
-import { PopupWithImage } from "../component/PopupWithImage.js";
-import UserInfo from "../component/UserInfo.js";
+import FormValidator from "../components/FormValidator.js";
+import { PopupWithImage } from "../components/PopupWithImage.js";
+import UserInfo from "../components/UserInfo.js";
 
 const editButton = document.querySelector(".profile__button");
 const modalInputTitle = document.querySelector("#profile-title-input");
@@ -19,7 +19,6 @@ const addCardBut = document.querySelector(".profile__card-button");
 
 const addCardModal = document.forms["formAddCard"];
 const profileModal = document.forms["profileForm"];
-// Initialize UserInfo
 
 /* -------------------------------------------------------------------------- */
 /*                               Form Validation                              */
@@ -94,7 +93,7 @@ const cardSection = new Section(
 /* -------------------------------------------------------------------------- */
 
 // Create the add form instance
-const addCardPopup = new PopupForm(formSettings.modalAddCard, (data) => {
+const addCardPopup = new PopupWithForm(formSettings.modalAddCard, (data) => {
   // Create a new card
   const newCard = renderCard(data);
   // Close the add form
@@ -121,9 +120,9 @@ const userInfo = new UserInfo(
   formSettings.profileSubtitle
 );
 // Create the edit form instance
-const profilePopup = new PopupForm(formSettings.modalProfile, (values) => {
+const profilePopup = new PopupWithForm(formSettings.modalProfile, (values) => {
   // Add the form's input to the profile section
-  userInfo.setInfo(values.name, values.subtitle);
+  userInfo.setUserInfo(values.name, values.subtitle);
 
   // Close the edit form
   profilePopup.close();
@@ -136,18 +135,18 @@ const profilePopup = new PopupForm(formSettings.modalProfile, (values) => {
 // Open the modal when users click on the edit button
 editButton.addEventListener("click", () => {
   // Get profile info and add to the form fields
-  const profileInfo = userInfo.getInfo();
+
+  const profileInfo = userInfo.getUserInfo();
 
   // Add the profile info on the page to the form's fields
   modalInputTitle.value = profileInfo.name;
   modalInputSubtitle.value = profileInfo.subtitle;
 
-  profile.open();
+  profilePopup.open();
   // Disable button each time it opens
   formValidator[profileModal.getAttribute("name")].disableButton();
   // Reset validation for the add card form
   formValidator[addCardModal.getAttribute("name")].resetValidation();
-  // Open modal
 });
 
 // Set edit form event listeners
