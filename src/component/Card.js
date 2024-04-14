@@ -3,34 +3,30 @@ export default class Card {
     this._name = name;
     this._link = link;
     this._cardSelector = cardSelector;
-
     this._handleImageClick = handleImageClick;
-    // Initialize _cardElement as null
+    this._element = this._getTemplate(); // Initialize _element once
+    this._likeButton = this._element.querySelector(".card__like-button"); // Initialize _likeButton once
+    this._cardImage = this._element.querySelector(".card__image"); // Initialize _cardImage once
+    this._trashButton = this._element.querySelector(".card__trash-button"); // Initialize _trashButton once
+
+    this._setEventListeners(); // Call _setEventListeners once
   }
+
   _setEventListeners() {
-    this._cardElement
-      .querySelector(".card__like-button")
-      .addEventListener("click", this._handleLike);
-
-    this._cardElement
-      .querySelector(".card__trash-button")
-      .addEventListener("click", () => this._deleteCard());
-
-    this._cardElement
-      .querySelector(".card__image")
-      .addEventListener("click", () =>
-        this._handleImageClick({ link: this._link, name: this._name })
-      );
+    this._likeButton.addEventListener("click", this._handleLike);
+    this._trashButton.addEventListener("click", () => this._deleteCard());
+    this._cardImage.addEventListener("click", () =>
+      this._handleImageClick({ link: this._link, name: this._name })
+    );
   }
-  _handleLike = () => {
-    const likeButton = this._cardElement.querySelector(".card__like-button");
 
-    likeButton.classList.toggle("card__like-button_active");
+  _handleLike = () => {
+    this._likeButton.classList.toggle("card__like-button_active");
   };
 
   _deleteCard() {
-    this._cardElement.remove();
-    this._cardElement = null;
+    this._element.remove();
+    this._element = null;
   }
 
   _getTemplate() {
@@ -41,21 +37,9 @@ export default class Card {
   }
 
   getView() {
-    // Create card template
-    this._cardElement = this._getTemplate();
-
-    // Set the image link
-    const cardImage = this._cardElement.querySelector(".card__image");
-    cardImage.src = this._link;
-    cardImage.alt = `Photo of ${this._name}`;
-
-    // Set the card title
-    const cardTitle = this._cardElement.querySelector(".card__title");
-    cardTitle.textContent = this._name;
-
-    // Set the event listeners after creating the card element
-    this._setEventListeners();
-
-    return this._cardElement;
+    this._cardImage.src = this._link;
+    this._cardImage.alt = `Photo of ${this._name}`;
+    this._element.querySelector(".card__title").textContent = this._name;
+    return this._element;
   }
 }

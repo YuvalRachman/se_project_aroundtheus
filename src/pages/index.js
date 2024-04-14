@@ -6,10 +6,10 @@ import {
   validationSettings,
   formSettings,
   initialCards,
-} from "../utils/utils.js";
+} from "../utils/contants.js";
 
 import FormValidator from "../component/FormValidator.js";
-import { PopupImage } from "../component/PopupImage.js";
+import { PopupWithImage } from "../component/PopupWithImage.js";
 import UserInfo from "../component/UserInfo.js";
 
 const editButton = document.querySelector(".profile__button");
@@ -53,11 +53,11 @@ enableValidation(validationSettings);
 /* -------------------------------------------------------------------------- */
 
 // Create image popup instance
-const imagePopup = new PopupImage(formSettings.modalImage);
+const imagePopup = new PopupWithImage(formSettings.modalImage);
 
 // Close image popup preview
-imagePopup.close();
-// Initialize PopupImage, PopupForm instances
+
+// Initialize PopupWithImage, PopupForm instances
 /* -------------------------------------------------------------------------- */
 /*                                Card Section                                */
 /* -------------------------------------------------------------------------- */
@@ -86,7 +86,7 @@ const cardSection = new Section(
   },
   formSettings.cardList
 );
-cardSection.renderItems(initialCards);
+
 // Enable validation for all forms
 
 /* -------------------------------------------------------------------------- */
@@ -105,9 +105,6 @@ const addCardPopup = new PopupForm(formSettings.modalAddCard, (data) => {
 
 // Open the modal when users click on the add button
 addCardBut.addEventListener("click", () => {
-  // Reset validation for the add card form
-  formValidator[addCardModal.getAttribute("name")].resetValidation();
-
   // Open the add card form
   addCardPopup.open();
 });
@@ -124,12 +121,12 @@ const userInfo = new UserInfo(
   formSettings.profileSubtitle
 );
 // Create the edit form instance
-const profile = new PopupForm(formSettings.modalProfile, (values) => {
+const profilePopup = new PopupForm(formSettings.modalProfile, (values) => {
   // Add the form's input to the profile section
   userInfo.setInfo(values.name, values.subtitle);
 
   // Close the edit form
-  profile.close();
+  profilePopup.close();
 });
 
 /* -------------------------------------------------------------------------- */
@@ -145,12 +142,14 @@ editButton.addEventListener("click", () => {
   modalInputTitle.value = profileInfo.name;
   modalInputSubtitle.value = profileInfo.subtitle;
 
+  profile.open();
   // Disable button each time it opens
   formValidator[profileModal.getAttribute("name")].disableButton();
-
+  // Reset validation for the add card form
+  formValidator[addCardModal.getAttribute("name")].resetValidation();
   // Open modal
-  profile.open();
 });
 
 // Set edit form event listeners
-profile.setEventListeners();
+profilePopup.setEventListeners();
+cardSection.renderItems(initialCards);
