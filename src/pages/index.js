@@ -17,8 +17,8 @@ const modalInputTitle = document.querySelector("#profile-title-input");
 const modalInputSubtitle = document.querySelector("#profile-subtitle-input");
 const addCardBut = document.querySelector(".profile__card-button");
 
-const addCardModal = document.forms["formAddCard"];
-const profileModal = document.forms["profileForm"];
+const addCardForm = document.forms["formAddCard"];
+const profileForm = document.forms["profileForm"];
 
 /* -------------------------------------------------------------------------- */
 /*                               Form Validation                              */
@@ -89,7 +89,7 @@ const cardSection = new Section(
 // Enable validation for all forms
 
 /* -------------------------------------------------------------------------- */
-/*                                  Add Form                                  */
+/*                                  Add Crad  Form                            */
 /* -------------------------------------------------------------------------- */
 
 // Create the add form instance
@@ -106,6 +106,7 @@ const addCardPopup = new PopupWithForm(formSettings.modalAddCard, (data) => {
 addCardBut.addEventListener("click", () => {
   // Open the add card form
   addCardPopup.open();
+  formValidator[addCardForm.getAttribute("name")].resetValidation();
 });
 
 // Set add form event listeners
@@ -144,9 +145,9 @@ editButton.addEventListener("click", () => {
 
   profilePopup.open();
   // Disable button each time it opens
-  formValidator[profileModal.getAttribute("name")].disableButton();
+  formValidator[profileForm.getAttribute("name")].disableButton();
   // Reset validation for the add card form
-  formValidator[addCardModal.getAttribute("name")].resetValidation();
+  formValidator[addCardForm.getAttribute("name")].resetValidation();
 });
 
 // Set edit form event listeners
