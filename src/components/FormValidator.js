@@ -5,9 +5,7 @@ export default class FormValidator {
     this._inactiveButtonClass = settings.inactiveButtonClass;
     this._inputErrorClass = settings.inputErrorClass;
     this._errorClass = settings.errorClass;
-
     this._form = formElement;
-
     this._inputList = this._form.querySelectorAll(this._inputSelector);
     console.log(this._inputList);
     this._submitButton = this._form.querySelector(this._submitButtonSelector);
@@ -18,13 +16,10 @@ export default class FormValidator {
     const errorMessageElement = this._form.querySelector(
       `#${inputElement.id}-error`
     );
-
     // Add the input error class to the element's class list
     inputElement.classList.add(this._inputErrorClass);
-
     // Change the text content to the error message
     errorMessageElement.textContent = inputElement.validationMessage;
-
     // Add the error class to the error message's class list
     errorMessageElement.classList.add(this._errorClass);
   }
