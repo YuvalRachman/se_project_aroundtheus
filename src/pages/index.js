@@ -1,12 +1,9 @@
+import Api from "../API/Api.js";
 import Card from "../components/Card.js";
 import Section from "../components/Section.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import "./index.css";
-import {
-  validationSettings,
-  formSettings,
-  initialCards,
-} from "../utils/contants.js";
+import { validationSettings, formSettings } from "../utils/contants.js";
 
 import FormValidator from "../components/FormValidator.js";
 import { PopupWithImage } from "../components/PopupWithImage.js";
@@ -19,6 +16,15 @@ const addCardBut = document.querySelector(".profile__card-button");
 
 const addCardForm = document.forms["formAddCard"];
 const profileForm = document.forms["profileForm"];
+
+const api = new Api({
+  baseUrl: "https://around.nomoreparties.co/v1/",
+  headers: {
+    authorization: "7020a5bf-3cd5-49cf-ad16-b85b65f2938f",
+    "Content-Type": "application/json",
+  },
+});
+console.log(this.headers);
 
 /* -------------------------------------------------------------------------- */
 /*                               Form Validation                              */
@@ -54,9 +60,6 @@ enableValidation(validationSettings);
 // Create image popup instance
 const imagePopup = new PopupWithImage(formSettings.modalImage);
 
-// Close image popup preview
-
-// Initialize PopupWithImage, PopupForm instances
 /* -------------------------------------------------------------------------- */
 /*                                Card Section                                */
 /* -------------------------------------------------------------------------- */
@@ -72,22 +75,26 @@ function renderCard(data) {
 }
 
 // Initialize card section
-const cardSection = new Section(
-  {
-    items: initialCards,
-    renderer: (data) => {
-      // Create a new card
-      const cardElement = renderCard(data);
+api
+  .getInitialCards()
+  .then((cards) => {
+    const cardSection = new Section(
+      {
+        items: cards,
+        renderer: renderCard,
+      },
+      formSettings.cardList
+    );
 
-      // Display each card
-      cardSection.addItem(cardElement);
-    },
-  },
-  formSettings.cardList
-);
-
-// Enable validation for all forms
-
+    cardSection.renderItems();
+  })
+  .catch((err) => {
+    console.error("Error fetching initial cards:", err);
+  });
+// function createCard(cardData) {
+//   const cardElement = cardData;
+//   cardSection.addItem(cardElement);
+// }
 /* -------------------------------------------------------------------------- */
 /*                                  Add Crad  Form                            */
 /* -------------------------------------------------------------------------- */
@@ -100,13 +107,16 @@ const addCardPopup = new PopupWithForm(formSettings.modalAddCard, (data) => {
   addCardPopup.close();
   // Add the new card to the section
   cardSection.addItem(newCard);
+  formValidator[addCardForm.getAttribute("name")].disableButton();
 });
 
-// Open the modal when users click on the add button
-addCardBut.addEventListener("click", () => {
+function openCardForm() {
   // Open the add card form
   addCardPopup.open();
-  formValidator[addCardForm.getAttribute("name")].resetValidation();
+}
+// Open the modal when users click on the add button
+addCardBut.addEventListener("click", () => {
+  openCardForm();
 });
 
 // Set add form event listeners
@@ -121,35 +131,41 @@ const userInfo = new UserInfo(
   formSettings.profileSubtitle
 );
 // Create the edit form instance
-const profilePopup = new PopupWithForm(formSettings.modalProfile, (values) => {
-  // Add the form's input to the profile section
-  userInfo.setUserInfo(values.name, values.subtitle);
+const profilePopup = new PopupWithForm(
+  formSettings.modalProfile,
+  ({ name, subtitle }) => {
+    // Add the form's input to the profile section
+    userInfo.setUserInfo(name, subtitle);
 
-  // Close the edit form
-  profilePopup.close();
-});
+    // Close the edit form
+    profilePopup.close();
+  }
+);
 
 /* -------------------------------------------------------------------------- */
 /*                                  Edit Form                                 */
 /* -------------------------------------------------------------------------- */
 
-// Open the modal when users click on the edit button
-editButton.addEventListener("click", () => {
-  // Get profile info and add to the form fields
-
+// Function to open the edit modal and populate form fields with profile info
+function openEditForm() {
   const profileInfo = userInfo.getUserInfo();
-
-  // Add the profile info on the page to the form's fields
   modalInputTitle.value = profileInfo.name;
   modalInputSubtitle.value = profileInfo.subtitle;
-
   profilePopup.open();
-  // Disable button each time it opens
-  formValidator[profileForm.getAttribute("name")].disableButton();
-  // Reset validation for the add card form
-  formValidator[addCardForm.getAttribute("name")].resetValidation();
+}
+
+// Function to disable buttons and reset validation
+function resetProfileForm() {
+  const profileValidator = formValidator[profileForm.getAttribute("name")];
+  profileValidator.resetValidation();
+  profileValidator.disableButton();
+}
+
+// Event listener for edit button click
+editButton.addEventListener("click", () => {
+  openEditForm();
+  resetProfileForm();
 });
 
-// Set edit form event listeners
+// Set event listeners for the profile popup modal
 profilePopup.setEventListeners();
-cardSection.renderItems(initialCards);
