@@ -18,13 +18,12 @@ const addCardForm = document.forms["formAddCard"];
 const profileForm = document.forms["profileForm"];
 
 const api = new Api({
-  baseUrl: "https://around.nomoreparties.co/v1/",
+  baseUrl: "https://around-api.en.tripleten-services.com/v1",
   headers: {
-    authorization: "7020a5bf-3cd5-49cf-ad16-b85b65f2938f",
+    authorization: "59d50a7d-5cbc-4141-92cc-d4a1e1821930",
     "Content-Type": "application/json",
   },
 });
-console.log(this.headers);
 
 /* -------------------------------------------------------------------------- */
 /*                               Form Validation                              */
@@ -63,6 +62,8 @@ const imagePopup = new PopupWithImage(formSettings.modalImage);
 /* -------------------------------------------------------------------------- */
 /*                                Card Section                                */
 /* -------------------------------------------------------------------------- */
+const initialCards = [];
+
 function renderCard(data) {
   const card = new Card(
     data,
@@ -74,26 +75,69 @@ function renderCard(data) {
   return card.getView();
 }
 
-// Initialize card section
-api
-  .getInitialCards()
-  .then((cards) => {
-    const cardSection = new Section(
-      {
-        items: cards,
-        renderer: renderCard,
+// Post initial cards
+function postInitialCard() {
+  const url = "https://around-api.en.tripleten-services.com/v1/cards";
+  initialCards.forEach((card) => {
+    const payload = { id: card.id, name: card.name, link: card.link };
+    const options = {
+      method: "POST",
+      headers: {
+        authorization: "59d50a7d-5cbc-4141-92cc-d4a1e1821930",
+        "Content-Type": "application/json",
       },
-      formSettings.cardList
-    );
-
-    cardSection.renderItems();
-  })
-  .catch((err) => {
-    console.error("Error fetching initial cards:", err);
+      body: JSON.stringify(payload),
+    };
+    fetch(url, options)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to post card: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Card posted successfully:", data);
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
   });
-// function createCard(cardData) {
-//   const cardElement = cardData;
-//   cardSection.addItem(cardElement);
+}
+
+// Fetch and render initial cards
+function fetchInitialCards() {
+  api
+    .getInitialCards()
+    .then((cards) => {
+      const cardSection = new Section(
+        {
+          items: cards,
+          renderer: (cardData) => {
+            cardSection.addItem(renderCard(cardData));
+          },
+        },
+        ".cards__list"
+      );
+      cardSection.renderItems();
+    })
+    .catch((err) => {
+      console.error("Error fetching initial cards:", err);
+    });
+}
+
+// // Load additional data using _loadData() method
+// api
+//   ._loadData()
+//   .then((additionalData) => {
+//     // Handle additional data if needed
+//   })
+//   .catch((error) => {
+//     console.error("Error loading additional data:", error);
+//   });
+
+postInitialCard();
+fetchInitialCards();
+
 // }
 /* -------------------------------------------------------------------------- */
 /*                                  Add Crad  Form                            */
