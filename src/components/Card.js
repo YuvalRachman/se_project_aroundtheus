@@ -12,14 +12,20 @@ export default class Card {
     this._likeButton = this._element.querySelector(".card__like-button"); // Initialize _likeButton once
     this._cardImage = this._element.querySelector(".card__image"); // Initialize _cardImage once
     this._trashButton = this._element.querySelector(".card__trash-button"); // Initialize _trashButton once
-
+    this._likeCount = this._element.querySelector(".card__like-num");
     this._setEventListeners();
   }
 
   _setEventListeners() {
     this._likeButton.addEventListener("click", this._handleLike);
+    this._likeButton.addEventListener("click", () => {
+      if (this._likeButton.classList.contains("card__like-button_active")) {
+        this._addLike();
+      } else {
+        this._removeLike();
+      }
+    });
     this._trashButton.addEventListener("click", () => this._deleteCard());
-
     this._cardImage.addEventListener("click", () =>
       this._handleImageClick({
         link: this._link,
@@ -54,6 +60,55 @@ export default class Card {
         console.error(error.message);
       });
   }
+
+  _addLike() {
+    // Instantiate Api class
+    const api = new Api({
+      baseUrl: `https://around-api.en.tripleten-services.com/v1`,
+      headers: {
+        authorization: "59d50a7d-5cbc-4141-92cc-d4a1e1821930",
+        "Content-Type": "application/json",
+      },
+    });
+    api
+      .addLike(this._cardId)
+      .then(() => {
+        this._countLikesAdd(); // Call _countLikes method
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  }
+  _removeLike() {
+    // Instantiate Api class
+    const api = new Api({
+      baseUrl: `https://around-api.en.tripleten-services.com/v1`,
+      headers: {
+        authorization: "59d50a7d-5cbc-4141-92cc-d4a1e1821930",
+        "Content-Type": "application/json",
+      },
+    });
+    api
+      .removeLike(this._cardId)
+      .then(() => {
+        this._countLikesRemove();
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
+  }
+
+  _countLikesAdd() {
+    const currentLikes = parseInt(this._likeCount.textContent, 10); // Correct the radix to 10
+    this._likeCount.textContent = currentLikes + 1;
+    console.log("Like count updated:", this._likeCount.textContent);
+  }
+  _countLikesRemove() {
+    const currentLikes = parseInt(this._likeCount.textContent, 10); // Correct the radix to 10
+    this._likeCount.textContent = currentLikes - 1;
+    console.log("Like count updated:", this._likeCount.textContent);
+  }
+
   _getTemplate() {
     return document
       .querySelector(this._cardSelector)

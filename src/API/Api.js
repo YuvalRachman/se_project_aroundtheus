@@ -24,7 +24,7 @@ export default class Api {
   _loadData() {
     return this.getInitialCards();
   }
-  addCard({ name, link }) {
+  renderCard(name, link) {
     return this._request(`${this.baseUrl}/cards`, {
       headers: this.headers,
       method: "POST",
@@ -33,12 +33,17 @@ export default class Api {
   }
 
   addLike(cardId) {
-    return this._request(`${this.baseUrl}/cards/likes/${cardId}`, {
+    return this._request(`${this.baseUrl}/cards/${cardId}/likes`, {
       headers: this.headers,
       method: "PUT",
     });
   }
-
+  removeLike(cardId) {
+    return this._request(`${this.baseUrl}/cards/${cardId}/likes`, {
+      headers: this.headers,
+      method: "DELETE",
+    });
+  }
   //   updateAvatar() {
   //     method: "PACH";
   //   }

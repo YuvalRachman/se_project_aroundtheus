@@ -58,113 +58,11 @@ enableValidation(validationSettings);
 
 // Create image popup instance
 const imagePopup = new PopupWithImage(formSettings.modalImage);
-
-/* -------------------------------------------------------------------------- */
-/*                                Card Section                                */
-/* -------------------------------------------------------------------------- */
-const initialCards = [];
-
-function renderCard(data) {
-  const card = new Card(
-    data,
-    (imageData) => {
-      imagePopup.open(imageData);
-    },
-    "#card-template"
-  );
-  return card.getView();
+imagePopup.setEventListeners();
+function handleImageClick(name, link) {
+  // Assuming imagePopup is defined elsewhere
+  imagePopup.open(name, link);
 }
-
-// Post initial cards
-function postInitialCard() {
-  const url = "https://around-api.en.tripleten-services.com/v1/cards";
-  initialCards.forEach((card) => {
-    const payload = { id: card.id, name: card.name, link: card.link };
-    const options = {
-      method: "POST",
-      headers: {
-        authorization: "59d50a7d-5cbc-4141-92cc-d4a1e1821930",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    };
-    fetch(url, options)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Failed to post card: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => {
-        console.log("Card posted successfully:", data);
-      })
-      .catch((error) => {
-        console.error(error.message);
-      });
-  });
-}
-
-// Fetch and render initial cards
-function fetchInitialCards() {
-  api
-    .getInitialCards()
-    .then((cards) => {
-      const cardSection = new Section(
-        {
-          items: cards,
-          renderer: (cardData) => {
-            cardSection.addItem(renderCard(cardData));
-          },
-        },
-        ".cards__list"
-      );
-      cardSection.renderItems();
-    })
-    .catch((err) => {
-      console.error("Error fetching initial cards:", err);
-    });
-}
-
-// // Load additional data using _loadData() method
-// api
-//   ._loadData()
-//   .then((additionalData) => {
-//     // Handle additional data if needed
-//   })
-//   .catch((error) => {
-//     console.error("Error loading additional data:", error);
-//   });
-
-postInitialCard();
-fetchInitialCards();
-
-// }
-/* -------------------------------------------------------------------------- */
-/*                                  Add Crad  Form                            */
-/* -------------------------------------------------------------------------- */
-
-// Create the add form instance
-const addCardPopup = new PopupWithForm(formSettings.modalAddCard, (data) => {
-  // Create a new card
-  const newCard = renderCard(data);
-  // Close the add form
-  addCardPopup.close();
-  // Add the new card to the section
-  cardSection.addItem(newCard);
-  formValidator[addCardForm.getAttribute("name")].disableButton();
-});
-
-function openCardForm() {
-  // Open the add card form
-  addCardPopup.open();
-}
-// Open the modal when users click on the add button
-addCardBut.addEventListener("click", () => {
-  openCardForm();
-});
-
-// Set add form event listeners
-addCardPopup.setEventListeners();
 /* -------------------------------------------------------------------------- */
 /*                             Profile Information                            */
 /* -------------------------------------------------------------------------- */
@@ -185,6 +83,89 @@ const profilePopup = new PopupWithForm(
     profilePopup.close();
   }
 );
+/* -------------------------------------------------------------------------- */
+/*                                Card Section                                */
+/* -------------------------------------------------------------------------- */
+let cardSection;
+
+// Define handleImageClick function
+
+function renderCard(data) {
+  // Create a new Card instance with appropriate parameters
+  const card = new Card(data, handleImageClick, "#card-template", api);
+  return card.getView(); // Return the card view
+}
+
+api
+  .getInitialCards() // Corrected: Remove the argument from getInitialCards
+  .then((initialCards) => {
+    // Create a new Section instance for cards
+    cardSection = new Section(
+      {
+        items: initialCards,
+        renderer: (item) => {
+          // Render each card and add it to the card section
+          const cardElement = renderCard(item);
+          cardSection.addItem(cardElement);
+        },
+      },
+      ".cards__list"
+    );
+
+    // Render items in the card section
+    cardSection.renderItems();
+  })
+  .catch((error) => {
+    console.error("Error fetching initial cards:", error);
+  });
+
+// Function to handle submission of new card form
+function handleAddCardSubmit(data) {
+  // Call the API to render a new card
+  api
+    .renderCard(data.name, data.link)
+    .then((newCardData) => {
+      // Render the new card and add it to the card section
+      const newCardElement = renderCard(newCardData);
+      cardSection.addItem(newCardElement);
+      addCardPopup.close();
+    })
+    .catch((error) => {
+      console.error("Error rendering new card:", error);
+    });
+}
+
+// Set event listeners for the profile popup modal
+profilePopup.setEventListeners();
+
+// // Load additional data using _loadData() method
+// api
+//   ._loadData()
+//   .then((additionalData) => {
+//     // Handle additional data if needed
+//   })
+//   .catch((error) => {
+//     console.error("Error loading additional data:", error);
+//   });
+
+// }
+/* -------------------------------------------------------------------------- */
+/*                                  Add Crad  Form                            */
+/* -------------------------------------------------------------------------- */
+
+function openCardForm() {
+  // Open the add card form
+  addCardPopup.open();
+}
+// Open the modal when users click on the add button
+addCardBut.addEventListener("click", () => {
+  openCardForm();
+});
+
+const addCardPopup = new PopupWithForm("#modalAddCard", handleAddCardSubmit);
+
+// Set add form event listeners
+addCardPopup.setEventListeners();
 
 /* -------------------------------------------------------------------------- */
 /*                                  Edit Form                                 */
@@ -210,6 +191,3 @@ editButton.addEventListener("click", () => {
   openEditForm();
   resetProfileForm();
 });
-
-// Set event listeners for the profile popup modal
-profilePopup.setEventListeners();
