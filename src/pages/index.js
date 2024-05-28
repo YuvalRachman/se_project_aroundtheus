@@ -67,6 +67,9 @@ const profilePopup = new PopupWithForm(
     profilePopup.close();
   }
 );
+// function handleAvatarSubmit(data){api.}
+// const avatarPopup = new PopupWithForm("#modalAvatar", handleAvatarSubmit);
+// avatarPopup.setEventListeners();
 
 /* -------------------------------------------------------------------------- */
 /*                                 Popup Image                                */
@@ -83,13 +86,11 @@ function handleImageClick(name, link) {
 /*                                Card Section                                */
 /* -------------------------------------------------------------------------- */
 
-let cardSection;
-
 function handleConfirmationOpen(cardId, cardElement) {
   deletePopup.open(cardId, cardElement);
 }
 
-function renderCard(data) {
+function createCard(data) {
   const card = new Card(
     data,
     handleImageClick,
@@ -99,7 +100,7 @@ function renderCard(data) {
   );
   return card.getView();
 }
-console.log(111);
+
 const deletePopup = new PopupWithConfirm(
   "#verify__card__delete",
   (cardId, cardElement) => {
@@ -114,49 +115,46 @@ const deletePopup = new PopupWithConfirm(
 );
 deletePopup.setEventListeners();
 
-console.log(333);
-function renderInitialCards() {
-  cardSection = new Section(
-    {
-      items: initialCards,
-      renderer: (item) => {
-        const cardElement = renderCard(item);
-        cardSection.addItem(cardElement);
-      },
-    },
-    ".cards__list"
-  );
-  cardSection.renderItems();
-}
-
-// Render initial cards from the array
-renderInitialCards();
-
-// Fetch and render initial cards from the server
-api
-  .getInitialCards()
-  .then((initialCardsFromServer) => {
-    initialCardsFromServer.forEach((item) => {
-      const cardElement = renderCard(item);
+const cardSection = new Section(
+  {
+    items: initialCards,
+    renderer: (item) => {
+      const cardElement = createCard(item);
       cardSection.addItem(cardElement);
-    });
-  })
-  .catch((error) => console.error("Error fetching initial cards:", error));
+    },
+  },
+  ".cards__list"
+);
+cardSection.renderItems();
+
+const addCardPopup = new PopupWithForm("#modalAddCard", handleAddCardSubmit);
+addCardPopup.setEventListeners();
 
 function handleAddCardSubmit(data) {
   api
-    .createCard(data.name, data.link)
+    .renderCard(data.name, data.link)
     .then((newCardData) => {
-      const newCardElement = renderCard(newCardData);
+      const newCardElement = createCard(newCardData);
       cardSection.addItem(newCardElement);
       addCardPopup.close();
     })
     .catch((error) => console.error("Error creating new card:", error));
 }
 
-const addCardPopup = new PopupWithForm("#modalAddCard", handleAddCardSubmit);
-addCardPopup.setEventListeners();
+addCardButton.addEventListener("click", () => {
+  addCardPopup.open();
+});
 
+// Fetch and render initial cards from the server
+api
+  .getInitialCards()
+  .then((initialCardsFromServer) => {
+    initialCardsFromServer.forEach((item) => {
+      const cardElement = createCard(item);
+      cardSection.addItem(cardElement);
+    });
+  })
+  .catch((error) => console.error("Error fetching initial cards:", error));
 /* -------------------------------------------------------------------------- */
 /*                                  Edit Form                                 */
 /* -------------------------------------------------------------------------- */

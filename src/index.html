@@ -55,6 +55,32 @@
     <footer class="footer">
       <p class="footer__copyright">&copy; 2022 Around The U.S.</p>
     </footer>
+    <div class="modal" id="modalAvatar">
+      <div class="modal__container">
+        <button class="modal__close" type="button"></button>
+        <h2 class="modal__heading">Change profile picture</h2>
+        <form>
+          <div class="input-wrapper">
+            <input
+              type="text"
+              name="name"
+              id=""
+              class="modal__input modal__input-first"
+              required
+              minlength="2"
+              maxlength="40"
+            />
+            <span
+              class="modal__input-error"
+              id="profile-title-input-error"
+            ></span>
+          </div>
+          <button class="modal__button" type="submit" name="button">
+            Save
+          </button>
+        </form>
+      </div>
+    </div>
     <div class="modal" id="modalEdit">
       <div class="modal__container">
         <button class="modal__close" type="button"></button>
