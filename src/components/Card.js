@@ -1,31 +1,41 @@
-import Api from "../API/Api.js";
+import Popup from "./Popup.js";
 
 export default class Card {
-  constructor({ name, link, _id }, handleImageClick, cardSelector) {
+  constructor(
+    { name, link, _id },
+    handleImageClick,
+    cardSelector,
+    api,
+    handleDelete
+  ) {
     this._name = name;
     this._link = link;
     this._cardId = _id;
     this._cardSelector = cardSelector;
-    console.log(this._cardId);
     this._handleImageClick = handleImageClick;
-    this._element = this._getTemplate(); // Initialize _element once
-    this._likeButton = this._element.querySelector(".card__like-button"); // Initialize _likeButton once
-    this._cardImage = this._element.querySelector(".card__image"); // Initialize _cardImage once
-    this._trashButton = this._element.querySelector(".card__trash-button"); // Initialize _trashButton once
+    this._api = api;
+    this._handleDelete = handleDelete;
+    this._element = this._getTemplate();
+    this._likeButton = this._element.querySelector(".card__like-button");
+    this._cardImage = this._element.querySelector(".card__image");
+    this._trashButton = this._element.querySelector(".card__trash-button");
     this._likeCount = this._element.querySelector(".card__like-num");
+
     this._setEventListeners();
   }
 
   _setEventListeners() {
-    this._likeButton.addEventListener("click", this._handleLike);
     this._likeButton.addEventListener("click", () => {
       if (this._likeButton.classList.contains("card__like-button_active")) {
-        this._addLike();
-      } else {
         this._removeLike();
+      } else {
+        this._addLike();
       }
     });
-    this._trashButton.addEventListener("click", () => this._deleteCard());
+
+    this._trashButton.addEventListener("click", () =>
+      this._handleDelete(this._cardId, this._element)
+    );
     this._cardImage.addEventListener("click", () =>
       this._handleImageClick({
         link: this._link,
@@ -39,75 +49,44 @@ export default class Card {
     this._likeButton.classList.toggle("card__like-button_active");
   };
 
-  _deleteCard() {
-    // Instantiate Api class
-    const api = new Api({
-      baseUrl: `https://around-api.en.tripleten-services.com/v1`,
-      headers: {
-        authorization: "59d50a7d-5cbc-4141-92cc-d4a1e1821930",
-        "Content-Type": "application/json",
-      },
-    });
-
-    // Call deleteCard method of the Api class
-    api
-      .deleteCard(this._cardId)
-      .then(() => {
-        this._element.remove();
-        this._element = null;
-      })
-      .catch((error) => {
-        console.error(error.message);
-      });
+  deleteCard() {
+    this._element.remove();
+    this._element = null;
   }
 
-  _addLike() {
-    // Instantiate Api class
-    const api = new Api({
-      baseUrl: `https://around-api.en.tripleten-services.com/v1`,
-      headers: {
-        authorization: "59d50a7d-5cbc-4141-92cc-d4a1e1821930",
-        "Content-Type": "application/json",
-      },
-    });
-    api
+  _addLike = () => {
+    this._api
       .addLike(this._cardId)
       .then(() => {
-        this._countLikesAdd(); // Call _countLikes method
+        this._countLikesAdd();
+        this._handleLike();
       })
       .catch((error) => {
         console.error(error.message);
       });
-  }
-  _removeLike() {
-    // Instantiate Api class
-    const api = new Api({
-      baseUrl: `https://around-api.en.tripleten-services.com/v1`,
-      headers: {
-        authorization: "59d50a7d-5cbc-4141-92cc-d4a1e1821930",
-        "Content-Type": "application/json",
-      },
-    });
-    api
+  };
+
+  _removeLike = () => {
+    this._api
       .removeLike(this._cardId)
       .then(() => {
         this._countLikesRemove();
+        this._handleLike();
       })
       .catch((error) => {
         console.error(error.message);
       });
-  }
+  };
 
-  _countLikesAdd() {
-    const currentLikes = parseInt(this._likeCount.textContent, 10); // Correct the radix to 10
+  _countLikesAdd = () => {
+    const currentLikes = parseInt(this._likeCount.textContent, 10);
     this._likeCount.textContent = currentLikes + 1;
-    console.log("Like count updated:", this._likeCount.textContent);
-  }
-  _countLikesRemove() {
-    const currentLikes = parseInt(this._likeCount.textContent, 10); // Correct the radix to 10
+  };
+
+  _countLikesRemove = () => {
+    const currentLikes = parseInt(this._likeCount.textContent, 10);
     this._likeCount.textContent = currentLikes - 1;
-    console.log("Like count updated:", this._likeCount.textContent);
-  }
+  };
 
   _getTemplate() {
     return document

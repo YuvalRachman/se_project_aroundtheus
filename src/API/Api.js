@@ -1,16 +1,16 @@
 export default class Api {
   constructor(options) {
-    console.log(options.headers);
     this.baseUrl = options.baseUrl;
     this.headers = options.headers;
-    console.log(this.headers);
   }
+
   deleteCard(cardId) {
     return this._request(`${this.baseUrl}/cards/${cardId}`, {
       headers: this.headers,
       method: "DELETE",
     });
   }
+
   _checkResponse(res) {
     return res.ok ? res.json() : Promise.reject(res);
   }
@@ -18,12 +18,11 @@ export default class Api {
   _request(url, options) {
     return fetch(url, options).then(this._checkResponse);
   }
+
   getInitialCards() {
     return this._request(`${this.baseUrl}/cards`, { headers: this.headers });
   }
-  _loadData() {
-    return this.getInitialCards();
-  }
+
   renderCard(name, link) {
     return this._request(`${this.baseUrl}/cards`, {
       headers: this.headers,
@@ -38,13 +37,26 @@ export default class Api {
       method: "PUT",
     });
   }
+
   removeLike(cardId) {
     return this._request(`${this.baseUrl}/cards/${cardId}/likes`, {
       headers: this.headers,
       method: "DELETE",
     });
   }
-  //   updateAvatar() {
-  //     method: "PACH";
-  //   }
+
+  getUserInfo() {
+    return this._request(`${this.baseUrl}/users/me`, { headers: this.headers });
+  }
+
+  updateUser(name, about) {
+    return this._request(`${this.baseUrl}/users/me`, {
+      method: "PATCH",
+      headers: this.headers,
+      body: JSON.stringify({
+        name: name,
+        about: about,
+      }),
+    });
+  }
 }
