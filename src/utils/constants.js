@@ -10,6 +10,7 @@ export const formSettings = {
   cardList: ".cards__list",
   profileAddForm: "#add__card__form",
   profileName: ".profile__title",
+  avatarSelector: ".profile__avatar",
   profileSubtitle: ".profile__subtitle",
   profileAddButton: ".profile__card-button",
 };

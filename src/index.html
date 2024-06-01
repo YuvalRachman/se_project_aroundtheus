@@ -21,7 +21,7 @@
       <section class="profile page__section">
         <img
           src="<%=require('./images/Avatar.png')%>"
-          alt="Avatar"
+          alt="avatar"
           class="profile__avatar"
         />
         <div class="profile__info">
@@ -59,20 +59,19 @@
       <div class="modal__container">
         <button class="modal__close" type="button"></button>
         <h2 class="modal__heading">Change profile picture</h2>
-        <form>
+        <form class="modal__form" name="profileAvatarForm">
           <div class="input-wrapper">
             <input
-              type="text"
-              name="name"
-              id=""
+              type="url"
+              name="avatar"
+              id="profile-avatar-input"
+              placeholder="Image URL"
               class="modal__input modal__input-first"
               required
-              minlength="2"
-              maxlength="40"
             />
             <span
               class="modal__input-error"
-              id="profile-title-input-error"
+              id="profile-avatar-input-error"
             ></span>
           </div>
           <button class="modal__button" type="submit" name="button">
@@ -105,8 +104,8 @@
           <div class="input-wrapper">
             <input
               type="text"
-              name="subtitle"
-              placeholder="subtitle"
+              name="about"
+              placeholder="about"
               id="profile-subtitle-input"
               class="modal__input"
               required

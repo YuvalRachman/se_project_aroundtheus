@@ -7,7 +7,7 @@ import {
   validationSettings,
   formSettings,
   initialCards,
-} from "../utils/contants.js";
+} from "../utils/constants.js";
 
 import FormValidator from "../components/FormValidator.js";
 import { PopupWithImage } from "../components/PopupWithImage.js";
@@ -19,9 +19,10 @@ const editButton = document.querySelector(".profile__button");
 const modalInputTitle = document.querySelector("#profile-title-input");
 const modalInputSubtitle = document.querySelector("#profile-subtitle-input");
 const addCardButton = document.querySelector(".profile__card-button");
-
+const editAvatar = document.querySelector(".profile__avatar");
 const addCardForm = document.forms["formAddCard"];
 const profileForm = document.forms["profileForm"];
+const profileAvatarForm = document.forms["profileAvatarForm"];
 
 const api = new Api({
   baseUrl: "https://around-api.en.tripleten-services.com/v1",
@@ -57,26 +58,41 @@ enableValidation(validationSettings);
 
 const userInfo = new UserInfo(
   formSettings.profileName,
-  formSettings.profileSubtitle
+  formSettings.profileSubtitle,
+  formSettings.avatarSelector
 );
 
 const profilePopup = new PopupWithForm(
   formSettings.modalProfile,
-  ({ name, subtitle }) => {
-    userInfo.setUserInfo(name, subtitle);
-    profilePopup.close();
+  ({ name, about }) => {
+    api
+      .updateUser(name, about)
+      .then(() => {
+        userInfo.setUserInfo({ name, about });
+        profilePopup.close();
+      })
+      .catch((error) => {
+        console.error("Error updating profile:", error);
+      });
   }
 );
-// function handleAvatarSubmit(data){api.}
-// const avatarPopup = new PopupWithForm("#modalAvatar", handleAvatarSubmit);
-// avatarPopup.setEventListeners();
+const avatarPopup = new PopupWithForm("#modalAvatar", ({ avatar }) => {
+  api
+    .updateAvatar(avatar)
+    .then(() => {
+      userInfo.setUserAvatar({ avatar });
+      avatarPopup.close();
+    })
+    .catch((error) => {
+      console.error("Error updating avatar:", error);
+    });
+});
 
 /* -------------------------------------------------------------------------- */
 /*                                 Popup Image                                */
 /* -------------------------------------------------------------------------- */
 
 const imagePopup = new PopupWithImage(formSettings.modalImage);
-imagePopup.setEventListeners();
 
 function handleImageClick(name, link) {
   imagePopup.open(name, link);
@@ -113,7 +129,6 @@ const deletePopup = new PopupWithConfirm(
       .catch((error) => console.error(error.message));
   }
 );
-deletePopup.setEventListeners();
 
 const cardSection = new Section(
   {
@@ -128,7 +143,6 @@ const cardSection = new Section(
 cardSection.renderItems();
 
 const addCardPopup = new PopupWithForm("#modalAddCard", handleAddCardSubmit);
-addCardPopup.setEventListeners();
 
 function handleAddCardSubmit(data) {
   api
@@ -146,15 +160,13 @@ addCardButton.addEventListener("click", () => {
 });
 
 // Fetch and render initial cards from the server
-api
-  .getInitialCards()
-  .then((initialCardsFromServer) => {
-    initialCardsFromServer.forEach((item) => {
-      const cardElement = createCard(item);
-      cardSection.addItem(cardElement);
-    });
-  })
-  .catch((error) => console.error("Error fetching initial cards:", error));
+api.getInitialCards().then((initialCardsFromServer) => {
+  initialCardsFromServer.forEach((item) => {
+    const cardElement = createCard(item);
+    cardSection.addItem(cardElement);
+  });
+});
+// .catch((error) => console.error("Error fetching initial cards:", error));
 /* -------------------------------------------------------------------------- */
 /*                                  Edit Form                                 */
 /* -------------------------------------------------------------------------- */
@@ -171,7 +183,21 @@ function resetProfileForm() {
   profileValidator.resetValidation();
   profileValidator.disableButton();
 }
+function resetAddCardForm() {
+  const cardValidator = formValidator[addCardForm.getAttribute("name")];
+  cardValidator.resetValidation();
+  cardValidator.disableButton();
+}
 
+function resetAvatarForm() {
+  const avatarValidator = formValidator[profileAvatarForm.getAttribute("name")];
+  avatarValidator.resetValidation();
+  avatarValidator.disableButton();
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 Setting popup                             */
+/* -------------------------------------------------------------------------- */
 editButton.addEventListener("click", () => {
   openEditForm();
   resetProfileForm();
@@ -179,4 +205,14 @@ editButton.addEventListener("click", () => {
 
 addCardButton.addEventListener("click", () => {
   addCardPopup.open();
+  resetAddCardForm();
 });
+editAvatar.addEventListener("click", () => {
+  avatarPopup.open();
+  resetAvatarForm();
+});
+imagePopup.setEventListeners();
+deletePopup.setEventListeners();
+addCardPopup.setEventListeners();
+profilePopup.setEventListeners();
+avatarPopup.setEventListeners();

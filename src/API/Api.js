@@ -54,9 +54,17 @@ export default class Api {
       method: "PATCH",
       headers: this.headers,
       body: JSON.stringify({
-        name: name,
-        about: about,
+        name,
+        about,
       }),
+    });
+  }
+
+  updateAvatar(avatar) {
+    return this._request(`${this.baseUrl}/users/me/avatar`, {
+      method: "PATCH",
+      headers: this.headers,
+      body: JSON.stringify({ avatar }),
     });
   }
 }
