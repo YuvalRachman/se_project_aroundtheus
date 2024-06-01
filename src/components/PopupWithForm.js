@@ -8,6 +8,18 @@ export default class PopupWithForm extends Popup {
     this._formInputs = this._popupForm.querySelectorAll("input");
 
     this._handleFormSubmit = handleFormSubmit;
+    this._submitButton = this._popupForm.querySelector(".modal__button");
+    this._submitButtonOriginalText = this._submitButton.textContent;
+  }
+
+  // Method to show the loading state
+  showLoading() {
+    this._submitButton.textContent = "Saving...";
+  }
+
+  // Method to hide the loading state
+  hideLoading() {
+    this._submitButton.textContent = this._submitButtonOriginalText;
   }
 
   // Collects data from all the input fields and returns the data as an object

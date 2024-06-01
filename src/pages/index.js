@@ -17,7 +17,7 @@ import { PopupWithConfirm } from "../components/PopupWithConfirm.js";
 // DOM Elements
 const editButton = document.querySelector(".profile__button");
 const modalInputTitle = document.querySelector("#profile-title-input");
-const modalInputSubtitle = document.querySelector("#profile-subtitle-input");
+const modalInputAbout = document.querySelector("#profile-subtitle-input");
 const addCardButton = document.querySelector(".profile__card-button");
 const editAvatar = document.querySelector(".profile__avatar");
 const addCardForm = document.forms["formAddCard"];
@@ -65,6 +65,7 @@ const userInfo = new UserInfo(
 const profilePopup = new PopupWithForm(
   formSettings.modalProfile,
   ({ name, about }) => {
+    profilePopup.showLoading();
     api
       .updateUser(name, about)
       .then(() => {
@@ -73,6 +74,9 @@ const profilePopup = new PopupWithForm(
       })
       .catch((error) => {
         console.error("Error updating profile:", error);
+      })
+      .finally(() => {
+        profilePopup.hideLoading();
       });
   }
 );
@@ -120,15 +124,14 @@ function createCard(data) {
 const deletePopup = new PopupWithConfirm(
   "#verify__card__delete",
   (cardId, cardElement) => {
-    api
-      .deleteCard(cardId)
-      .then(() => {
-        cardElement.remove();
-        deletePopup.close();
-      })
-      .catch((error) => console.error(error.message));
+    api.deleteCard(cardId).then(() => {
+      cardElement.remove();
+      deletePopup.close();
+    });
   }
 );
+//     .catch((error) => console.error(error.message));
+// }
 
 const cardSection = new Section(
   {
@@ -160,13 +163,15 @@ addCardButton.addEventListener("click", () => {
 });
 
 // Fetch and render initial cards from the server
-api.getInitialCards().then((initialCardsFromServer) => {
-  initialCardsFromServer.forEach((item) => {
-    const cardElement = createCard(item);
-    cardSection.addItem(cardElement);
-  });
-});
-// .catch((error) => console.error("Error fetching initial cards:", error));
+api
+  .getInitialCards()
+  .then((initialCardsFromServer) => {
+    initialCardsFromServer.forEach((item) => {
+      const cardElement = createCard(item);
+      cardSection.addItem(cardElement);
+    });
+  })
+  .catch((error) => console.error("Error fetching initial cards:", error));
 /* -------------------------------------------------------------------------- */
 /*                                  Edit Form                                 */
 /* -------------------------------------------------------------------------- */
@@ -174,7 +179,7 @@ api.getInitialCards().then((initialCardsFromServer) => {
 function openEditForm() {
   const profileInfo = userInfo.getUserInfo();
   modalInputTitle.value = profileInfo.name;
-  modalInputSubtitle.value = profileInfo.subtitle;
+  modalInputAbout.value = profileInfo.about;
   profilePopup.open();
 }
 
