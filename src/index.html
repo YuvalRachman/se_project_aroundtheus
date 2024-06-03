@@ -19,11 +19,14 @@
     </header>
     <main class="contnt">
       <section class="profile page__section">
-        <img
-          src="<%=require('./images/Avatar.png')%>"
-          alt="avatar"
-          class="profile__avatar"
-        />
+        <div class="profile__avatar-container">
+          <button class="profile__avatar-vector"></button>
+          <img
+            src="<%=require('./images/Avatar.png')%>"
+            alt="avatar"
+            class="profile__avatar"
+          />
+        </div>
         <div class="profile__info">
           <h1 class="profile__title">Jacques Cousteau</h1>
           <button
@@ -169,10 +172,12 @@
       </div>
     </div>
     <div class="modal" id="verify__card__delete">
-      <div class="modal__container modal__delete">
+      <div class="modal__delete">
         <button class="modal__close" id="preview_close" type="button"></button>
-        <p class="modal__verify">Are you sure?</p>
-        <button class="modal__button" id="deleteCard" type="button">yes</button>
+        <p class="modal__heading">Are you sure?</p>
+        <button class="modal__button deleteCard" id="deleteCard" type="button">
+          yes
+        </button>
       </div>
     </div>
     <div class="modal preview" id="preview_image">

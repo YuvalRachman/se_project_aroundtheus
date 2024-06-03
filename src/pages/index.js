@@ -81,6 +81,7 @@ const profilePopup = new PopupWithForm(
   }
 );
 const avatarPopup = new PopupWithForm("#modalAvatar", ({ avatar }) => {
+  avatarPopup.showLoading();
   api
     .updateAvatar(avatar)
     .then(() => {
@@ -89,6 +90,9 @@ const avatarPopup = new PopupWithForm("#modalAvatar", ({ avatar }) => {
     })
     .catch((error) => {
       console.error("Error updating avatar:", error);
+    })
+    .finally(() => {
+      avatarPopup.hideLoading();
     });
 });
 

@@ -25,6 +25,31 @@
   object-fit: cover;
   background-position: center;
   margin: 0;
+  z-index: 1;
+}
+
+.profile__avatar-container {
+  position: relative;
+}
+
+.profile__avatar-vector {
+  background: transparent url(../images/Vector\ copy.svg) no-repeat center;
+  border: none;
+  cursor: pointer;
+  height: 24px;
+  width: 24px;
+  position: absolute;
+  margin-top: 49px;
+  margin-left: 49px;
+  opacity: 100%;
+  z-index: 2;
+  display: none;
+}
+.profile__avatar-container:hover .profile__avatar-vector {
+  display: block;
+}
+.profile__avatar-container:hover {
+  opacity: 60%;
 }
 .profile__change {
   background-image: url(../images/Avatar\ change.svg);

@@ -46,6 +46,8 @@
   height: 18px;
   border: none;
   cursor: pointer;
+  position: absolute;
+  margin-left: 211px;
 }
 .card__like-button_active {
   background: transparent url(../images/like\ icon\ activ.svg);

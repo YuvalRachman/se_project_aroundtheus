@@ -16,10 +16,8 @@ export class PopupWithConfirm extends Popup {
   }
 
   // Handle delete confirmation
-  _handleEnterRemove = (e) => {
-    if (e.key === "Enter") {
-      this._handleDelete(this._cardId, this._cardElement);
-    }
+  _handleEnterRemove = () => {
+    this._handleDelete(this._cardId, this._cardElement);
   };
 
   // Override setEventListeners to add delete confirmation logic
@@ -29,9 +27,6 @@ export class PopupWithConfirm extends Popup {
       evt.preventDefault();
       this._handleDelete(this._cardId, this._cardElement);
     });
-
-    // Optionally add an event listener for the "Enter" key
-    document.addEventListener("keydown", this._handleEnterRemove);
   }
 
   // Ensure to remove the Enter key event listener when the popup is closed
