@@ -4,13 +4,6 @@ export default class Api {
     this.headers = options.headers;
   }
 
-  deleteCard(cardId) {
-    return this._request(`${this.baseUrl}/cards/${cardId}`, {
-      headers: this.headers,
-      method: "DELETE",
-    });
-  }
-
   _checkResponse(res) {
     return res.ok ? res.json() : Promise.reject(res);
   }
@@ -28,6 +21,13 @@ export default class Api {
       headers: this.headers,
       method: "POST",
       body: JSON.stringify({ name, link }),
+    });
+  }
+
+  deleteCard(cardId) {
+    return this._request(`${this.baseUrl}/cards/${cardId}`, {
+      headers: this.headers,
+      method: "DELETE",
     });
   }
 
@@ -66,5 +66,13 @@ export default class Api {
       headers: this.headers,
       body: JSON.stringify({ avatar }),
     });
+  }
+
+  showPromiseStatus() {
+    return Promise.all([this.getInitialCards(), this.getUserInfo()]).then(
+      (res) => {
+        return { initialCards: res[0], fetchedUserInfo: res[1] };
+      }
+    );
   }
 }

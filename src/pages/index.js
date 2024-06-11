@@ -3,11 +3,7 @@ import Card from "../components/Card.js";
 import Section from "../components/Section.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import "./index.css";
-import {
-  validationSettings,
-  formSettings,
-  initialCards,
-} from "../utils/constants.js";
+import { validationSettings, formSettings } from "../utils/constants.js";
 
 import FormValidator from "../components/FormValidator.js";
 import { PopupWithImage } from "../components/PopupWithImage.js";
@@ -68,8 +64,8 @@ const profilePopup = new PopupWithForm(
     profilePopup.showLoading();
     api
       .updateUser(name, about)
-      .then(() => {
-        userInfo.setUserInfo({ name, about });
+      .then((data) => {
+        userInfo.setUserInfo(data);
         profilePopup.close();
       })
       .catch((error) => {
@@ -80,12 +76,13 @@ const profilePopup = new PopupWithForm(
       });
   }
 );
+
 const avatarPopup = new PopupWithForm("#modalAvatar", ({ avatar }) => {
   avatarPopup.showLoading();
   api
     .updateAvatar(avatar)
-    .then(() => {
-      userInfo.setUserAvatar({ avatar });
+    .then((data) => {
+      userInfo.setUserInfo({ avatar: data.avatar });
       avatarPopup.close();
     })
     .catch((error) => {
@@ -120,7 +117,8 @@ function createCard(data) {
     handleImageClick,
     "#card-template",
     api,
-    handleConfirmationOpen
+    handleConfirmationOpen,
+    userInfo
   );
   return card.getView();
 }
@@ -134,12 +132,10 @@ const deletePopup = new PopupWithConfirm(
     });
   }
 );
-//     .catch((error) => console.error(error.message));
-// }
 
 const cardSection = new Section(
   {
-    items: initialCards,
+    items: [],
     renderer: (item) => {
       const cardElement = createCard(item);
       cardSection.addItem(cardElement);
@@ -147,35 +143,31 @@ const cardSection = new Section(
   },
   ".cards__list"
 );
-cardSection.renderItems();
 
-const addCardPopup = new PopupWithForm("#modalAddCard", handleAddCardSubmit);
-
-function handleAddCardSubmit(data) {
+const addCardPopup = new PopupWithForm("#modalAddCard", (data) => {
   api
-    .renderCard(data.name, data.link)
+    .renderCard(data.name, data.link) // Changed from addCard to renderCard
     .then((newCardData) => {
-      const newCardElement = createCard(newCardData);
-      cardSection.addItem(newCardElement);
+      const cardElement = createCard(newCardData);
+      cardSection.addItem(cardElement);
       addCardPopup.close();
     })
     .catch((error) => console.error("Error creating new card:", error));
-}
+});
 
 addCardButton.addEventListener("click", () => {
   addCardPopup.open();
 });
-
-// Fetch and render initial cards from the server
 api
-  .getInitialCards()
-  .then((initialCardsFromServer) => {
-    initialCardsFromServer.forEach((item) => {
-      const cardElement = createCard(item);
-      cardSection.addItem(cardElement);
-    });
+  .showPromiseStatus()
+  .then(({ initialCards, fetchedUserInfo }) => {
+    userInfo.setUserInfo(fetchedUserInfo);
+    cardSection.renderItems(initialCards);
   })
-  .catch((error) => console.error("Error fetching initial cards:", error));
+  .catch((err) => {
+    console.log(err);
+  });
+
 /* -------------------------------------------------------------------------- */
 /*                                  Edit Form                                 */
 /* -------------------------------------------------------------------------- */
@@ -192,10 +184,11 @@ function resetProfileForm() {
   profileValidator.resetValidation();
   profileValidator.disableButton();
 }
+
 function resetAddCardForm() {
-  const cardValidator = formValidator[addCardForm.getAttribute("name")];
-  cardValidator.resetValidation();
-  cardValidator.disableButton();
+  const addCardValidator = formValidator[addCardForm.getAttribute("name")];
+  addCardValidator.resetValidation();
+  addCardValidator.disableButton();
 }
 
 function resetAvatarForm() {
@@ -204,22 +197,16 @@ function resetAvatarForm() {
   avatarValidator.disableButton();
 }
 
-/* -------------------------------------------------------------------------- */
-/*                                 Setting popup                             */
-/* -------------------------------------------------------------------------- */
 editButton.addEventListener("click", () => {
   openEditForm();
   resetProfileForm();
 });
 
-addCardButton.addEventListener("click", () => {
-  addCardPopup.open();
-  resetAddCardForm();
-});
 editAvatar.addEventListener("click", () => {
   avatarPopup.open();
   resetAvatarForm();
 });
+
 imagePopup.setEventListeners();
 deletePopup.setEventListeners();
 addCardPopup.setEventListeners();

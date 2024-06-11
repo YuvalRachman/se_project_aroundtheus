@@ -1,16 +1,21 @@
-import Popup from "./Popup.js";
+import UserInfo from "./UserInfo.js";
+import Api from "../API/Api.js";
 
 export default class Card {
   constructor(
-    { name, link, _id },
+    { name, link, _id, owner, likes },
     handleImageClick,
     cardSelector,
     api,
-    handleDelete
+    handleDelete,
+    userInfo,
+    userHasLiked
   ) {
     this._name = name;
     this._link = link;
     this._cardId = _id;
+    this._owner = owner;
+    this._likes = likes;
     this._cardSelector = cardSelector;
     this._handleImageClick = handleImageClick;
     this._api = api;
@@ -20,7 +25,8 @@ export default class Card {
     this._cardImage = this._element.querySelector(".card__image");
     this._trashButton = this._element.querySelector(".card__trash-button");
     this._likeCount = this._element.querySelector(".card__like-num");
-
+    this.userInfo = userInfo;
+    this._userHasLiked = userHasLiked;
     this._setEventListeners();
   }
 
@@ -57,8 +63,9 @@ export default class Card {
   _addLike = () => {
     this._api
       .addLike(this._cardId)
-      .then(() => {
-        this._countLikesAdd();
+      .then((data) => {
+        this._likes = data.likes;
+        this._likeCount.textContent = this._likes.length;
         this._handleLike();
       })
       .catch((error) => {
@@ -69,23 +76,14 @@ export default class Card {
   _removeLike = () => {
     this._api
       .removeLike(this._cardId)
-      .then(() => {
-        this._countLikesRemove();
+      .then((data) => {
+        this._likes = data.likes;
+        this._likeCount.textContent = this._likes.length;
         this._handleLike();
       })
       .catch((error) => {
         console.error(error.message);
       });
-  };
-
-  _countLikesAdd = () => {
-    const currentLikes = parseInt(this._likeCount.textContent, 10);
-    this._likeCount.textContent = currentLikes + 1;
-  };
-
-  _countLikesRemove = () => {
-    const currentLikes = parseInt(this._likeCount.textContent, 10);
-    this._likeCount.textContent = currentLikes - 1;
   };
 
   _getTemplate() {
@@ -99,6 +97,18 @@ export default class Card {
     this._cardImage.src = this._link;
     this._cardImage.alt = `Photo of ${this._name}`;
     this._element.querySelector(".card__title").textContent = this._name;
+    this._likeCount.textContent = Array.isArray(this._likes)
+      ? this._likes.length
+      : 0;
+
+    if (this._userHasLiked) {
+      this._likeButton.classList.add("card__like-button_active");
+    }
+
+    if (this._owner !== this.userInfo.getUserInfo().id) {
+      this._trashButton.style.display = "none";
+    }
+
     return this._element;
   }
 }
