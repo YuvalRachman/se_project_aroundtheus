@@ -19,11 +19,12 @@ const editAvatar = document.querySelector(".profile__avatar");
 const addCardForm = document.forms["formAddCard"];
 const profileForm = document.forms["profileForm"];
 const profileAvatarForm = document.forms["profileAvatarForm"];
+const resetButton = document.querySelector("#resetButton");
 
 const api = new Api({
   baseUrl: "https://around-api.en.tripleten-services.com/v1",
   headers: {
-    authorization: "59d50a7d-5cbc-4141-92cc-d4a1e1821930",
+    authorization: "16081f5d-5388-4376-aa61-c2dcfd9d649c",
     "Content-Type": "application/json",
   },
 });
@@ -107,11 +108,17 @@ function handleImageClick(name, link) {
 /*                                Card Section                                */
 /* -------------------------------------------------------------------------- */
 
+const existingCardIds = new Set(); // Set to track existing card IDs
+
 function handleConfirmationOpen(cardId, cardElement) {
   deletePopup.open(cardId, cardElement);
 }
 
 function createCard(data) {
+  if (existingCardIds.has(data._id)) {
+    return null; // Card already exists, do not create duplicate
+  }
+
   const card = new Card(
     data,
     handleImageClick,
@@ -120,7 +127,10 @@ function createCard(data) {
     handleConfirmationOpen,
     userInfo
   );
-  return card.getView();
+  const cardElement = card.getView();
+  cardElement.dataset.id = data._id;
+  existingCardIds.add(data._id); // Add to Set to track
+  return cardElement;
 }
 
 const deletePopup = new PopupWithConfirm(
@@ -129,16 +139,75 @@ const deletePopup = new PopupWithConfirm(
     api.deleteCard(cardId).then(() => {
       cardElement.remove();
       deletePopup.close();
+      existingCardIds.delete(cardId); // Remove from Set when card is deleted
     });
   }
 );
+
+// Define the exponential backoff function with retries and initial delay
+const exponentialBackoff = (fn, retries = 3, initialDelay = 3000) => {
+  return new Promise((resolve, reject) => {
+    const attempt = (retryCount) => {
+      fn()
+        .then(resolve)
+        .catch((err) => {
+          if (retryCount <= 0) {
+            reject(err); // Reject if no more retries left
+          } else {
+            setTimeout(() => {
+              attempt(retryCount - 1); // Retry after delay
+            }, initialDelay * Math.pow(2, retries - retryCount)); // Exponential delay
+          }
+        });
+    };
+    attempt(retries); // Start attempt with maximum retries
+  });
+};
+
+// DOM Elements
+const cardList = document.querySelector(".cards__list");
+
+// Event listener for reset button
+resetButton.addEventListener("click", () => {
+  const cardElements = Array.from(cardList.querySelectorAll(".card"));
+  resetCards(cardElements);
+});
+
+// Function to reset cards with exponential backoff and delay between deletions
+function resetCards(cardElements) {
+  let index = 0;
+
+  const deleteNextCard = () => {
+    if (index >= cardElements.length) return; // Exit if all cards deleted
+
+    const cardElement = cardElements[index];
+    const cardId = cardElement.dataset.id;
+
+    exponentialBackoff(() => api.deleteCard(cardId)) // Using the exponential backoff function
+      .then(() => {
+        cardElement.remove(); // Remove card from DOM after successful deletion
+        existingCardIds.delete(cardId); // Remove from Set when card is deleted
+      })
+      .catch((err) => {
+        console.error(`Error deleting card ${cardId}:`, err); // Log error if deletion fails
+      })
+      .finally(() => {
+        index++; // Move to next card
+        setTimeout(deleteNextCard, 1000); // Delay before deleting next card (1 second)
+      });
+  };
+
+  deleteNextCard(); // Start the deletion process
+}
 
 const cardSection = new Section(
   {
     items: [],
     renderer: (item) => {
       const cardElement = createCard(item);
-      cardSection.addItem(cardElement);
+      if (cardElement) {
+        cardSection.addItem(cardElement);
+      }
     },
   },
   ".cards__list"
@@ -146,10 +215,12 @@ const cardSection = new Section(
 
 const addCardPopup = new PopupWithForm("#modalAddCard", (data) => {
   api
-    .renderCard(data.name, data.link) // Changed from addCard to renderCard
+    .renderCard(data.name, data.link)
     .then((newCardData) => {
       const cardElement = createCard(newCardData);
-      cardSection.addItem(cardElement);
+      if (cardElement) {
+        cardSection.addItem(cardElement);
+      }
       addCardPopup.close();
     })
     .catch((error) => console.error("Error creating new card:", error));
@@ -158,10 +229,17 @@ const addCardPopup = new PopupWithForm("#modalAddCard", (data) => {
 addCardButton.addEventListener("click", () => {
   addCardPopup.open();
 });
+
 api
   .showPromiseStatus()
   .then(({ initialCards, fetchedUserInfo }) => {
     userInfo.setUserInfo(fetchedUserInfo);
+    initialCards.forEach((card) => {
+      const cardElement = createCard(card);
+      if (cardElement) {
+        cardSection.addItem(cardElement);
+      }
+    });
     cardSection.renderItems(initialCards);
   })
   .catch((err) => {

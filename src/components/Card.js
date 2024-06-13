@@ -13,7 +13,7 @@ export default class Card {
   ) {
     this._name = name;
     this._link = link;
-    this._cardId = _id;
+    this._cardId = _id; // Store card ID
     this._owner = owner;
     this._likes = likes;
     this._cardSelector = cardSelector;

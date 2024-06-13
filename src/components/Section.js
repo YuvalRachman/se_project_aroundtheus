@@ -4,9 +4,9 @@ export default class Section {
     this._renderer = renderer;
     this._container = document.querySelector(containerSelector);
   }
-  renderItems() {
-    console.log("Rendering items:", this._items); // Add this line to log the items being rendered
-    this._items.forEach((item) => {
+  renderItems(items) {
+    console.log("Rendering items:", items); // Add this line to log the items being rendered
+    items.forEach((item) => {
       this._renderer(item);
     });
   }
