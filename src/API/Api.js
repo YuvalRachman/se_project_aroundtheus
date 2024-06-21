@@ -35,6 +35,11 @@ export default class Api {
     return this._request(`${this.baseUrl}/cards/${cardId}/likes`, {
       headers: this.headers,
       method: "PUT",
+    }).then((data) => {
+      return {
+        ...data,
+        isLiked: true, // Assuming server response includes `hasLike` information
+      };
     });
   }
 
@@ -42,9 +47,13 @@ export default class Api {
     return this._request(`${this.baseUrl}/cards/${cardId}/likes`, {
       headers: this.headers,
       method: "DELETE",
+    }).then((data) => {
+      return {
+        ...data,
+        isLiked: false, // Assuming server response includes `hasLike` information
+      };
     });
   }
-
   getUserInfo() {
     return this._request(`${this.baseUrl}/users/me`, { headers: this.headers });
   }
