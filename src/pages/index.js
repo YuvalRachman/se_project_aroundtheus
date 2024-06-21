@@ -11,6 +11,7 @@ import UserInfo from "../components/UserInfo.js";
 import { PopupWithConfirm } from "../components/PopupWithConfirm.js";
 
 // DOM Elements
+
 const editButton = document.querySelector(".profile__button");
 const modalInputTitle = document.querySelector("#profile-title-input");
 const modalInputAbout = document.querySelector("#profile-subtitle-input");
@@ -107,16 +108,15 @@ function handleImageClick(name, link) {
 /* -------------------------------------------------------------------------- */
 /*                                Card Section                                */
 /* -------------------------------------------------------------------------- */
-
-const existingCardIds = new Set(); // Set to track existing card IDs
-
 function handleConfirmationOpen(cardId, cardElement) {
   deletePopup.open(cardId, cardElement);
 }
 
+const existingCardIds = new Set();
+
 function createCard(data) {
   if (existingCardIds.has(data._id)) {
-    return null; // Card already exists, do not create duplicate
+    return null; // Card already exists, do not create a duplicate
   }
 
   const card = new Card(
@@ -124,25 +124,86 @@ function createCard(data) {
     handleImageClick,
     "#card-template",
     api,
-    handleConfirmationOpen,
-    userInfo
+    handleDelete
   );
+
   const cardElement = card.getView();
+
   cardElement.dataset.id = data._id;
-  existingCardIds.add(data._id); // Add to Set to track
+
+  existingCardIds.add(data._id);
+
   return cardElement;
+}
+
+function handleDelete(cardId, cardElement) {
+  handleConfirmationOpen(cardId, cardElement);
 }
 
 const deletePopup = new PopupWithConfirm(
   "#verify__card__delete",
   (cardId, cardElement) => {
-    api.deleteCard(cardId).then(() => {
-      cardElement.remove();
-      deletePopup.close();
-      existingCardIds.delete(cardId); // Remove from Set when card is deleted
-    });
+    api
+      .deleteCard(cardId)
+      .then(() => {
+        cardElement.remove();
+        deletePopup.close();
+        existingCardIds.delete(cardId); // Remove from Set when card is deleted
+      })
+      .catch((error) => {
+        console.error("Error deleting card:", error);
+      });
   }
 );
+
+const cardSection = new Section(
+  {
+    items: [],
+    renderer: (item) => {
+      const cardElement = createCard(item);
+      if (cardElement) {
+        cardSection.addItem(cardElement);
+      }
+    },
+  },
+  ".cards__list"
+);
+
+const addCardPopup = new PopupWithForm("#modalAddCard", (data) => {
+  api.renderCard(data.name, data.link).then((newCardData) => {
+    const cardElement = createCard(newCardData);
+    if (cardElement) {
+      cardSection.addItem(cardElement);
+    }
+    addCardPopup.close();
+  });
+});
+//     .catch((error) => console.error("Error creating new card:", error));
+// });
+
+addCardButton.addEventListener("click", () => {
+  addCardPopup.open();
+});
+
+api
+  .showPromiseStatus()
+  .then(({ initialCards, fetchedUserInfo }) => {
+    userInfo.setUserInfo(fetchedUserInfo);
+    initialCards.forEach((card) => {
+      const cardElement = createCard(card);
+      if (cardElement) {
+        cardSection.addItem(cardElement);
+      }
+    });
+    cardSection.renderItems(initialCards);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+/* -------------------------------------------------------------------------- */
+/*                              exponential backoff                           */
+/* -------------------------------------------------------------------------- */
 
 // Define the exponential backoff function with retries and initial delay
 const exponentialBackoff = (fn, retries = 3, initialDelay = 3000) => {
@@ -199,53 +260,6 @@ function resetCards(cardElements) {
 
   deleteNextCard(); // Start the deletion process
 }
-
-const cardSection = new Section(
-  {
-    items: [],
-    renderer: (item) => {
-      const cardElement = createCard(item);
-      if (cardElement) {
-        cardSection.addItem(cardElement);
-      }
-    },
-  },
-  ".cards__list"
-);
-
-const addCardPopup = new PopupWithForm("#modalAddCard", (data) => {
-  api
-    .renderCard(data.name, data.link)
-    .then((newCardData) => {
-      const cardElement = createCard(newCardData);
-      if (cardElement) {
-        cardSection.addItem(cardElement);
-      }
-      addCardPopup.close();
-    })
-    .catch((error) => console.error("Error creating new card:", error));
-});
-
-addCardButton.addEventListener("click", () => {
-  addCardPopup.open();
-});
-
-api
-  .showPromiseStatus()
-  .then(({ initialCards, fetchedUserInfo }) => {
-    userInfo.setUserInfo(fetchedUserInfo);
-    initialCards.forEach((card) => {
-      const cardElement = createCard(card);
-      if (cardElement) {
-        cardSection.addItem(cardElement);
-      }
-    });
-    cardSection.renderItems(initialCards);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
 /* -------------------------------------------------------------------------- */
 /*                                  Edit Form                                 */
 /* -------------------------------------------------------------------------- */

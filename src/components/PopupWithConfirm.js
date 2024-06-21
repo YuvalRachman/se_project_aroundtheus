@@ -5,6 +5,7 @@ export class PopupWithConfirm extends Popup {
     super({ popupSelector });
     this._handleDelete = handleDelete;
     this._confirmDeleteButton = this._popupElement.querySelector("#deleteCard");
+
     this.setEventListeners();
   }
 

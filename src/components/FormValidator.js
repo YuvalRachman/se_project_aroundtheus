@@ -7,7 +7,7 @@ export default class FormValidator {
     this._errorClass = settings.errorClass;
     this._form = formElement;
     this._inputList = this._form.querySelectorAll(this._inputSelector);
-    console.log(this._inputList);
+
     this._submitButton = this._form.querySelector(this._submitButtonSelector);
   }
 
