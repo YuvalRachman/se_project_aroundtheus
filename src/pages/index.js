@@ -15,6 +15,7 @@ import { PopupWithConfirm } from "../components/PopupWithConfirm.js";
 const editButton = document.querySelector(".profile__button");
 const modalInputTitle = document.querySelector("#profile-title-input");
 const modalInputAbout = document.querySelector("#profile-subtitle-input");
+const modalInputAvatar = document.querySelector("#profile-avatar-input");
 const addCardButton = document.querySelector(".profile__card-button");
 const editAvatar = document.querySelector(".profile__avatar");
 const addCardForm = document.forms["formAddCard"];
@@ -84,7 +85,7 @@ const avatarPopup = new PopupWithForm("#modalAvatar", ({ avatar }) => {
   api
     .updateAvatar(avatar)
     .then((data) => {
-      userInfo.setUserInfo({ avatar: data.avatar });
+      userInfo.setAvatarInfo({ avatar: data.avatar });
       avatarPopup.close();
     })
     .catch((error) => {
@@ -126,13 +127,9 @@ function createCard(data) {
     api,
     handleDelete
   );
-
   const cardElement = card.getView();
-
   cardElement.dataset.id = data._id;
-
   existingCardIds.add(data._id);
-
   return cardElement;
 }
 
@@ -189,6 +186,7 @@ api
   .showPromiseStatus()
   .then(({ initialCards, fetchedUserInfo }) => {
     userInfo.setUserInfo(fetchedUserInfo);
+    userInfo.setAvatarInfo(fetchedUserInfo);
     initialCards.forEach((card) => {
       const cardElement = createCard(card);
       if (cardElement) {
@@ -268,6 +266,8 @@ function openEditForm() {
   const profileInfo = userInfo.getUserInfo();
   modalInputTitle.value = profileInfo.name;
   modalInputAbout.value = profileInfo.about;
+  modalInputAvatar.value = profileInfo.avatar;
+
   profilePopup.open();
 }
 
