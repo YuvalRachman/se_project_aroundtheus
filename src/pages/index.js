@@ -18,6 +18,7 @@ const modalInputAbout = document.querySelector("#profile-subtitle-input");
 const modalInputAvatar = document.querySelector("#profile-avatar-input");
 const addCardButton = document.querySelector(".profile__card-button");
 const editAvatar = document.querySelector(".profile__avatar");
+const creatCardButton = document.querySelector(".modal__button");
 const addCardForm = document.forms["formAddCard"];
 const profileForm = document.forms["profileForm"];
 const profileAvatarForm = document.forms["profileAvatarForm"];
@@ -49,6 +50,7 @@ const enableValidation = (validationSettings) => {
     validator.enableValidation();
   });
 };
+
 enableValidation(validationSettings);
 
 /* -------------------------------------------------------------------------- */
@@ -171,10 +173,16 @@ const addCardPopup = new PopupWithForm("#modalAddCard", (data) => {
     const cardElement = createCard(newCardData);
     if (cardElement) {
       cardSection.addItem(cardElement);
+
+      const formName = document
+        .querySelector("#modalAddCard .modal__form")
+        .getAttribute("name");
+      formValidator[formName].resetValidation(); // Reset the form and validation state
     }
     addCardPopup.close();
   });
 });
+
 //     .catch((error) => console.error("Error creating new card:", error));
 // });
 
@@ -203,61 +211,61 @@ api
 /*                              exponential backoff                           */
 /* -------------------------------------------------------------------------- */
 
-// Define the exponential backoff function with retries and initial delay
-const exponentialBackoff = (fn, retries = 3, initialDelay = 3000) => {
-  return new Promise((resolve, reject) => {
-    const attempt = (retryCount) => {
-      fn()
-        .then(resolve)
-        .catch((err) => {
-          if (retryCount <= 0) {
-            reject(err); // Reject if no more retries left
-          } else {
-            setTimeout(() => {
-              attempt(retryCount - 1); // Retry after delay
-            }, initialDelay * Math.pow(2, retries - retryCount)); // Exponential delay
-          }
-        });
-    };
-    attempt(retries); // Start attempt with maximum retries
-  });
-};
+// // Define the exponential backoff function with retries and initial delay
+// const exponentialBackoff = (fn, retries = 3, initialDelay = 3000) => {
+//   return new Promise((resolve, reject) => {
+//     const attempt = (retryCount) => {
+//       fn()
+//         .then(resolve)
+//         .catch((err) => {
+//           if (retryCount <= 0) {
+//             reject(err); // Reject if no more retries left
+//           } else {
+//             setTimeout(() => {
+//               attempt(retryCount - 1); // Retry after delay
+//             }, initialDelay * Math.pow(2, retries - retryCount)); // Exponential delay
+//           }
+//         });
+//     };
+//     attempt(retries); // Start attempt with maximum retries
+//   });
+// };
 
-// DOM Elements
-const cardList = document.querySelector(".cards__list");
+// // DOM Elements
+// const cardList = document.querySelector(".cards__list");
 
-// Event listener for reset button
-resetButton.addEventListener("click", () => {
-  const cardElements = Array.from(cardList.querySelectorAll(".card"));
-  resetCards(cardElements);
-});
+// // Event listener for reset button
+// resetButton.addEventListener("click", () => {
+//   const cardElements = Array.from(cardList.querySelectorAll(".card"));
+//   resetCards(cardElements);
+// });
 
-// Function to reset cards with exponential backoff and delay between deletions
-function resetCards(cardElements) {
-  let index = 0;
+// // Function to reset cards with exponential backoff and delay between deletions
+// function resetCards(cardElements) {
+//   let index = 0;
 
-  const deleteNextCard = () => {
-    if (index >= cardElements.length) return; // Exit if all cards deleted
+//   const deleteNextCard = () => {
+//     if (index >= cardElements.length) return; // Exit if all cards deleted
 
-    const cardElement = cardElements[index];
-    const cardId = cardElement.dataset.id;
+//     const cardElement = cardElements[index];
+//     const cardId = cardElement.dataset.id;
 
-    exponentialBackoff(() => api.deleteCard(cardId)) // Using the exponential backoff function
-      .then(() => {
-        cardElement.remove(); // Remove card from DOM after successful deletion
-        existingCardIds.delete(cardId); // Remove from Set when card is deleted
-      })
-      .catch((err) => {
-        console.error(`Error deleting card ${cardId}:`, err); // Log error if deletion fails
-      })
-      .finally(() => {
-        index++; // Move to next card
-        setTimeout(deleteNextCard, 1000); // Delay before deleting next card (1 second)
-      });
-  };
+//     exponentialBackoff(() => api.deleteCard(cardId)) // Using the exponential backoff function
+//       .then(() => {
+//         cardElement.remove(); // Remove card from DOM after successful deletion
+//         existingCardIds.delete(cardId); // Remove from Set when card is deleted
+//       })
+//       .catch((err) => {
+//         console.error(`Error deleting card ${cardId}:`, err); // Log error if deletion fails
+//       })
+//       .finally(() => {
+//         index++; // Move to next card
+//         setTimeout(deleteNextCard, 1000); // Delay before deleting next card (1 second)
+//       });
+//   };
 
-  deleteNextCard(); // Start the deletion process
-}
+//   deleteNextCard(); // Start the deletion process
+// }
 /* -------------------------------------------------------------------------- */
 /*                                  Edit Form                                 */
 /* -------------------------------------------------------------------------- */
