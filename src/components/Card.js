@@ -1,5 +1,3 @@
-import Api from "../API/Api.js";
-
 export default class Card {
   constructor(
     { name, link, _id, isLiked }, // Ensure isLiked is received here

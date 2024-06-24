@@ -1,4 +1,4 @@
-import Api from "../API/Api.js";
+import Api from "../components/Api.js";
 import Card from "../components/Card.js";
 import Section from "../components/Section.js";
 import PopupWithForm from "../components/PopupWithForm.js";
@@ -169,23 +169,28 @@ const cardSection = new Section(
 );
 
 const addCardPopup = new PopupWithForm("#modalAddCard", (data) => {
-  api.renderCard(data.name, data.link).then((newCardData) => {
-    const cardElement = createCard(newCardData);
-    if (cardElement) {
-      cardSection.addItem(cardElement);
+  addCardPopup.showLoading(); // Show loading before API call
+  api
+    .renderCard(data.name, data.link)
+    .then((newCardData) => {
+      const cardElement = createCard(newCardData);
+      if (cardElement) {
+        cardSection.addItem(cardElement);
 
-      const formName = document
-        .querySelector("#modalAddCard .modal__form")
-        .getAttribute("name");
-      formValidator[formName].resetValidation(); // Reset the form and validation state
-    }
-    addCardPopup.close();
-  });
+        const formName = document
+          .querySelector("#modalAddCard .modal__form")
+          .getAttribute("name");
+        formValidator[formName].resetValidation();
+        addCardPopup.close();
+      }
+    })
+    .catch((error) => {
+      console.error("Error creating new card:", error);
+    })
+    .finally(() => {
+      addCardPopup.hideLoading();
+    });
 });
-
-//     .catch((error) => console.error("Error creating new card:", error));
-// });
-
 addCardButton.addEventListener("click", () => {
   addCardPopup.open();
 });
@@ -204,7 +209,7 @@ api
     cardSection.renderItems(initialCards);
   })
   .catch((err) => {
-    console.log(err);
+    console.error(err);
   });
 
 /* -------------------------------------------------------------------------- */

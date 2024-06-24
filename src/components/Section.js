@@ -7,7 +7,6 @@ export default class Section {
 
   // Method to render items using the provided renderer
   renderItems(items) {
-    console.log("Rendering items:", items); // Logging items for debugging
     items.forEach((item) => {
       this._renderer(item);
     });
