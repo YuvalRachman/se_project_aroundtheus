@@ -200,12 +200,7 @@ api
   .then(({ initialCards, fetchedUserInfo }) => {
     userInfo.setUserInfo(fetchedUserInfo);
     userInfo.setAvatarInfo(fetchedUserInfo);
-    initialCards.forEach((card) => {
-      const cardElement = createCard(card);
-      if (cardElement) {
-        cardSection.addItem(cardElement);
-      }
-    });
+
     cardSection.renderItems(initialCards);
   })
   .catch((err) => {
