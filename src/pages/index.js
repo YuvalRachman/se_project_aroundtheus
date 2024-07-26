@@ -176,12 +176,9 @@ const addCardPopup = new PopupWithForm("#modalAddCard", (data) => {
       const cardElement = createCard(newCardData);
       if (cardElement) {
         cardSection.addItem(cardElement);
-
-        const formName = document
-          .querySelector("#modalAddCard .modal__form")
-          .getAttribute("name");
-        formValidator[formName].resetValidation();
         addCardPopup.close();
+        const formName = addCardForm.getAttribute("name");
+        formValidator[formName].resetValidation();
       }
     })
     .catch((error) => {
